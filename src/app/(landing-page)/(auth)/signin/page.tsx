@@ -24,25 +24,25 @@ const SignInPage = () => {
     resolver: zodResolver(formSignInSchema),
   });
 
-  const {toast} = useToast()
+  const { toast } = useToast()
   const router = useRouter()
-  
-  const onSubmit =  async (val: z.infer<typeof formSignInSchema>) => {
-   const authenticated = await signIn('credentials', {
-    ...val,
-    redirect: false
-   })
-   
-   if(authenticated?.error) {
-    toast({
-      title: 'Error',
-      description: 'Email or password maybe wrong'
+
+  const onSubmit = async (val: z.infer<typeof formSignInSchema>) => {
+    const authenticated = await signIn('credentials', {
+      ...val,
+      redirect: false
     })
-    
-    return
-   }
-   
-   router.push('/')
+
+    if (authenticated?.error) {
+      toast({
+        title: 'Error',
+        description: 'Email or password maybe wrong'
+      })
+
+      return
+    }
+
+    router.push('/')
   };
 
   return (
@@ -80,10 +80,10 @@ const SignInPage = () => {
             )}
           />
           <Button type="submit" className="w-full">Sign In</Button>
-          
+
           <div className="text-gray-500 text-sm mt-6">
             Don&apos;t have an account {' '}
-            <Link href={'/signup'} className="text-primary font-medium">Sign Up</Link>
+            <Link href={'/auth/signup'} className="text-primary font-medium">Sign Up</Link>
           </div>
         </form>
       </Form>

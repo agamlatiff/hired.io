@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Epilogue } from "next/font/google";
-import "../../globals.css";
+import "../globals.css";
 
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import AuthProvider from "./providers/AuthProvider";
 
 const epilogue = Epilogue({ subsets: ["latin"] });
 
@@ -21,11 +22,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${epilogue.className} relative overflow-x-hidden`}>
-        <Navbar />
-        <main>{children}</main>
-
-        <Footer />
-        <Toaster />
+        <AuthProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

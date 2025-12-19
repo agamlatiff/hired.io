@@ -1,3 +1,5 @@
+"use client";
+
 import useFeaturedJobs from "@/hooks/useFeaturedJobs";
 import TitleSection from "./TitleSection";
 import type { JobType } from "@/app/types";

@@ -1,3 +1,5 @@
+"use client";
+
 import type { JobType } from "@/app/types";
 import { fetcher, parsingJobs } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -17,7 +19,7 @@ const useJobs = (filter?: string[]) => {
   const { data, error, isLoading, mutate } = useSWR(
     `${JOB_PATH}?category=${paramsCategory}`,
     fetcher,
-   {revalidateOnMount: false}
+    { revalidateOnMount: false }
   );
 
   const [jobs, setJobs] = useState<JobType[]>([]);

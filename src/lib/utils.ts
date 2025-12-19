@@ -70,7 +70,7 @@ export const parsingJobs = async (
         if (imageName) {
           imageUrl = await supabasePublicUrl(imageName, "company");
         } else {
-          imageUrl = "/images/company/png";
+          imageUrl = "/images/company.png";
         }
 
         const job: JobType = {
@@ -127,7 +127,7 @@ export const parsingCompanies = async (
         if (imageName) {
           imageUrl = await supabasePublicUrl(imageName, "company");
         } else {
-          imageUrl = "/images/company/png";
+          imageUrl = "/images/company.png";
         }
 
         const companyDetail = item.CompanyOverview[0];

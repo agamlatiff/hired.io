@@ -238,9 +238,9 @@ const PostJobPage = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {data?.map((item: any) => (
-                        <SelectItem key={item} value="m@example.com">
-                          {item}
+                      {data?.map((item: CategoryJob) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

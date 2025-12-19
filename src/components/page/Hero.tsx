@@ -22,11 +22,11 @@ const Hero = () => {
           career heights and passionate about startups.
         </div>
       </div>
-      
+
       <div className="block mt-2 ">
-        <Image src={'/images/hero.png'} alt="/images/hero.png" width={501} height={710} objectFit="contain"/>
+        <Image src={'/images/hero.png'} alt="/images/hero.png" width={501} height={710} className="object-contain" />
       </div>
-      <FormSearch/>
+      <FormSearch />
     </div>
   );
 };

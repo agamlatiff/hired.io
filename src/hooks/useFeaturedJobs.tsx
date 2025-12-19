@@ -1,10 +1,12 @@
+"use client";
+
 import type { JobType } from "@/app/types";
 import { fetcher, parsingJobs } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 
 const useFeaturedJobs = () => {
-  const { data, isLoading, error } = useSWR("/api/job/featured", fetcher);
+  const { data, isLoading, error } = useSWR("/api/jobs/featured", fetcher);
 
   const [jobs, setJobs] = useState<JobType[]>([]);
 

@@ -1,3 +1,5 @@
+"use client";
+
 import TitleSection from "./TitleSection";
 import JobItem from "./JobItem";
 import type { JobType } from "@/app/types";

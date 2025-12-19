@@ -3,9 +3,9 @@ import Image from "next/image";
 const clients = [
   "/images/jobox.png",
   "/images/design.png",
-  "/images/wave,png",
+  "/images/wave.png",
   "/images/twins.png",
-  "images/bubles.png",
+  "/images/bubles.png",
 ];
 
 const Clients = () => {
