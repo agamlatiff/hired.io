@@ -14,10 +14,10 @@ const Clients = () => {
       <div className="text-lg text-muted-foreground">
         Companies we helped grow
       </div>
-      
+
       <div className="mt-8 flex flex-row justify-between" >
-        {clients.map((item: string, i: number) =>(
-          <Image key={i} src={item} alt={item} width={139} height={35}/>
+        {clients.map((item: string, i: number) => (
+          <Image key={i} src={item} alt={item} width={139} height={35} />
         ))}
       </div>
     </div>

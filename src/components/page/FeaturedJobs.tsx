@@ -4,7 +4,7 @@ import type { JobType } from "@/app/types";
 import useFeaturedJobs from "@/hooks/useFeaturedJobs";
 
 const FeaturedJobs = () => {
-const {jobs, isLoading, error} = useFeaturedJobs()
+  const { jobs, isLoading, error } = useFeaturedJobs()
 
   return (
     <div className="mt-32 mb-10">
