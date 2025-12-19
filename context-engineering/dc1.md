@@ -9,222 +9,143 @@
 
 This documentation records all bugs and errors found and fixed in the Next.js job portal application.
 
+**Total Bugs Fixed: 16**
+
 ---
 
 ## Bugs Fixed
 
 ### 1. Module Resolution Error - `tsconfig.json`
 
-**Problem:** Application failed to compile with error "Module not found: Can't resolve '@/components/page/Navbar'"
-
-**Cause:** The `tsconfig.json` file was missing `baseUrl` and `paths` configuration for the `@/` alias.
-
-**Solution:** Added the following configuration to `compilerOptions`:
-
-```json
-"baseUrl": ".",
-"paths": {
-  "@/*": ["./src/*"]
-}
-```
-
-**File:** `tsconfig.json`
+**File:** `tsconfig.json`  
+**Fix:** Added `baseUrl` and `paths` configuration for `@/` alias.
 
 ---
 
 ### 2. CSS Import Typo - Auth Layout
 
-**Problem:** CSS was not loading on authentication pages.
-
-**Cause:** Typo in import path: `"../..globals.css"` (missing slash).
-
-**Solution:** Fixed path to `"../../globals.css"`.
-
-**File:** `src/app/(landing-page)/(auth)/layout.tsx`
+**File:** `src/app/(landing-page)/(auth)/layout.tsx`  
+**Fix:** Changed `"../..globals.css"` → `"../../globals.css"`
 
 ---
 
 ### 3. Wrong Array in Footer Resources Section
 
-**Problem:** The "Resources" section in Footer displayed the same content as "About".
-
-**Cause:** Mapping was using `aboutLinks` array instead of `resourceLinks`.
-
-**Solution:** Changed `aboutLinks.map` to `resourceLinks.map` on line 53.
-
-**File:** `src/components/page/Footer.tsx`
+**File:** `src/components/page/Footer.tsx`  
+**Fix:** Changed `aboutLinks.map` → `resourceLinks.map`
 
 ---
 
 ### 4. Image Path Typo - Utils
 
-**Problem:** Fallback image was not loading for jobs and companies.
-
-**Cause:** Incorrect path: `"/images/company/png"` (missing dot).
-
-**Solution:** Fixed to `"/images/company.png"` in both `parsingJobs` and `parsingCompanies` functions.
-
-**File:** `src/lib/utils.ts`
+**File:** `src/lib/utils.ts`  
+**Fix:** Changed `"/images/company/png"` → `"/images/company.png"`
 
 ---
 
 ### 5. Auth Navigation Links Missing Prefix
 
-**Problem:** Sign Up and Sign In links were not working on auth pages.
-
-**Cause:** Links were using `/signup` and `/signin` without the `/auth/` prefix.
-
-**Solution:** Fixed paths to `/auth/signup` and `/auth/signin`.
-
-**Files:**
-
-- `src/app/(landing-page)/(auth)/signin/page.tsx`
-- `src/app/(landing-page)/(auth)/signup/page.tsx`
+**Files:** `signin/page.tsx`, `signup/page.tsx`  
+**Fix:** Changed `/signup` → `/auth/signup`, `/signin` → `/auth/signin`
 
 ---
 
 ### 6. Missing Image Dimensions - Landing Page
 
-**Problem:** Runtime warning/error because Image component had no dimensions.
-
-**Cause:** Image component for pattern.png had no `width`, `height`, or `fill` prop.
-
-**Solution:** Added `fill` prop and `className="object-cover"`.
-
-**File:** `src/app/(landing-page)/(page)/page.tsx`
+**File:** `src/app/(landing-page)/(page)/page.tsx`  
+**Fix:** Added `fill` prop to Image component
 
 ---
 
 ### 7. Deprecated objectFit/objectPosition Props
 
-**Problem:** Console warnings about deprecated props on Next.js Image component.
-
-**Cause:** Using `objectFit` and `objectPosition` props which are deprecated in Next.js 13+.
-
-**Solution:** Replaced with Tailwind CSS classes (`object-cover`, `object-contain`, `object-top`).
-
-**Files:**
-
-- `src/app/(landing-page)/(auth)/layout.tsx`
-- `src/components/page/Hero.tsx`
+**Files:** Auth layout, Hero component  
+**Fix:** Replaced with Tailwind classes (`object-cover`, `object-contain`)
 
 ---
 
 ### 8. Wrong API Endpoint Path - useFeaturedJobs
 
-**Problem:** Hook `useFeaturedJobs` could not fetch data.
-
-**Cause:** Using endpoint `/api/job/featured` which doesn't exist.
-
-**Solution:** Fixed to `/api/jobs/featured` matching the actual route location.
-
-**File:** `src/hooks/useFeaturedJobs.tsx`
+**File:** `src/hooks/useFeaturedJobs.tsx`  
+**Fix:** Changed `/api/job/featured` → `/api/jobs/featured`
 
 ---
 
 ### 9. SelectItem Bug - Post Job Page
 
-**Problem:** Job category dropdown was not functioning correctly.
-
-**Cause:**
-
-- `key` was using object `item` instead of `item.id`
-- `value` was hardcoded to `"m@example.com"` instead of `item.id`
-- Displaying `{item}` (object) instead of `{item.name}`
-
-**Solution:** Fixed to:
-
-```tsx
-{
-  data?.map((item: CategoryJob) => (
-    <SelectItem key={item.id} value={item.id}>
-      {item.name}
-    </SelectItem>
-  ));
-}
-```
-
-**File:** `src/app/(dashboard)/post-a-job/page.tsx`
+**File:** `src/app/(dashboard)/post-a-job/page.tsx`  
+**Fix:** Fixed key, value, and display text for category SelectItem
 
 ---
 
-### 10. Missing "use client" Directive - Hooks and Components
+### 10. Missing "use client" Directive
 
-**Problem:** React Server Components error - hooks using useState/useEffect need to be in Client Components.
-
-**Cause:** Custom hooks and components using React hooks were missing the `"use client"` directive.
-
-**Solution:** Added `"use client"` directive at the top of each file.
-
-**Files:**
-
-- `src/hooks/useFeaturedJobs.tsx`
-- `src/hooks/useJobs.tsx`
-- `src/hooks/useCompanies.tsx`
-- `src/hooks/useCategoryJobFilter.tsx`
-- `src/hooks/useCategoryCompanyFilter.tsx`
-- `src/components/page/FeaturedJobs.tsx`
-- `src/components/page/LatestJobs.tsx`
+**Files:** All hooks and related components (7 files)  
+**Fix:** Added `"use client"` directive
 
 ---
 
 ### 11. Wrong CSS Import Path - Landing Page Layout
 
-**Problem:** Module not found error for globals.css in landing page layout.
-
-**Cause:** Import path was `../../globals.css` but should be `../globals.css` (only one level up).
-
-**Solution:** Fixed import path to `../globals.css`.
-
-**File:** `src/app/(landing-page)/layout.tsx`
+**File:** `src/app/(landing-page)/layout.tsx`  
+**Fix:** Changed `"../../globals.css"` → `"../globals.css"`
 
 ---
 
 ### 12. Missing SessionProvider - Landing Page Layout
 
-**Problem:** `useSession must be wrapped in a <SessionProvider />` error.
-
-**Cause:** Navbar component uses `useSession()` but its parent layout wasn't wrapping children with SessionProvider.
-
-**Solution:** Added `AuthProvider` wrapper to the layout.
-
-**File:** `src/app/(landing-page)/layout.tsx`
+**File:** `src/app/(landing-page)/layout.tsx`  
+**Fix:** Added `AuthProvider` wrapper
 
 ---
 
 ### 13. Image Path Errors - Clients Component
 
-**Problem:** `Failed to parse src 'images/bubles.png'` - relative image path must start with leading slash.
-
-**Cause:**
-
-- `images/bubles.png` missing leading `/`
-- `wave,png` typo (comma instead of dot)
-
-**Solution:** Fixed paths to `/images/bubles.png` and `/images/wave.png`.
-
-**File:** `src/components/page/Clients.tsx`
+**File:** `src/components/page/Clients.tsx`  
+**Fix:** Fixed `images/bubles.png` → `/images/bubles.png`, `wave,png` → `wave.png`
 
 ---
 
-## Recommendations for Future Development
+### 14. Hydration Error - Duplicate html/body Tags
 
-1. **Type Safety:** Consider enabling `strict: true` in `tsconfig.json` to catch more errors at compile time.
+**Files:** Nested layout files  
+**Fix:** Deleted `(page)/layout.tsx`, simplified `(auth)/layout.tsx`
 
-2. **Image Optimization:** Ensure all Image components have explicit dimensions or use `fill` with a sized container.
+---
 
-3. **API Route Consistency:** Consider consolidating all API routes in one location (`/api/*`) rather than spreading across route groups.
+### 15. Missing Tailwind Configuration
 
-4. **Error Handling:** Add error boundaries and better handling for API calls.
+**Files:** Created `tailwind.config.js`, `postcss.config.js`  
+**Fix:** Added proper Tailwind CSS configuration
 
-5. **Testing:** Add unit tests for utility functions and integration tests for API routes.
+---
 
-6. **Client/Server Components:** Always add `"use client"` directive to files that use React hooks (useState, useEffect, useMemo, useCallback, etc.).
+### 16. Syntax Errors - Company Detail Page
 
-7. **Image Paths:** Always use absolute paths starting with `/` for static images in Next.js Image component.
+**File:** `src/app/(landing-page)/(page)/detail/company/[id]/page.tsx`  
+**Fix:**
+
+- Fixed else block: `] else [(imageUrl = ...)]` → proper else syntax
+- Fixed optional chaining: `CompanyOverview?[0]` → `CompanyOverview?.[0]`
+
+---
+
+### 17. Image File Naming
+
+**Files:** `public/images/`  
+**Fix:** Renamed `dsign.png` → `design.png`, `soc-Dribbble.png` → `soc-Dribble.png`
+
+---
+
+## Recommendations
+
+1. Enable `strict: true` in tsconfig.json
+2. Use absolute paths starting with `/` for all images
+3. Always add `"use client"` to files using React hooks
+4. Avoid nested layouts with duplicate html/body tags
 
 ---
 
 ## Status
 
-✅ All bugs above have been fixed and are ready for testing.
+✅ All bugs fixed and ready for testing.
