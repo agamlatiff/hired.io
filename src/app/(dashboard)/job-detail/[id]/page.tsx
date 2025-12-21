@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Applicants from "@/components/dashboard/Applicants";
 import JobDetail from "@/components/dashboard/JobDetail";
 import type { FC } from "react";
-import prisma from "../../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 type Params = {
   id: string;
@@ -14,7 +14,6 @@ interface JobDetailPageProps {
   params: Params;
 }
 
-j
 
 async function getDetailJob(id: string) {
   const job = await prisma.job.findFirst({

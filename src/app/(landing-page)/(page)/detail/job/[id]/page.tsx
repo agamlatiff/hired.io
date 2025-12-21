@@ -7,16 +7,16 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { BiCategory } from "react-icons/bi";
-import prisma from "../../../../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 import { supabasePublicUrl } from "@/lib/supabase";
 import { dateFormat } from "@/lib/utils";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/(landing-page)/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
-interface DetailJobPageProps {}
+interface DetailJobPageProps { }
 
 async function getDetailJob(id: string) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as { user?: { id: string } } | null;
 
   const data = await prisma.job.findFirst({
     where: {
@@ -48,12 +48,12 @@ async function getDetailJob(id: string) {
 
   const isApply = await prisma.applicant.count({
     where: {
-      userId: session?.user.id,
+      userId: session?.user?.id,
     },
-    
+
   });
-  
-  const benefits : any = data?.benefits
+
+  const benefits: any = data?.benefits
 
   if (!session) {
     return { ...data, image: imageUrl, benefits, applicants, needs, isApply: 0 };
@@ -89,7 +89,7 @@ const DetailJobPage = async ({ params }: { params: { id: string } }) => {
           </Link>{" "}
           /{" "}
           <Link
-            href={`/detail/job${data?.id}`}
+            href={`/detail/job/${data?.id}`}
             className="hover:underline hover:text-black"
           >
             {data?.roles}
@@ -108,7 +108,7 @@ const DetailJobPage = async ({ params }: { params: { id: string } }) => {
           {session ? (
             <>
               {data.isApply === 1 ? (
-                <Button className="text-lg px-12 py-6 bg=green-500" disabled>
+                <Button className="text-lg px-12 py-6 bg-green-500" disabled>
                   Applied
                 </Button>
               ) : (
@@ -207,7 +207,7 @@ const DetailJobPage = async ({ params }: { params: { id: string } }) => {
                 <div className="text-gray-500">Salary</div>
 
                 <div className="font-semibold ">
-                  ${data?.salaryFrom}-${data?.salaryFrom}
+                  ${data?.salaryFrom}-${data?.salaryTo}
                 </div>
               </div>
             </div>

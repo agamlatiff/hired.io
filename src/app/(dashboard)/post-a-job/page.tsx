@@ -66,7 +66,7 @@ const PostJobPage = () => {
         applicants: 0,
         benefits: val.benefits,
         categoryId: val.categoryId,
-        companyId: session?.user.id!!,
+        companyId: (session?.user as { id?: string })?.id ?? "",
         datePosted: moment().toDate(),
         description: val.jobDescription,
         dueDate: moment().add(1, "M").toDate(),

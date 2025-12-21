@@ -15,7 +15,7 @@ import {
 } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
-import prisma from "../../../../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 import { supabasePublicUrl } from "@/lib/supabase";
 import { dateFormat } from "@/lib/utils";
 import type { CompanyTeam } from "@prisma/client";
@@ -91,7 +91,7 @@ const DetailCompanyPage: FC<DetailCompanyPageProps> = async ({ params }) => {
               </div>
 
               <div>
-                <div className="mt-10 inlinef-lex gap-6 items-start">
+                <div className="mt-10 inline-flex gap-6 items-start">
                   <Image
                     src={data.imageUrl}
                     alt="company"
@@ -212,7 +212,7 @@ const DetailCompanyPage: FC<DetailCompanyPageProps> = async ({ params }) => {
                 <div className="text-gray-500 text-sm">
                   Learn about the technology and tools that Pattern uses.
                 </div>
-                <div className="mt-5flex flex-row items-center flex-wrap gap-4">
+                <div className="mt-5 flex flex-row items-center flex-wrap gap-4">
                   {data.CompanyOverview[0].techStack.map((item: string) => (
                     <Badge key={item}>{item}</Badge>
                   ))}

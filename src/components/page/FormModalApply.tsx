@@ -22,7 +22,7 @@ import { useSession } from "next-auth/react";
 import type { FC } from "react";
 import { supabaseUploadFile } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface FormModalApplyProps {
   image: string | undefined;
@@ -55,7 +55,7 @@ const FormModalApply: FC<FormModalApplyProps> = ({
       );
 
       const reqData = {
-        userId: session?.user.id,
+        userId: (session?.user as { id?: string })?.id,
         jobId: id,
         resume: filename,
         coverLetter: val.coverLetter,
@@ -221,7 +221,7 @@ const FormModalApply: FC<FormModalApplyProps> = ({
 
             <FormField
               control={form.control}
-              name="resume"
+              name="coverLetter"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Additional Information</FormLabel>

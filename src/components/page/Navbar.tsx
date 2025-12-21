@@ -35,7 +35,7 @@ const Navbar = () => {
 
       <div className="inline-flex items-center gap-4 h-8">
         {session ? (
-         <MenuAuth />
+          <MenuAuth />
         ) : (
           <>
             <Button
@@ -44,7 +44,7 @@ const Navbar = () => {
             >
               Login
             </Button>
-            <Button>Sign Up</Button>
+            <Button onClick={() => router.push("/auth/signup")}>Sign Up</Button>
           </>
         )}
       </div>

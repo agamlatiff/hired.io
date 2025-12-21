@@ -56,7 +56,7 @@ export type CompanyType = {
   location: string;
   industry: string;
   dateFounded: Date;
-  techStaack: string[];
+  techStack: string[];
   sosmed: CompanySosmedType;
   teams: CompanyTeamType;
   employee: string

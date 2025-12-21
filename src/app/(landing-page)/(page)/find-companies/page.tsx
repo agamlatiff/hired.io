@@ -29,7 +29,7 @@ const FindCompaniesPage = () => {
 
   useEffect(() => {
     mutate();
-  }, [categories]);
+  }, [categories, mutate]);
 
   return (
     <ExploreDataContainer

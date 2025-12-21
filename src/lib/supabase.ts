@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // Create a single supabase client for interacting with your database
 export const supabaseClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASe_URL!!,
+  process.env.NEXT_PUBLIC_SUPABASE_URL!!,
   process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY!!
 );
 
@@ -78,14 +78,14 @@ export const supabaseUpdateFile = async (
       cacheControl: "3600",
       upsert: true,
     });
-    
-    return {
-      data, error
-    }
+
+  return {
+    data, error
+  }
 };
 
-export const supabasePublicUrl = async (filename: string, bucket : string) => {
-  const {data: {publicUrl}} = await supabaseClient.storage.from(bucket).getPublicUrl(`public/${filename}`)
-  
+export const supabasePublicUrl = async (filename: string, bucket: string) => {
+  const { data: { publicUrl } } = await supabaseClient.storage.from(bucket).getPublicUrl(`public/${filename}`)
+
   return publicUrl
 }

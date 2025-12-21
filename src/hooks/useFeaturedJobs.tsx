@@ -17,12 +17,13 @@ const useFeaturedJobs = () => {
 
   useEffect(() => {
     parseJobs();
-  }, [data, isLoading, error]);
-
+  }, [parseJobs]);
 
   return {
-    jobs, isLoading, error
-  }
+    jobs,
+    isLoading,
+    error,
+  };
 };
 
 export default useFeaturedJobs;

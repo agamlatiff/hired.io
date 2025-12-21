@@ -1,16 +1,17 @@
-import type { EnumValues } from "zod/v3";
+// Job types constant
+export const JOBTYPES = [
+  "Full-Time",
+  "Part-Time",
+  "Remote",
+  "Internship",
+] as const;
+
+export type JobTypeValue = (typeof JOBTYPES)[number];
 
 export type optionType = {
   id: string;
   label: string;
 };
-
-export const JOBTYPES: EnumValues = [
-  "Full-Time",
-  "Part-Time",
-  "Remote",
-  "Internship",
-];
 
 export const JOB_LISTING_COLUMNS: string[] = [
   "Roles",
@@ -109,7 +110,7 @@ export const LOCATION_OPTIONS_PAGE: optionType[] = [
   },
 ];
 
-export const CATEGORIES_OPTIONS = [
+export const CATEGORIES_OPTIONS: optionType[] = [
   {
     id: "recents",
     label: "Recents",
@@ -134,4 +135,4 @@ export const CATEGORIES_OPTIONS = [
     id: "documents",
     label: "Documents",
   },
-]
+];

@@ -1,20 +1,20 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import OverviewForm from "@/components/dashboard/OverviewForm";
 import SocialMediaForm from "@/components/dashboard/SocialMediaForm";
 import TeamForm from "@/components/dashboard/TeamForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import React from "react";
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 export const revalidate = 0;
 
 async function getDetailCompany() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as { user?: { id: string } } | null;
 
   const company = await prisma.company.findFirst({
     where: {
-      id: session?.user.id,
+      id: session?.user?.id,
     },
     include: {
       CompanyOverview: true,

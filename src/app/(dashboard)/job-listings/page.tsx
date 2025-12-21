@@ -10,9 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { JOB_LISTING_COLUMNS, JOB_LISTING_DATA } from "@/constants";
-import prisma from "../../../../lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 import type { Job } from "@prisma/client";
 import { dateFormat } from "@/lib/utils";
 import moment from "moment";
@@ -20,11 +20,11 @@ import moment from "moment";
 export const revalidate = 0
 
 async function getDatajobs() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as { user?: { id: string } } | null;
 
   const jobs = prisma.job.findMany({
     where: {
-      companyId: session?.user.id,
+      companyId: session?.user?.id,
     },
   });
 

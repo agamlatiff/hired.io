@@ -1,6 +1,6 @@
 "use client";
 
-import type { JobType } from "@/app/types";
+import type { CompanyType } from "@/app/types";
 import { fetcher, parsingCompanies } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
@@ -22,17 +22,16 @@ const useCompanies = (filter?: string[]) => {
     { revalidateOnMount: false }
   );
 
-  const [companies, setCompanies] = useState<JobType[]>([]);
+  const [companies, setCompanies] = useState<CompanyType[]>([]);
 
-  const parseJobs = useCallback(async () => {
+  const parseCompanies = useCallback(async () => {
     const parseData = await parsingCompanies(data, isLoading, error);
-
     setCompanies(parseData);
   }, [data, isLoading, error]);
 
   useEffect(() => {
-    parseJobs();
-  }, [data, isLoading, error]);
+    parseCompanies();
+  }, [parseCompanies]);
 
   return {
     companies,

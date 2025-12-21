@@ -26,13 +26,12 @@ const useJobs = (filter?: string[]) => {
 
   const parseJobs = useCallback(async () => {
     const parseData = await parsingJobs(data, isLoading, error);
-
     setJobs(parseData);
   }, [data, isLoading, error]);
 
   useEffect(() => {
     parseJobs();
-  }, [data, isLoading, error]);
+  }, [parseJobs]);
 
   return {
     jobs,

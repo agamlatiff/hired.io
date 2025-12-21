@@ -141,7 +141,7 @@ export const parsingCompanies = async (
           employee: companyDetail?.employee,
           industry: companyDetail?.industry,
           location: companyDetail?.location,
-          techStaack: companyDetail?.techStaack,
+          techStack: companyDetail?.techStack,
           website: companyDetail?.website,
           sosmed: item.CompanySocialMedia[0],
           teams: item?.CompanyTeam,

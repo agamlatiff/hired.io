@@ -42,7 +42,7 @@ const ExploreDataContainer: FC<ExploreDataContainerProps> = ({
                   src={"/images/pattern2.png"}
                   alt="pattern"
                   fill
-                  objectFit="contain"
+                  className="object-contain"
                 />
               </div>
             </div>

@@ -28,7 +28,7 @@ const FindJobsPage = () => {
 
   useEffect(() => {
     mutate();
-  }, [categories]);
+  }, [categories, mutate]);
 
   return (
     <ExploreDataContainer
