@@ -24,7 +24,7 @@ const MenuAuth = () => {
       <DropdownMenuContent>
         <DropdownMenuItem
           onClick={() => signOut()}
-          className="text-red-500  font-semibold"
+          className="text-red-500 flex items-center gap-4  font-semibold"
         >
           <BiLogOut /> Logout
         </DropdownMenuItem>
