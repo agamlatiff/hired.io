@@ -13,9 +13,6 @@ interface NavItem {
 const mainMenuItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
   { label: "Job Listings", href: "/dashboard/jobs", icon: "list_alt" },
-  { label: "Job Detail", href: "/dashboard/jobs/1", icon: "work" },
-  { label: "Candidates", href: "/dashboard/candidates", icon: "group", badge: "New" },
-  { label: "Interviews", href: "/dashboard/interviews", icon: "schedule" },
 ];
 
 const configMenuItems: NavItem[] = [
