@@ -1,5 +1,4 @@
 import Navbar from "@/components/page/Navbar";
-import Footer from "@/components/page/Footer";
 import AuthProvider from "./providers/AuthProvider";
 
 export const metadata = {
@@ -17,8 +16,8 @@ export default async function LandingPageLayout({
       <div className="relative overflow-x-hidden">
         <Navbar />
         <main>{children}</main>
-        <Footer />
       </div>
     </AuthProvider>
   );
 }
+
