@@ -175,4 +175,33 @@
   .card-lift:hover {
     @apply -translate-y-1;
   }
+
+  /* Dashboard Sidebar Links */
+  .sidebar-link {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background-color: #49e619;
+    transition: height 0.3s ease;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .sidebar-link:hover::before,
+  .sidebar-link.active::before {
+    height: 70%;
+  }
+
+  .sidebar-link.active {
+    background: rgba(73, 230, 25, 0.05);
+    color: white;
+  }
 }
