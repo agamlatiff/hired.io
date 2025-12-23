@@ -1,60 +1,78 @@
+"use client";
+
 import type { JobType } from "@/app/types";
 import Image from "next/image";
 import type { FC } from "react";
-import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
-import { Progress } from "../ui/progress";
 import { useRouter } from "next/navigation";
+import TechBadge from "../ui/TechBadge";
+import MaterialIcon from "../ui/MaterialIcon";
 
-interface JobCardProps extends JobType {}
+interface JobCardProps extends JobType {
+  salary?: string;
+  salaryType?: string;
+  featured?: boolean;
+}
 
 const JobCard: FC<JobCardProps> = ({
-  applicants,
   skills,
   image,
-  jobType,
   location,
   name,
-  needs,
   type,
   id,
+  salary,
+  salaryType = "Salary",
+  featured = false,
 }) => {
   const router = useRouter();
 
   return (
     <div
-      className="w-full border p-6 border-border flex flex-row justify-between items-center"
       onClick={() => router.push("/detail/job/" + id)}
+      className={`glow-box group relative bg-card-dark border ${featured ? "border-neon-green/50" : "border-accent-dark"
+        } hover:border-neon-green/50 rounded-full p-3 pr-8 transition-all duration-300 flex flex-col md:flex-row items-center gap-6 cursor-pointer`}
     >
-      <div className="flex flex-row items-start gap-6">
-        <div>
-          <Image src={image} alt={image} width={64} height={64} />
+      {/* Company Logo & Info */}
+      <div className="flex items-center gap-4 w-full md:w-auto pl-3">
+        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden">
+          <Image
+            src={image}
+            alt={name}
+            width={32}
+            height={32}
+            className="object-contain"
+          />
         </div>
-        <div>
-          <div className="text-lg font-semibold">{name}</div>
-          <div className="text-sm text-muted-foreground mb-2">
-            {type} . {location}
-          </div>
-          <div className="h-5 inline-flex gap-2 items-center">
-            <Badge variant={"secondary"}>{jobType}</Badge>
-            <Separator orientation="vertical" />
-            {skills.map((item: string, i: number) => (
-              <Badge key={i}>{item}</Badge>
-            ))}
-          </div>
+        <div className="flex flex-col">
+          <h3 className="text-lg font-bold text-white group-hover:text-neon-green transition-colors">
+            {name}
+          </h3>
+          <span className="text-sm text-gray-400">
+            {type} • {location}
+          </span>
+        </div>
+      </div>
 
-          <div className="w-[200px]">
-            <Button className="w-full" size={"lg"}>
-              Apply
-            </Button>
-            <Progress className="mt-2" value={(applicants / needs) * 100} />
-            <div className="text-gray-500 text-sm text-center mt-2">
-              <span className="text-black  font-semibold">{applicants}</span> of{" "}
-              {needs} capacity
-            </div>
-          </div>
+      {/* Tech Stack Badges */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto md:flex-1 md:justify-center px-4">
+        {skills?.slice(0, 3).map((skill: string, i: number) => (
+          <TechBadge key={i} label={skill} />
+        ))}
+      </div>
+
+      {/* Salary & Action */}
+      <div className="flex items-center justify-between w-full md:w-auto gap-8 pl-4 md:pl-0 border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+        <div className="flex flex-col items-end">
+          <span className="text-neon-green font-bold text-lg glow-text">
+            {salary || "$100k - $150k"}
+          </span>
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+            {salaryType}
+          </span>
         </div>
+        <button className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-neon-green group-hover:text-black transition-colors shrink-0">
+          <MaterialIcon icon="arrow_forward" />
+        </button>
       </div>
     </div>
   );

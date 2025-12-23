@@ -1,159 +1,166 @@
 # Hired.io Redesign - Task Checklist
 
-## Phase 0: Preparation & Analysis
-
-- [x] Review existing documentation
-- [x] Analyze current tailwind config dan globals.css
-- [x] Map existing components yang perlu di-update
-- [x] Identify new components yang perlu dibuat
-- [x] Create comprehensive roadmap
+> Converting HTML designs from `stitch_hired.io_homepage_dark_mode` to React/Next.js
 
 ---
 
-## Phase 1: Design System Foundation
+## Phase 0: Foundation ✅ COMPLETED
 
-### 1.1 Tailwind Configuration
-
-- [x] Add custom colors (primary, secondary, background-dark, card-dark, accent-dark)
-- [x] Add Manrope font family
-- [x] Add custom border radius scale
-- [x] Add grid-pattern background image
-
-### 1.2 Global Styles
-
-- [x] Import Manrope font from Google Fonts
-- [x] Import Material Symbols Outlined
-- [x] Add `.glass-panel` class
-- [x] Add `.glow-text` class
-- [x] Add `.glow-box` class
-- [x] Add `.bg-grid` class
-- [x] Add `.input-field` class
-- [x] Update dark mode CSS variables
-
-### 1.3 Root Layout
-
-- [x] Add `dark` class to html element
-- [x] Add `font-display` to body
+- [x] Update tailwind.config.js
+- [x] Update globals.css with glassmorphism & glow effects
+- [x] Update layout.tsx with dark mode
+- [x] Create MaterialIcon.tsx
+- [x] Create GlassPanel.tsx
+- [x] Create GlowButton.tsx
+- [x] Create TechBadge.tsx
+- [x] Create SearchBar.tsx
 
 ---
 
-## Phase 2: Shared Components
+## Phase 1: Public Landing Pages ✅ COMPLETED
 
-### 2.1 Core Components (Update)
+### Home Page (`home-page/code.html`)
 
-- [ ] `Navbar.tsx` - Floating glassmorphism navbar
-- [ ] `Footer.tsx` - Multi-column footer
-- [ ] `JobCard.tsx` - Pill-shaped job card
-- [ ] `CompanyCard.tsx` - Glassmorphism company card
+- [x] Convert Navbar section
+- [x] Convert Hero section
+- [x] Convert Top Companies section
+- [x] Convert Featured Jobs section
+- [x] Convert Trending Tech Stacks section
+- [x] Convert Footer section
 
-### 2.2 New Shared Components
+### Login Page (`login-page/code.html`)
 
-- [ ] `TechBadge.tsx` - Tech stack badge
-- [ ] `SearchBar.tsx` - Hero search with glow
-- [ ] `GlassPanel.tsx` - Reusable glassmorphism container
-- [ ] `GlowButton.tsx` - Button with glow effect
-- [ ] `MaterialIcon.tsx` - Material Symbols wrapper
+- [x] Convert login form card
+- [x] Convert input fields
+- [x] Convert OAuth buttons
+- [x] Convert submit button
 
----
+### Register Page (`register-page/code.html`)
 
-## Phase 3: Public Pages Redesign
+- [x] Convert registration form
+- [x] Convert role toggle tabs
+- [x] Convert skills input
+- [x] Convert password strength indicator
 
-### 3.1 Home Page
+### Auth Layout
 
-- [ ] Hero section with animated badge
-- [ ] Search bar with glow effect
-- [ ] Tech stack chips
-- [ ] Top Companies section
-- [ ] Featured Jobs section
-- [ ] Trending Tech Stacks section
-
-### 3.2 Authentication Pages
-
-- [ ] Login page redesign
-- [ ] Register page redesign
-- [ ] Add OAuth buttons styling
-- [ ] Add password strength indicator
-
-### 3.3 Jobs Pages
-
-- [ ] Jobs listing page with sidebar filters
-- [ ] Job detail page with company sidebar
-- [ ] Similar jobs section
-
-### 3.4 Companies Pages
-
-- [ ] Companies listing page
-- [ ] Company detail page
-- [ ] Company jobs section
-
-### 3.5 Application Pages
-
-- [ ] Apply form page (NEW)
-- [ ] Success apply page (NEW)
+- [x] Update auth layout with new design
 
 ---
 
-## Phase 4: Dashboard Redesign
+## Phase 2: Jobs Pages
 
-### 4.1 Dashboard Layout
+### Jobs Listing (`jobs-listing-page/code.html`)
 
-- [ ] Create `DashboardSidebar.tsx`
-- [ ] Update dashboard `layout.tsx`
-- [ ] Add sidebar navigation items
-- [ ] Hide "Candidates" and "Interviews" (no designs)
+- [ ] Convert filter sidebar
+- [ ] Convert job cards list
+- [ ] Convert sort/filter header
+- [ ] Convert pagination
 
-### 4.2 Dashboard Components
+### Job Detail (`job-detail-page/code.html`)
 
-- [ ] `StatCard.tsx` - Stats cards
-- [ ] `ActivityFeed.tsx` - Live activity
-- [ ] `TrafficChart.tsx` - Bar chart
-- [ ] `FunnelProgress.tsx` - Conversion funnel
-- [ ] `JobsTable.tsx` - Active jobs table
+- [ ] Convert job header card
+- [ ] Convert about section
+- [ ] Convert tech stack section
+- [ ] Convert responsibilities section
+- [ ] Convert benefits section
+- [ ] Convert company sidebar
+- [ ] Convert similar jobs
 
-### 4.3 Dashboard Pages
+### Apply Form (`apply-form-job-page/code.html`)
 
-- [ ] Dashboard main page
-- [ ] Job listings management page
-- [ ] Post a job page
-- [ ] Settings page
+- [ ] Create apply page route
+- [ ] Convert application form
+- [ ] Convert file upload
+- [ ] Convert submit section
 
----
+### Apply Success (`success-apply-page/code.html`)
 
-## Phase 5: Testing & Polish
-
-### 5.1 Responsive Testing
-
-- [ ] Mobile (< 640px)
-- [ ] Tablet (768px)
-- [ ] Desktop (1024px)
-- [ ] Large Desktop (1280px+)
-
-### 5.2 Cross-browser Testing
-
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Safari
-- [ ] Edge
-
-### 5.3 Performance Optimization
-
-- [ ] Image optimization
-- [ ] Font loading optimization
-- [ ] CSS bundle size check
-- [ ] Lighthouse audit
-
-### 5.4 Accessibility
-
-- [ ] Keyboard navigation
-- [ ] Color contrast check
-- [ ] Screen reader compatibility
-- [ ] Focus states
+- [ ] Create success page route
+- [ ] Convert success message
+- [ ] Convert navigation buttons
 
 ---
 
-## Final Checklist
+## Phase 3: Companies Pages
 
-- [ ] All pages match design reference
-- [ ] No console errors
-- [ ] Build succeeds without warnings
-- [ ] Documentation updated
+### Companies Listing (`companies-page/code.html`)
+
+- [ ] Convert companies grid
+- [ ] Convert company cards
+- [ ] Convert filters
+- [ ] Convert pagination
+
+### Company Detail (`company-detail-page/code.html`)
+
+- [ ] Create company detail route
+- [ ] Convert company header
+- [ ] Convert about section
+- [ ] Convert open positions
+
+### Company Jobs (`companies-detail-job-page/code.html`)
+
+- [ ] Convert company jobs list
+
+---
+
+## Phase 4: Dashboard Pages
+
+### Dashboard Layout
+
+- [ ] Create DashboardSidebar component
+- [ ] Update dashboard layout.tsx
+- [ ] Add navigation items
+- [ ] Add user profile section
+
+### Dashboard Main (`dashboard-admn-page/code.html`)
+
+- [ ] Create dashboard main page
+- [ ] Convert stat cards
+- [ ] Convert traffic chart
+- [ ] Convert funnel progress
+- [ ] Convert activity feed
+- [ ] Convert jobs table
+
+### Job Listings (`dashboard-job-listings-page/code.html`)
+
+- [ ] Convert jobs table
+- [ ] Convert actions
+- [ ] Convert filters
+
+### Job Detail Admin (`dashboard-job-detail-page/code.html`)
+
+- [ ] Convert job detail view
+- [ ] Convert applicants section
+
+### Post a Job (`dashboaed-post-a-job-page/code.html`)
+
+- [ ] Convert job form
+- [ ] Convert requirements section
+- [ ] Convert benefits section
+- [ ] Convert preview
+
+### Settings (`dashboard-setting-page/code.html`)
+
+- [ ] Convert profile section
+- [ ] Convert account settings
+- [ ] Convert notifications
+
+---
+
+## Phase 5: Testing & Finalization
+
+- [ ] Build verification (`npm run build`)
+- [ ] Visual comparison with designs
+- [ ] Responsive testing
+- [ ] Fix any issues
+
+---
+
+## Git Commits Plan
+
+- [x] Phase 1 complete → commit & push
+- [ ] Phase 2 complete → commit & push
+- [ ] Phase 3 complete → commit & push
+- [ ] Phase 4 complete → commit & push
+- [ ] Phase 5 complete → commit & push

@@ -1,88 +1,128 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Separator } from "@radix-ui/react-separator";
-
-const aboutLinks = [
-  "Companies",
-  "Pricing",
-  "Terms",
-  "Advice",
-  "Privacy Policy",
-];
-const resourceLinks = ["Help Docs", "Updates", "Contact Us"];
-const socialMediaImg = [
-  "/images/soc-Facebook.png",
-  "/images/soc-Instagram.png",
-  "/images/soc-Twitter.png",
-  "/images/soc-LinkedIn.png",
-  "/images/soc-Dribble.png",
-];
 
 const Footer = () => {
   return (
-    <div className="bg-slate-900  px-32 text-foreground pt-16 pb-11">
-      <div className="flex flex-row items-tart justify-between">
-        <div>
-          <Image src={"/images/logo.png"} alt="logo" width={160} height={36} />
-          <div className="text-muted mt-8">
-            Great PLatform for the job seeker that <br /> passionate a bout
-            startups. Find your dream job <br /> easier.
+    <footer className="mt-auto border-t border-accent-dark bg-background-dark pt-16 pb-8 px-4 md:px-10 lg:px-20">
+      <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+        {/* Logo & Description */}
+        <div className="max-w-xs">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="size-6 rounded-full bg-neon-green flex items-center justify-center text-background-dark">
+              <span
+                className="material-symbols-outlined font-bold"
+                style={{ fontSize: "14px" }}
+              >
+                terminal
+              </span>
+            </div>
+            <h2 className="text-lg font-bold text-white">hired.io</h2>
           </div>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            The #1 job board for 10x developers. Built for devs, by devs.
+          </p>
         </div>
 
-        <div>
-          <div className="text-lg text-primary-foreground font-semibold mb-5">
-            About
+        {/* Links Grid */}
+        <div className="flex flex-wrap gap-12 md:gap-24">
+          {/* Candidates */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider">
+              Candidates
+            </h4>
+            <Link
+              href="/find-jobs"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Find Jobs
+            </Link>
+            <Link
+              href="/find-companies"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Company Directory
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Salary Calculator
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Resume Review
+            </Link>
           </div>
-          <div className="space-y-4">
-            {aboutLinks.map((item: string, i: number) => (
-              <Link className="block text-muted" key={i} href={"/"}>
-                {item}
-              </Link>
-            ))}
-          </div>
-        </div>
 
-        <div>
-          <div className="text-lg text-primary-foreground font-semibold mb-5">
-            Resources
+          {/* Employers */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider">
+              Employers
+            </h4>
+            <Link
+              href="/dashboard/post-a-job"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Post a Job
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Success Stories
+            </Link>
           </div>
-          <div className="space-y-4">
-            {resourceLinks.map((item: string, i: number) => (
-              <Link className="block text-muted" key={i} href={"/"}>
-                {item}
-              </Link>
-            ))}
-          </div>
-        </div>
 
-        <div>
-          <div className="text-lg text-primary-foreground font-semibold mb-5">
-            Get job notifications
+          {/* Company */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider">
+              Company
+            </h4>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              About Us
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Blog
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
+            >
+              Contact
+            </Link>
           </div>
-          <div className="text-muted">The Latest job news, articles, sent to <br /> your inbox weekly</div>
         </div>
-        <div className="mt-10 inline-flex items-center gap-3">
-          <Input placeholder="Email Address" className="py-5" />
-          <Button className="py-5">Subscribe</Button>
-        </div>
-
       </div>
-      <Separator className="mt-20 mb-11 bg-gray-300" />
 
-      <div className="flex flex-row items-center justify-between">
-        <div className="text-slate-600">
-          2021 @JobHuntly. All right reserved.
-        </div>
-        <div className="space-x-3">
-          {socialMediaImg.map((item: string, i: number) => (
-            <Image className="inline" src={item} alt={item} key={i} width={32} height={32} />
-          ))}
+      {/* Bottom Bar */}
+      <div className="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-accent-dark flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+        <p>© 2024 hired.io Inc. All rights reserved.</p>
+        <div className="flex gap-6">
+          <Link href="#" className="hover:text-white transition-colors">
+            Privacy Policy
+          </Link>
+          <Link href="#" className="hover:text-white transition-colors">
+            Terms of Service
+          </Link>
+          <Link href="#" className="hover:text-white transition-colors">
+            Twitter
+          </Link>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
