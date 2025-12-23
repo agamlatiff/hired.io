@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hired.io - Login</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#49e619", // Neon Green
+                        "secondary": "#a259ff", // Neon Purple accent for future tech vibe
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131811",
+                        "card-dark": "#1e261c",
+                        "accent-dark": "#2c3829"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #2c3829 1px, transparent 1px), linear-gradient(to bottom, #2c3829 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 38, 28, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(73, 230, 25, 0.1);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
+        }
+        .glow-box:hover {
+            box-shadow: 0 0 20px rgba(73, 230, 25, 0.15);
+            border-color: rgba(73, 230, 25, 0.5);
+        }.bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+        .input-field {
+            background: rgba(20, 25, 20, 0.8);
+            border: 1px solid rgba(73, 230, 25, 0.2);
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #49e619;
+            box-shadow: 0 0 15px rgba(73, 230, 25, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col">
+<div class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
+<nav class="glass-panel rounded-full px-6 py-3 flex items-center justify-between gap-12 shadow-2xl max-w-5xl w-full">
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-3" href="#">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold" style="font-size: 20px;">terminal</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-white">hired.io</h1>
+</a>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold text-gray-400 hover:text-primary transition-colors" href="#">Find Jobs</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Companies</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Salaries</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">For Employers</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark text-sm font-bold px-6 py-2.5 rounded-full transition-all shadow-[0_0_15px_rgba(73,230,25,0.3)] hover:shadow-[0_0_25px_rgba(73,230,25,0.5)]">
+                    Sign Up
+                </button>
+</div>
+</nav>
+</div>
+<section class="relative flex-grow flex items-center justify-center px-4 py-32 overflow-hidden min-h-screen">
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.07] bg-grid pointer-events-none"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="w-full max-w-md relative z-10">
+<div class="glass-panel p-8 md:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+<div class="mb-8 text-center">
+<h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
+<p class="text-gray-400 text-sm">Access your developer dashboard</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-gray-300 ml-1" for="email">Email or Username</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors">person</span>
+</div>
+<input class="input-field block w-full pl-11 pr-4 py-3 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-0 sm:text-sm" id="email" placeholder="dev@example.com" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between ml-1">
+<label class="block text-sm font-medium text-gray-300" for="password">Password</label>
+<a class="text-xs text-primary hover:text-white transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors">lock</span>
+</div>
+<input class="input-field block w-full pl-11 pr-4 py-3 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-0 sm:text-sm" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-[#3cd612] text-background-dark font-bold py-3.5 px-4 rounded-xl transition-all shadow-[0_0_20px_rgba(73,230,25,0.2)] hover:shadow-[0_0_30px_rgba(73,230,25,0.4)] transform active:scale-[0.98] flex items-center justify-center gap-2" type="button">
+<span>Login to Dashboard</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-white/10"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-[#181f16] text-gray-500">Or continue with</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 px-4 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-colors group">
+<svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+<path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"></path>
+</svg>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">Google</span>
+</button>
+<button class="flex items-center justify-center gap-2 px-4 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-colors group">
+<svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+<path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path>
+</svg>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">GitHub</span>
+</button>
+</div>
+<div class="mt-8 text-center">
+<p class="text-sm text-gray-400">
+                        Don't have an account? 
+                        <a class="text-primary font-bold hover:underline decoration-primary/50 underline-offset-4" href="#">Sign up for free</a>
+</p>
+</div>
+</div>
+<div class="absolute -z-10 -bottom-10 -right-10 w-32 h-32 bg-secondary/20 rounded-full blur-2xl"></div>
+<div class="absolute -z-10 -top-10 -left-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+</div>
+</section>
+<footer class="border-t border-accent-dark bg-background-dark pt-8 pb-8 px-4 md:px-10 lg:px-20">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-600" style="font-size: 16px;">terminal</span>
+<p>© 2024 hired.io Inc. All rights reserved.</p>
+</div>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+
+</body></html>

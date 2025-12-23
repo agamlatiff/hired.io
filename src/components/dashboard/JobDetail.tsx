@@ -3,7 +3,7 @@ import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import type { CategoryJob, Job } from "@prisma/client";
 import type { FC } from "react";
-import { dateFormat } from "@/lib/utils";
+import { dateFormat } from "@/lib/helpers";
 
 type JobDetailType = {
   CategoryJob: CategoryJob | null;

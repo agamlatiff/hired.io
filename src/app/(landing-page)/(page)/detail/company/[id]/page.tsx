@@ -17,7 +17,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
 import prisma from "@/lib/prisma";
 import { supabasePublicUrl } from "@/lib/supabase";
-import { dateFormat } from "@/lib/utils";
+import { dateFormat } from "@/lib/helpers";
 import type { CompanyTeam } from "@prisma/client";
 
 type Params = {

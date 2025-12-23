@@ -9,7 +9,7 @@ import React from "react";
 import { BiCategory } from "react-icons/bi";
 import prisma from "@/lib/prisma";
 import { supabasePublicUrl } from "@/lib/supabase";
-import { dateFormat } from "@/lib/utils";
+import { dateFormat } from "@/lib/helpers";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 

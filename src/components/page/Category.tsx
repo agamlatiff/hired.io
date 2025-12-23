@@ -4,7 +4,7 @@ import TitleSection from "./TitleSection";
 
 import CategoryItem from "./CategoryItem";
 import useSWR from "swr";
-import { fetcher, parsingCategories } from "@/lib/utils";
+import { fetcher, parsingCategories } from "@/lib/helpers";
 import { useMemo } from "react";
 import type { categoryJobType } from "@/app/types";
 

@@ -1,7 +1,8 @@
 "use client";
 
 import type { CompanyType } from "@/app/types";
-import { fetcher, parsingCompanies } from "@/lib/utils";
+import { fetcher } from "@/lib/helpers";
+import { parsingCompanies } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 

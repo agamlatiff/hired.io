@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Senior Frontend Engineer at Vercel - Hired.io</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#49e619", // Neon Green
+                        "secondary": "#a259ff", // Neon Purple accent for future tech vibe
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131811",
+                        "card-dark": "#1e261c",
+                        "accent-dark": "#2c3829"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "mono": ["monospace"] // enhancing dev vibe
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #2c3829 1px, transparent 1px), linear-gradient(to bottom, #2c3829 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 38, 28, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(73, 230, 25, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 38, 28, 0.4);
+            border: 1px solid rgba(44, 56, 41, 0.5);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
+        }
+        .glow-text-secondary {
+            text-shadow: 0 0 10px rgba(162, 89, 255, 0.5);
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 5%, black, 95%, transparent);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(44, 56, 41, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(73, 230, 25, 0.3);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(73, 230, 25, 0.6);
+        }
+        .tech-badge {
+            transition: all 0.2s ease;
+        }
+        .tech-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-color: rgba(73, 230, 25, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col relative">
+<div class="fixed inset-0 z-0 pointer-events-none">
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.03] bg-grid"></div>
+<div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px]"></div>
+</div>
+<div class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
+<nav class="glass-panel rounded-full px-6 py-3 flex items-center justify-between gap-12 shadow-2xl max-w-6xl w-full">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold" style="font-size: 20px;">terminal</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-white">hired.io</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold text-primary transition-colors" href="#">Find Jobs</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Companies</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Salaries</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">For Employers</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex text-sm font-bold text-white hover:text-primary px-4 py-2 transition-colors">
+                Log In
+            </button>
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark text-sm font-bold px-6 py-2.5 rounded-full transition-all shadow-[0_0_15px_rgba(73,230,25,0.3)] hover:shadow-[0_0_25px_rgba(73,230,25,0.5)]">
+                Sign Up
+            </button>
+</div>
+</nav>
+</div>
+<main class="flex-grow relative z-10 pt-32 pb-20 px-4 md:px-10 lg:px-20">
+<div class="max-w-[1400px] mx-auto">
+<div class="flex items-center gap-2 text-sm text-gray-500 mb-8 font-medium">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Find Jobs</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-white">Senior Frontend Engineer</span>
+</div>
+<div class="relative group mb-8">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20 rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition duration-700"></div>
+<div class="glass-panel relative rounded-3xl p-8 md:p-10 border border-white/10">
+<div class="flex flex-col lg:flex-row gap-8 items-start">
+<div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white flex items-center justify-center shrink-0 p-4 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+<img alt="Vercel Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAmRxDHv2vweGovYx9DWWH3IOHQUMsap5anKHu2FlbXHWuB_LDnq8eBMNLOBom2vsXEvaQPlESS6KPwIZvZyUqCpW6fScnO1QRU19Zy7gzUCEbI9XatG3gVtJky5DbWxn2k7KQfu_nBMMtAshbXYw2dbz6_AlM7SM0L13rzrEdvAypuNvqSlyj9vCdIyRdXZTLo1O0KIy9axy5lpolMI2xcLP9SdG4yjC_rKsmw1GnST3BgILu0pZt79zXqxyTjAeUmCAj3o7_eg"/>
+</div>
+<div class="flex-1 w-full">
+<div class="flex flex-col xl:flex-row justify-between xl:items-start gap-6">
+<div>
+<h1 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-3">Senior Frontend Engineer</h1>
+<div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm md:text-base font-medium">
+<span class="text-white flex items-center gap-1">Vercel <span class="material-symbols-outlined text-blue-400 text-sm ml-1">verified</span></span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span>San Francisco, CA</span>
+<span class="px-2 py-0.5 rounded text-xs bg-primary/10 text-primary border border-primary/20">Remote Friendly</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span>Posted 2 hours ago</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto mt-2 xl:mt-0">
+<div class="flex gap-3">
+<button class="flex-1 sm:flex-none h-12 px-4 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all group/btn" title="Save Job">
+<span class="material-symbols-outlined group-hover/btn:scale-110 transition-transform">bookmark_border</span>
+</button>
+<button class="flex-1 sm:flex-none h-12 px-4 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all group/btn" title="Share">
+<span class="material-symbols-outlined group-hover/btn:scale-110 transition-transform">share</span>
+</button>
+</div>
+<button class="flex-1 sm:flex-none bg-primary hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-10 h-12 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 whitespace-nowrap text-lg flex items-center justify-center gap-2">
+<span>Apply Now</span>
+<span class="material-symbols-outlined text-xl">arrow_outward</span>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-y-6 gap-x-10 mt-8 pt-8 border-t border-white/5">
+<div>
+<div class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Salary Range</div>
+<div class="text-2xl md:text-3xl font-bold text-primary glow-text font-mono tracking-tight">$180k - $240k<span class="text-lg text-gray-500 font-normal">/yr</span></div>
+</div>
+<div>
+<div class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Equity</div>
+<div class="text-xl md:text-2xl font-bold text-white font-mono">0.05% - 0.1%</div>
+</div>
+<div>
+<div class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Experience</div>
+<div class="text-xl md:text-2xl font-bold text-white">5+ Years</div>
+</div>
+<div>
+<div class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Applicants</div>
+<div class="flex -space-x-2 overflow-hidden mt-1.5">
+<div class="inline-block h-8 w-8 rounded-full bg-gray-600 ring-2 ring-[#1e261c] overflow-hidden"><img alt="" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpy39WovbIB2mvLwVgd1xO_IeCktGTeTAnFJdfMYOyuWNqUR0zwBJLdFr7JT8p-wh8TCnQPjyUiPcnyTDdLS-O7DQH2r8_n3c_erdCnfLzRfoeaGP034WaFRpfoMZt5j1Yb5qItUxGAFGd5GYrlC19PBS4y5rbvcX-R1o_3sg1tuyHsK8U2A05tQen7Lek43AnZX9cn3s8WU2WaoYkt7xumrd6Cz5tP8kDRHgOjCHWyv5HwqquhVO40IKuAjKKSGMZ8wPWajzvpA"/></div>
+<div class="inline-block h-8 w-8 rounded-full bg-gray-500 ring-2 ring-[#1e261c] overflow-hidden"><img alt="" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD32g1pDLuQIwipEXqIKFFmRdQJ2xjAaEDPf_qa2iIIcwL4ysgvvn2D4IWyMzpNhSlVTfzyDcbElgXoWd4NLBWrxfitxAEuT_qYCrPbdM4rZWciYWT8zMDXCFzTaneJpxDfyLl0GBQ5Mn_f_3nyjeiJX-4QDLPt8s7cD0ryQQK2quAteDj5k1UuuJnW5ME-8te5git8TJAnIfpqdwrqVUaruV0I-0RtAQuRg9UTv6BQOJatgWKDqhmTDmIOuYtiOMbQ7N1R6_to4g"/></div>
+<div class="inline-block h-8 w-8 rounded-full bg-gray-400 ring-2 ring-[#1e261c] overflow-hidden"><img alt="" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGPEGuqP3jk88FN70EpIq0P5ftgD0XXlVAAKzJ--X5JbK1jwNXaAlLexyC_WAkJQai4w8waw82Fi4ISMg91iJGpnEwkcT2cAgkClPZjujs_rIe2c6FbTUH-m9vFpFXpVQ1mR3P7CGZBMoqvyo2u6AHckz7LQuCjNKX7hM7yEKT3JvxzMCJTaW_WPeTjDwz6Oy4rJmrCVl07VXUweYTLjT1jfWoKZBXkjV_TFMo-iU_JF9i1fVtw7DySqK-oYtN4va6Fu_2ubMhDQ"/></div>
+<div class="inline-block h-8 w-8 rounded-full bg-card-dark ring-2 ring-[#1e261c] flex items-center justify-center text-[10px] font-bold text-gray-400 border border-gray-700">+42</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-8 space-y-6">
+<section class="glass-card rounded-2xl p-8 border border-accent-dark">
+<h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+<span class="p-2 rounded-lg bg-primary/10 text-primary"><span class="material-symbols-outlined">description</span></span>
+                        About the Role
+                    </h2>
+<div class="prose prose-invert max-w-none text-gray-300 leading-relaxed space-y-4">
+<p>
+                            Vercel is looking for a Senior Frontend Engineer to join our Core Product team. In this role, you will be responsible for building and maintaining the user interface of our platform, ensuring a seamless and performant experience for developers worldwide.
+                        </p>
+<p>
+                            You will work closely with our design and product teams to translate complex requirements into clean, efficient, and reusable code. We value craftsmanship, attention to detail, and a passion for building tools that empower other developers.
+                        </p>
+<p>
+                            If you love Next.js, obsess over web performance, and enjoy working in a fast-paced environment where your work has immediate impact, we'd love to hear from you.
+                        </p>
+</div>
+</section>
+<section class="glass-card rounded-2xl p-8 border border-accent-dark">
+<h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+<span class="p-2 rounded-lg bg-secondary/10 text-secondary"><span class="material-symbols-outlined">code</span></span>
+                        Tech Stack
+                    </h2>
+<div class="flex flex-wrap gap-3">
+<div class="tech-badge px-4 py-2 rounded-xl bg-card-dark border border-accent-dark flex items-center gap-3 cursor-default group">
+<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-blue-400">
+<span class="material-symbols-outlined text-sm">code</span>
+</div>
+<div>
+<div class="text-xs text-gray-500 font-bold uppercase tracking-wide">Frontend</div>
+<div class="text-white font-mono text-sm group-hover:text-primary transition-colors">React</div>
+</div>
+</div>
+<div class="tech-badge px-4 py-2 rounded-xl bg-card-dark border border-accent-dark flex items-center gap-3 cursor-default group">
+<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">javascript</span>
+</div>
+<div>
+<div class="text-xs text-gray-500 font-bold uppercase tracking-wide">Framework</div>
+<div class="text-white font-mono text-sm group-hover:text-primary transition-colors">Next.js</div>
+</div>
+</div>
+<div class="tech-badge px-4 py-2 rounded-xl bg-card-dark border border-accent-dark flex items-center gap-3 cursor-default group">
+<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-sm">data_object</span>
+</div>
+<div>
+<div class="text-xs text-gray-500 font-bold uppercase tracking-wide">Language</div>
+<div class="text-white font-mono text-sm group-hover:text-primary transition-colors">TypeScript</div>
+</div>
+</div>
+<div class="tech-badge px-4 py-2 rounded-xl bg-card-dark border border-accent-dark flex items-center gap-3 cursor-default group">
+<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-cyan-400">
+<span class="material-symbols-outlined text-sm">brush</span>
+</div>
+<div>
+<div class="text-xs text-gray-500 font-bold uppercase tracking-wide">Styling</div>
+<div class="text-white font-mono text-sm group-hover:text-primary transition-colors">Tailwind CSS</div>
+</div>
+</div>
+<div class="tech-badge px-4 py-2 rounded-xl bg-card-dark border border-accent-dark flex items-center gap-3 cursor-default group">
+<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-purple-400">
+<span class="material-symbols-outlined text-sm">deployed_code</span>
+</div>
+<div>
+<div class="text-xs text-gray-500 font-bold uppercase tracking-wide">Testing</div>
+<div class="text-white font-mono text-sm group-hover:text-primary transition-colors">Jest / RTL</div>
+</div>
+</div>
+</div>
+</section>
+<section class="glass-card rounded-2xl p-8 border border-accent-dark">
+<h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+<span class="p-2 rounded-lg bg-green-500/10 text-green-500"><span class="material-symbols-outlined">check_circle</span></span>
+                        What You'll Do
+                    </h2>
+<ul class="space-y-4">
+<li class="flex items-start gap-4 group">
+<div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary group-hover:shadow-[0_0_8px_#49e619] transition-all shrink-0"></div>
+<span class="text-gray-300 group-hover:text-white transition-colors">Design and implement new features for the Vercel dashboard using React, Next.js, and TypeScript.</span>
+</li>
+<li class="flex items-start gap-4 group">
+<div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary group-hover:shadow-[0_0_8px_#49e619] transition-all shrink-0"></div>
+<span class="text-gray-300 group-hover:text-white transition-colors">Collaborate with designers to maintain and evolve our design system, ensuring consistency across the platform.</span>
+</li>
+<li class="flex items-start gap-4 group">
+<div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary group-hover:shadow-[0_0_8px_#49e619] transition-all shrink-0"></div>
+<span class="text-gray-300 group-hover:text-white transition-colors">Optimize application performance for maximum speed and scalability, aiming for 100 lighthouse scores.</span>
+</li>
+<li class="flex items-start gap-4 group">
+<div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary group-hover:shadow-[0_0_8px_#49e619] transition-all shrink-0"></div>
+<span class="text-gray-300 group-hover:text-white transition-colors">Conduct code reviews and mentor junior engineers, fostering a culture of technical excellence.</span>
+</li>
+</ul>
+</section>
+<section class="glass-card rounded-2xl p-8 border border-accent-dark">
+<h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+<span class="p-2 rounded-lg bg-purple-500/10 text-purple-500"><span class="material-symbols-outlined">redeem</span></span>
+                        Perks &amp; Benefits
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">monitor_heart</span>
+<span class="text-sm font-medium text-gray-200">Comprehensive Health</span>
+</div>
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">flight_takeoff</span>
+<span class="text-sm font-medium text-gray-200">Unlimited PTO</span>
+</div>
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">devices</span>
+<span class="text-sm font-medium text-gray-200">$3k Home Office Stipend</span>
+</div>
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+<span class="text-sm font-medium text-gray-200">Equity Package</span>
+</div>
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">lunch_dining</span>
+<span class="text-sm font-medium text-gray-200">Daily Lunch Stipend</span>
+</div>
+<div class="flex items-center gap-3 p-4 rounded-xl bg-card-dark border border-white/5 hover:border-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary">school</span>
+<span class="text-sm font-medium text-gray-200">Learning Budget</span>
+</div>
+</div>
+</section>
+</div>
+<aside class="lg:col-span-4 space-y-6 sticky top-32">
+<div class="glass-card rounded-2xl p-6 border border-accent-dark">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center p-2">
+<img alt="Vercel Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAmRxDHv2vweGovYx9DWWH3IOHQUMsap5anKHu2FlbXHWuB_LDnq8eBMNLOBom2vsXEvaQPlESS6KPwIZvZyUqCpW6fScnO1QRU19Zy7gzUCEbI9XatG3gVtJky5DbWxn2k7KQfu_nBMMtAshbXYw2dbz6_AlM7SM0L13rzrEdvAypuNvqSlyj9vCdIyRdXZTLo1O0KIy9axy5lpolMI2xcLP9SdG4yjC_rKsmw1GnST3BgILu0pZt79zXqxyTjAeUmCAj3o7_eg"/>
+</div>
+<div>
+<h3 class="font-bold text-white">Vercel</h3>
+<a class="text-primary text-xs hover:text-[#3cd612] hover:underline flex items-center gap-1" href="#">
+                                vercel.com <span class="material-symbols-outlined text-[10px]">open_in_new</span>
+</a>
+</div>
+</div>
+<p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        Vercel is the platform for Frontend developers, providing the speed and reliability innovators need to create at the moment of inspiration.
+                    </p>
+<div class="grid grid-cols-2 gap-3 mb-6">
+<div class="bg-card-dark p-3 rounded-lg border border-white/5">
+<div class="text-xs text-gray-500 mb-1">Employees</div>
+<div class="font-bold text-white text-sm">500-1000</div>
+</div>
+<div class="bg-card-dark p-3 rounded-lg border border-white/5">
+<div class="text-xs text-gray-500 mb-1">Industry</div>
+<div class="font-bold text-white text-sm">Cloud</div>
+</div>
+<div class="bg-card-dark p-3 rounded-lg border border-white/5">
+<div class="text-xs text-gray-500 mb-1">Location</div>
+<div class="font-bold text-white text-sm">SF, CA</div>
+</div>
+<div class="bg-card-dark p-3 rounded-lg border border-white/5">
+<div class="text-xs text-gray-500 mb-1">Series</div>
+<div class="font-bold text-white text-sm">Series D</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-card-dark border border-accent-dark text-gray-300 hover:text-white hover:border-gray-500 hover:bg-white/5 transition-all text-sm font-semibold">
+                        View Company Profile
+                    </button>
+</div>
+<div class="glass-card rounded-2xl p-6 border border-accent-dark">
+<h3 class="font-bold text-white mb-4">Similar Jobs</h3>
+<div class="space-y-4">
+<a class="block group" href="#">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-lg bg-[#635BFF] flex items-center justify-center shrink-0 text-white font-bold shadow-lg shadow-purple-500/10 transition-transform group-hover:scale-105">S</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-white font-bold text-sm truncate group-hover:text-primary transition-colors">Staff Backend Engineer</h4>
+<div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+<span>Stripe</span>
+<span>•</span>
+<span class="text-green-400">$220k+</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-600 group-hover:text-white text-sm">chevron_right</span>
+</div>
+</a>
+<a class="block group" href="#">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-lg bg-black border border-gray-700 flex items-center justify-center shrink-0 shadow-lg transition-transform group-hover:scale-105">
+<img alt="Linear Logo" class="w-5 h-5 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeBYuGCEABchKdQW_mJDi7ZhPKMd-rd6T2LwEQBSCJ6AX2FVaKZVKOv2ALHQ4l9DnoKW31y2thUGoIyddScCly8wJ4wwdNl9OCN0SuoL7EHxAb9u6cQVLnOL5XVS4RqyTR5RRdm4Wsd3jS4xyNFHyn2if6_tBTeje7OFr1M9sA5GD3sa0OxNMM6bPjS9uQFlmCHot0ZI4HMzq_xXn0FFoEhGswC2zlkgpvoSCKYZD-iWVCwJJu0VR-klvFUEf-a0EXeMehjLLNRA"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-white font-bold text-sm truncate group-hover:text-primary transition-colors">Product Designer</h4>
+<div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+<span>Linear</span>
+<span>•</span>
+<span class="text-green-400">$160k+</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-600 group-hover:text-white text-sm">chevron_right</span>
+</div>
+</a>
+<a class="block group" href="#">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-lg bg-[#5865F2] flex items-center justify-center shrink-0 shadow-lg transition-transform group-hover:scale-105">
+<img alt="Discord Logo" class="w-5 h-5 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0P6Sg4EjTkyHcqfJr33vWJT9FBK0jGBCJWFt0uz4rj51c8VPNWmzAWuRGiYttYTkoUhCpQgSnmDfLyCDKJbprQzgXdZx5qAw_XjxvJUXtOpmdN92MCR1LWmSImIFDq22Rs-TYELZLWstKNkl6fyDHMHEiin58Z3l0bLY4lEWDGEIMOU1bKijaKJOGZJxZpyPZALP8oTwBwZz8VCv5vYMDsF_Q792sEhW5K_TbeD4-h3qmooBa4QcQ3lUfdRk16WZkYyl60I9lnw"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-white font-bold text-sm truncate group-hover:text-primary transition-colors">iOS Engineer</h4>
+<div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+<span>Discord</span>
+<span>•</span>
+<span class="text-green-400">$190k+</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-600 group-hover:text-white text-sm">chevron_right</span>
+</div>
+</a>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-accent-dark bg-background-dark pt-16 pb-8 px-4 md:px-10 lg:px-20 z-10 relative">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="max-w-xs">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold" style="font-size: 14px;">terminal</span>
+</div>
+<h2 class="text-lg font-bold text-white">hired.io</h2>
+</div>
+<p class="text-gray-500 text-sm leading-relaxed">
+                The #1 job board for 10x developers. Built for devs, by devs.
+            </p>
+</div>
+<div class="flex flex-wrap gap-12 md:gap-24">
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Candidates</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Find Jobs</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Company Directory</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Salary Calculator</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Resume Review</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Employers</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Post a Job</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Pricing</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Success Stories</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Company</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">About Us</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Blog</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Contact</a>
+</div>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-accent-dark flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+<p>© 2024 hired.io Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Twitter</a>
+</div>
+</div>
+</footer>
+
+</body></html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hired.io - High-Tech Job Portal</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#49e619", // Neon Green
+                        "secondary": "#a259ff", // Neon Purple accent for future tech vibe
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131811",
+                        "card-dark": "#1e261c",
+                        "accent-dark": "#2c3829"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #2c3829 1px, transparent 1px), linear-gradient(to bottom, #2c3829 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 38, 28, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(73, 230, 25, 0.1);
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
+        }
+        
+        .glow-box:hover {
+            box-shadow: 0 0 20px rgba(73, 230, 25, 0.15);
+            border-color: rgba(73, 230, 25, 0.5);
+        }
+
+        /* Subtle grid animation */
+        .bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col">
+<!-- Navbar -->
+<div class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
+<nav class="glass-panel rounded-full px-6 py-3 flex items-center justify-between gap-12 shadow-2xl max-w-5xl w-full">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold" style="font-size: 20px;">terminal</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-white">hired.io</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold text-white hover:text-primary transition-colors" href="#">Find Jobs</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Companies</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">Salaries</a>
+<a class="text-sm font-medium text-gray-400 hover:text-white transition-colors" href="#">For Employers</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex text-sm font-bold text-white hover:text-primary px-4 py-2 transition-colors">
+                    Log In
+                </button>
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark text-sm font-bold px-6 py-2.5 rounded-full transition-all shadow-[0_0_15px_rgba(73,230,25,0.3)] hover:shadow-[0_0_25px_rgba(73,230,25,0.5)]">
+                    Sign Up
+                </button>
+</div>
+</nav>
+</div>
+<!-- Hero Section -->
+<section class="relative pt-32 pb-20 px-4 md:px-10 lg:px-20 min-h-[85vh] flex flex-col items-center justify-center overflow-hidden">
+<!-- Background decorative elements -->
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.07] bg-grid pointer-events-none"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="max-w-4xl w-full text-center relative z-10 flex flex-col items-center gap-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                Over 500+ new dev jobs added today
+            </div>
+<h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[1.1] bg-clip-text text-transparent bg-gradient-to-br from-white via-gray-200 to-gray-500 pb-2">
+                Code Your Future.<br/>
+<span class="text-white relative">
+                    Find the top 1%
+                    <svg class="absolute -bottom-2 w-full h-3 text-primary" preserveaspectratio="none" viewbox="0 0 100 10">
+<path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="3"></path>
+</svg>
+</span> 
+                dev jobs.
+            </h1>
+<p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Join the exclusive network where top tech companies compete to hire you. 
+                Transparent salaries, direct access to founders, and zero spam.
+            </p>
+<div class="w-full max-w-2xl mt-6 relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative flex items-center bg-card-dark border border-accent-dark rounded-2xl p-2 shadow-2xl">
+<div class="pl-4 text-gray-500">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 px-4 py-3 text-base md:text-lg" placeholder="Search by technology, role (e.g. 'Rust', 'Senior Backend')..." type="text"/>
+<div class="hidden sm:flex border-l border-accent-dark pl-2">
+<select class="bg-transparent border-none text-gray-300 text-sm font-medium focus:ring-0 cursor-pointer py-3 pr-8">
+<option>Remote</option>
+<option>On-site</option>
+<option>Hybrid</option>
+</select>
+</div>
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark font-bold rounded-xl px-6 py-3 ml-2 transition-transform active:scale-95">
+                        Search
+                    </button>
+</div>
+</div>
+<!-- Chips -->
+<div class="flex flex-wrap justify-center gap-3 mt-8">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-dark hover:bg-white/10 border border-transparent hover:border-white/20 transition-all group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform text-lg">code</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">React</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-dark hover:bg-white/10 border border-transparent hover:border-white/20 transition-all group">
+<span class="material-symbols-outlined text-purple-400 group-hover:scale-110 transition-transform text-lg">database</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">Node.js</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-dark hover:bg-white/10 border border-transparent hover:border-white/20 transition-all group">
+<span class="material-symbols-outlined text-blue-400 group-hover:scale-110 transition-transform text-lg">terminal</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">Python</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-dark hover:bg-white/10 border border-transparent hover:border-white/20 transition-all group">
+<span class="material-symbols-outlined text-orange-400 group-hover:scale-110 transition-transform text-lg">deployed_code</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">Rust</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-accent-dark hover:bg-white/10 border border-transparent hover:border-white/20 transition-all group">
+<span class="material-symbols-outlined text-yellow-400 group-hover:scale-110 transition-transform text-lg">token</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white">Solidity</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Top Companies Section (Glassmorphism) -->
+<section class="px-4 md:px-10 lg:px-20 py-10">
+<div class="max-w-[1400px] mx-auto">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="text-2xl font-bold mb-2">Top Hiring Companies</h2>
+<p class="text-gray-400 text-sm">Companies with the highest dev satisfaction scores</p>
+</div>
+<a class="text-primary text-sm font-bold flex items-center hover:underline" href="#">
+                    View all companies <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Company Card 1 -->
+<div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden">
+<img alt="Vercel Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAmRxDHv2vweGovYx9DWWH3IOHQUMsap5anKHu2FlbXHWuB_LDnq8eBMNLOBom2vsXEvaQPlESS6KPwIZvZyUqCpW6fScnO1QRU19Zy7gzUCEbI9XatG3gVtJky5DbWxn2k7KQfu_nBMMtAshbXYw2dbz6_AlM7SM0L13rzrEdvAypuNvqSlyj9vCdIyRdXZTLo1O0KIy9axy5lpolMI2xcLP9SdG4yjC_rKsmw1GnST3BgILu0pZt79zXqxyTjAeUmCAj3o7_eg"/>
+</div>
+<div>
+<h3 class="font-bold text-lg">Vercel</h3>
+<p class="text-xs text-gray-400">Frontend Cloud</p>
+</div>
+</div>
+<div class="flex gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">REMOTE FIRST</span>
+<span class="bg-white/5 text-gray-300 text-[10px] font-bold px-2 py-1 rounded">SERIES D</span>
+</div>
+<div class="pt-4 border-t border-white/5 flex justify-between items-center">
+<span class="text-sm text-gray-400">12 Open Roles</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 border border-card-dark"></div>
+<div class="w-6 h-6 rounded-full bg-gray-600 border border-card-dark"></div>
+<div class="w-6 h-6 rounded-full bg-gray-500 border border-card-dark flex items-center justify-center text-[8px]">+4</div>
+</div>
+</div>
+</div>
+<!-- Company Card 2 -->
+<div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-xl bg-[#635BFF] flex items-center justify-center overflow-hidden text-white font-bold">
+                            S
+                        </div>
+<div>
+<h3 class="font-bold text-lg">Stripe</h3>
+<p class="text-xs text-gray-400">Fintech</p>
+</div>
+</div>
+<div class="flex gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">HYBRID</span>
+<span class="bg-white/5 text-gray-300 text-[10px] font-bold px-2 py-1 rounded">PUBLIC</span>
+</div>
+<div class="pt-4 border-t border-white/5 flex justify-between items-center">
+<span class="text-sm text-gray-400">45 Open Roles</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 border border-card-dark"></div>
+<div class="w-6 h-6 rounded-full bg-gray-600 border border-card-dark flex items-center justify-center text-[8px]">+9</div>
+</div>
+</div>
+</div>
+<!-- Company Card 3 -->
+<div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-xl bg-black border border-gray-700 flex items-center justify-center overflow-hidden">
+<img alt="Linear Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeBYuGCEABchKdQW_mJDi7ZhPKMd-rd6T2LwEQBSCJ6AX2FVaKZVKOv2ALHQ4l9DnoKW31y2thUGoIyddScCly8wJ4wwdNl9OCN0SuoL7EHxAb9u6cQVLnOL5XVS4RqyTR5RRdm4Wsd3jS4xyNFHyn2if6_tBTeje7OFr1M9sA5GD3sa0OxNMM6bPjS9uQFlmCHot0ZI4HMzq_xXn0FFoEhGswC2zlkgpvoSCKYZD-iWVCwJJu0VR-klvFUEf-a0EXeMehjLLNRA"/>
+</div>
+<div>
+<h3 class="font-bold text-lg">Linear</h3>
+<p class="text-xs text-gray-400">Project Mgmt</p>
+</div>
+</div>
+<div class="flex gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">REMOTE</span>
+<span class="bg-white/5 text-gray-300 text-[10px] font-bold px-2 py-1 rounded">SERIES B</span>
+</div>
+<div class="pt-4 border-t border-white/5 flex justify-between items-center">
+<span class="text-sm text-gray-400">8 Open Roles</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 border border-card-dark"></div>
+<div class="w-6 h-6 rounded-full bg-gray-600 border border-card-dark flex items-center justify-center text-[8px]">+2</div>
+</div>
+</div>
+</div>
+<!-- Company Card 4 -->
+<div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-xl bg-[#000000] border border-gray-700 flex items-center justify-center overflow-hidden">
+<img alt="OpenAI Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGwfyDSdpRwqBhWIiRYNcQcm5y8vqoS2STc9RTyM2wNgoI2GMMzYZCi4Vg80MC_X5GSD_de8zLgGMCYt6gZMu8L2shOYE_m9DDpdTk3csCKFVhxG_er6heYHNwVmdtyJn3uYsy36HNylJSaBl-bb735tuuxb5DqLTlIV0K3VFojPGFh49O-xRNWHnsa_O5p2ZHGbvsuUkx_LdYyKd2918GnAH2NhRojynNmoBVTGSwm6XIySi0wW2R6sp2QrK-i1PP9H9SAZfB9w"/>
+</div>
+<div>
+<h3 class="font-bold text-lg">OpenAI</h3>
+<p class="text-xs text-gray-400">Artificial Intelligence</p>
+</div>
+</div>
+<div class="flex gap-2 mb-4">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded">ON-SITE</span>
+<span class="bg-white/5 text-gray-300 text-[10px] font-bold px-2 py-1 rounded">ENTERPRISE</span>
+</div>
+<div class="pt-4 border-t border-white/5 flex justify-between items-center">
+<span class="text-sm text-gray-400">80+ Open Roles</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 border border-card-dark"></div>
+<div class="w-6 h-6 rounded-full bg-gray-600 border border-card-dark flex items-center justify-center text-[8px]">+20</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Job Listings -->
+<section class="px-4 md:px-10 lg:px-20 py-16 bg-gradient-to-b from-transparent to-black/30">
+<div class="max-w-[1200px] mx-auto">
+<h2 class="text-3xl font-black mb-10 text-center">Featured Opportunities</h2>
+<div class="space-y-4">
+<!-- Job Card 1 -->
+<div class="glow-box group relative bg-card-dark border border-accent-dark hover:border-primary/50 rounded-full p-3 pr-8 transition-all duration-300 flex flex-col md:flex-row items-center gap-6">
+<div class="flex items-center gap-4 w-full md:w-auto pl-3">
+<div class="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0">
+<img alt="Airbnb Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEGcgf3gTYdc96SuM-_DXtO5u3FkgcZmzROQVjlIRkOI_wPH9gWlIm5Ysx0VA3BGtpF0u22c2OAcArklBFLZWcDUbOTTJRf11ptIKnCwTlthbGqwjj-G10GOVevigBIqx0JeBO7Z1TueevaEdVW3wlhy4ktuPYTTzmW_T9BW7Yh_sDL7NFQLucyPZeYVRvHUQ8aSnCl33es0LqisSFGu5fHSOGzHCchDEGu6uTvyXhvhhddK7cICHvaCUAA0TfWKPB5ZmunUk2iQ"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Senior Frontend Engineer</h3>
+<span class="text-sm text-gray-400">Airbnb • Remote, US</span>
+</div>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto md:flex-1 md:justify-center px-4">
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">React</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">GraphQL</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">TypeScript</span>
+</div>
+<div class="flex items-center justify-between w-full md:w-auto gap-8 pl-4 md:pl-0 border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+<div class="flex flex-col items-end">
+<span class="text-primary font-bold text-lg glow-text">$180k - $240k</span>
+<span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Salary + Equity</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors shrink-0">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 2 -->
+<div class="glow-box group relative bg-card-dark border border-accent-dark hover:border-primary/50 rounded-full p-3 pr-8 transition-all duration-300 flex flex-col md:flex-row items-center gap-6">
+<div class="flex items-center gap-4 w-full md:w-auto pl-3">
+<div class="w-14 h-14 rounded-full bg-[#5865F2] flex items-center justify-center shrink-0">
+<img alt="Discord Logo" class="w-8 h-8 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0P6Sg4EjTkyHcqfJr33vWJT9FBK0jGBCJWFt0uz4rj51c8VPNWmzAWuRGiYttYTkoUhCpQgSnmDfLyCDKJbprQzgXdZx5qAw_XjxvJUXtOpmdN92MCR1LWmSImIFDq22Rs-TYELZLWstKNkl6fyDHMHEiin58Z3l0bLY4lEWDGEIMOU1bKijaKJOGZJxZpyPZALP8oTwBwZz8VCv5vYMDsF_Q792sEhW5K_TbeD4-h3qmooBa4QcQ3lUfdRk16WZkYyl60I9lnw"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Staff Backend Engineer</h3>
+<span class="text-sm text-gray-400">Discord • San Francisco</span>
+</div>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto md:flex-1 md:justify-center px-4">
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Rust</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Elixir</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Distributed Systems</span>
+</div>
+<div class="flex items-center justify-between w-full md:w-auto gap-8 pl-4 md:pl-0 border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+<div class="flex flex-col items-end">
+<span class="text-primary font-bold text-lg glow-text">$220k - $300k</span>
+<span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Total Comp</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors shrink-0">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 3 -->
+<div class="glow-box group relative bg-card-dark border border-accent-dark hover:border-primary/50 rounded-full p-3 pr-8 transition-all duration-300 flex flex-col md:flex-row items-center gap-6">
+<div class="flex items-center gap-4 w-full md:w-auto pl-3">
+<div class="w-14 h-14 rounded-full bg-black flex items-center justify-center shrink-0 border border-gray-700">
+<img alt="Uber Logo" class="w-8 h-8 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOQC2BT7d6myeRXvKJNUXUNgdIdsjlQqFsu9SpuMPbduHn5u-7mlqHz3_0YM7DJeWLI-GGsj0MvdPMporzfw8Whpo9nvZ2CN8arheZr23ehzgqoY5DhJwZHinqzHyAyo1WGqz5Me2kN7kgViCAIxh3YVa5-5T87D0X2jgpeMyI6c-1HmhN1UBuxuZNYRUi7ozSm9GgqLiKcwrmuKKrPRi1s4dAPJU5VGgQqxZRVj2j5tKdUGTFVwn2mp5z1PDsx8OAQknWJdzVuQ"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Mobile Engineer, iOS</h3>
+<span class="text-sm text-gray-400">Uber • New York, NY</span>
+</div>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto md:flex-1 md:justify-center px-4">
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Swift</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Obj-C</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Mobile</span>
+</div>
+<div class="flex items-center justify-between w-full md:w-auto gap-8 pl-4 md:pl-0 border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+<div class="flex flex-col items-end">
+<span class="text-primary font-bold text-lg glow-text">$160k - $210k</span>
+<span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Base Salary</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors shrink-0">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Job Card 4 -->
+<div class="glow-box group relative bg-card-dark border border-accent-dark hover:border-primary/50 rounded-full p-3 pr-8 transition-all duration-300 flex flex-col md:flex-row items-center gap-6">
+<div class="flex items-center gap-4 w-full md:w-auto pl-3">
+<div class="w-14 h-14 rounded-full bg-[#61DAFB] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-black font-bold text-2xl">code</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Fullstack Developer</h3>
+<span class="text-sm text-gray-400">Startup Stealth • Remote</span>
+</div>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto md:flex-1 md:justify-center px-4">
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Next.js</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Supabase</span>
+<span class="shrink-0 px-3 py-1 rounded-full bg-accent-dark text-xs font-mono text-gray-300 border border-white/5">Tailwind</span>
+</div>
+<div class="flex items-center justify-between w-full md:w-auto gap-8 pl-4 md:pl-0 border-t md:border-t-0 border-white/5 pt-3 md:pt-0">
+<div class="flex flex-col items-end">
+<span class="text-primary font-bold text-lg glow-text">$120k - $160k</span>
+<span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Salary + Stock</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors shrink-0">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<button class="bg-accent-dark hover:bg-white/10 text-white font-bold py-3 px-8 rounded-full border border-white/10 transition-colors">
+                    View 248 more jobs
+                </button>
+</div>
+</div>
+</section>
+<!-- Tech Stack Grid -->
+<section class="px-4 md:px-10 lg:px-20 py-16">
+<div class="max-w-[1200px] mx-auto">
+<h2 class="text-2xl font-bold mb-8 text-gray-300">Trending Tech Stacks</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">code</span>
+</div>
+<span class="font-bold">React</span>
+<span class="text-xs text-gray-500">2,400+ jobs</span>
+</div>
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">terminal</span>
+</div>
+<span class="font-bold">Node.js</span>
+<span class="text-xs text-gray-500">1,800+ jobs</span>
+</div>
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center text-yellow-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">bolt</span>
+</div>
+<span class="font-bold">Python</span>
+<span class="text-xs text-gray-500">3,100+ jobs</span>
+</div>
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">cloud</span>
+</div>
+<span class="font-bold">AWS</span>
+<span class="text-xs text-gray-500">4,000+ jobs</span>
+</div>
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">memory</span>
+</div>
+<span class="font-bold">Rust</span>
+<span class="text-xs text-gray-500">600+ jobs</span>
+</div>
+<div class="bg-card-dark border border-accent-dark p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">layers</span>
+</div>
+<span class="font-bold">Solidity</span>
+<span class="text-xs text-gray-500">450+ jobs</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-auto border-t border-accent-dark bg-background-dark pt-16 pb-8 px-4 md:px-10 lg:px-20">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="max-w-xs">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold" style="font-size: 14px;">terminal</span>
+</div>
+<h2 class="text-lg font-bold text-white">hired.io</h2>
+</div>
+<p class="text-gray-500 text-sm leading-relaxed">
+                    The #1 job board for 10x developers. Built for devs, by devs.
+                </p>
+</div>
+<div class="flex flex-wrap gap-12 md:gap-24">
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Candidates</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Find Jobs</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Company Directory</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Salary Calculator</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Resume Review</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Employers</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Post a Job</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Pricing</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Success Stories</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-white font-bold text-sm uppercase tracking-wider">Company</h4>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">About Us</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Blog</a>
+<a class="text-gray-400 hover:text-primary text-sm transition-colors" href="#">Contact</a>
+</div>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-accent-dark flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+<p>© 2024 hired.io Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Twitter</a>
+</div>
+</div>
+</footer>
+</body></html>

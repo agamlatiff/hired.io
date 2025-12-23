@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hired.io - Company Job Detail</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#49e619", // Neon Green
+                        "secondary": "#a259ff", // Neon Purple accent for future tech vibe
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131811",
+                        "card-dark": "#1e261c",
+                        "accent-dark": "#2c3829",
+                        "chart-blue": "#3b82f6",
+                        "chart-purple": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #2c3829 1px, transparent 1px), linear-gradient(to bottom, #2c3829 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 38, 28, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(73, 230, 25, 0.1);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
+        }
+        .glow-text-secondary {
+            text-shadow: 0 0 10px rgba(162, 89, 255, 0.5);
+        }
+        .glow-box:hover {
+            box-shadow: 0 0 20px rgba(73, 230, 25, 0.15);
+            border-color: rgba(73, 230, 25, 0.5);
+        }.bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+        .sidebar-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background-color: #49e619;
+            transition: height 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        .sidebar-link:hover::before, .sidebar-link.active::before {
+            height: 70%;
+        }
+        .sidebar-link.active {
+            background: rgba(73, 230, 25, 0.05);
+            color: white;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(44, 56, 41, 0.3);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(73, 230, 25, 0.2);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(73, 230, 25, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-white overflow-hidden h-screen flex">
+<aside class="w-64 border-r border-accent-dark flex flex-col h-full bg-[#161c14]">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-background-dark shrink-0 shadow-[0_0_15px_rgba(73,230,25,0.4)]">
+<span class="material-symbols-outlined font-bold" style="font-size: 20px;">terminal</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-white">hired.io</h1>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 space-y-1">
+<div class="px-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Main Menu</div>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="text-sm font-medium">Job Listings</span>
+</a>
+<a class="sidebar-link active flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">work</span>
+<span class="text-sm font-medium">Job Detail</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Candidates</span>
+<span class="ml-auto bg-secondary/20 text-secondary text-xs font-bold px-2 py-0.5 rounded-full">New</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span class="text-sm font-medium">Interviews</span>
+</a>
+<div class="px-4 mt-8 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Configuration</div>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">post_add</span>
+<span class="text-sm font-medium">Post a Job</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-accent-dark">
+<div class="bg-card-dark p-3 rounded-xl flex items-center gap-3 border border-white/5 cursor-pointer hover:border-primary/30 transition-colors">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center text-black font-bold">
+                    TC
+                </div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">TechCorp Inc.</p>
+<p class="text-xs text-gray-400 truncate">Pro Plan</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-gray-500 text-sm">unfold_more</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-background-dark relative">
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.05] bg-grid pointer-events-none h-full"></div>
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="relative z-10 p-6 md:p-10 max-w-[1920px] mx-auto">
+<header class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+<div class="flex items-start gap-4">
+<button class="bg-card-dark border border-accent-dark p-2 rounded-full text-gray-400 hover:text-white hover:border-primary transition-all">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+</button>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="text-3xl font-bold text-white tracking-tight">Senior Frontend Engineer</h2>
+<span class="bg-primary/20 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            Active
+                        </span>
+</div>
+<div class="flex items-center gap-4 text-gray-400 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Remote, Worldwide</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">schedule</span> Full-time</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">payments</span> $120k - $160k</span>
+<span class="text-gray-600">•</span>
+<span>Posted 2 days ago</span>
+<span class="text-gray-600">•</span>
+<span class="font-mono text-xs text-gray-500">ID: #FE-2024-004</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-xl bg-card-dark border border-accent-dark text-gray-300 hover:text-white hover:border-gray-500 transition-colors text-sm font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">share</span>
+                        Share
+                    </button>
+<button class="px-4 py-2 rounded-xl bg-card-dark border border-accent-dark text-gray-300 hover:text-white hover:border-gray-500 transition-colors text-sm font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">edit</span>
+                        Edit Job
+                    </button>
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2 rounded-xl transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]">
+<span class="material-symbols-outlined text-lg">pause_circle</span>
+                        Pause Hiring
+                    </button>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-6 mb-6">
+<div class="col-span-12 md:col-span-3">
+<div class="glass-panel p-5 rounded-2xl flex flex-col h-full relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Total Views</span>
+<span class="material-symbols-outlined text-primary/30">visibility</span>
+</div>
+<div class="flex items-end gap-3">
+<h3 class="text-3xl font-bold text-white">2,402</h3>
+<span class="text-primary text-xs font-bold mb-1.5 bg-primary/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span> 12%
+                        </span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-auto rounded-full overflow-hidden opacity-50">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-3">
+<div class="glass-panel p-5 rounded-2xl flex flex-col h-full relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Applied</span>
+<span class="material-symbols-outlined text-secondary/30">group_add</span>
+</div>
+<div class="flex items-end gap-3">
+<h3 class="text-3xl font-bold text-white">148</h3>
+<span class="text-secondary text-xs font-bold mb-1.5 bg-secondary/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[10px] mr-0.5">arrow_upward</span> 5
+                        </span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-auto rounded-full overflow-hidden opacity-50">
+<div class="bg-secondary h-full w-[35%]"></div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-3">
+<div class="glass-panel p-5 rounded-2xl flex flex-col h-full relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Interviewing</span>
+<span class="material-symbols-outlined text-blue-500/30">video_call</span>
+</div>
+<div class="flex items-end gap-3">
+<h3 class="text-3xl font-bold text-white">12</h3>
+<span class="text-blue-400 text-xs font-bold mb-1.5 bg-blue-500/10 px-1.5 py-0.5 rounded flex items-center">
+                            3 scheduled
+                        </span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-auto rounded-full overflow-hidden opacity-50">
+<div class="bg-blue-500 h-full w-[25%]"></div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-3">
+<div class="glass-panel p-5 rounded-2xl flex flex-col h-full relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Offer Stage</span>
+<span class="material-symbols-outlined text-yellow-500/30">handshake</span>
+</div>
+<div class="flex items-end gap-3">
+<h3 class="text-3xl font-bold text-white">2</h3>
+<span class="text-yellow-400 text-xs font-bold mb-1.5 bg-yellow-500/10 px-1.5 py-0.5 rounded flex items-center">
+                            1 pending
+                        </span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-auto rounded-full overflow-hidden opacity-50">
+<div class="bg-yellow-500 h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<div class="glass-panel p-8 rounded-2xl">
+<div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+<h3 class="text-lg font-bold">Job Description</h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-400 font-mono">React</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-400 font-mono">TypeScript</span>
+<span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-gray-400 font-mono">Tailwind</span>
+</div>
+</div>
+<div class="space-y-6 text-gray-300 text-sm leading-relaxed">
+<p>
+                                We are looking for an experienced Senior Frontend Engineer to join our core product team. You will be responsible for architecting and building the client-side of our next-generation hiring platform. You should have a deep understanding of modern web technologies and a passion for creating high-performance, accessible, and beautiful user interfaces.
+                            </p>
+<div>
+<h4 class="text-white font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                                    Key Responsibilities
+                                </h4>
+<ul class="list-disc pl-5 space-y-2 marker:text-gray-500">
+<li>Lead the development of new features using React, TypeScript, and Tailwind CSS.</li>
+<li>Collaborate with product designers and backend engineers to deliver high-quality user experiences.</li>
+<li>Optimize application performance for maximum speed and scalability.</li>
+<li>Mentor junior engineers and conduct code reviews.</li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                                    Requirements
+                                </h4>
+<ul class="list-disc pl-5 space-y-2 marker:text-gray-500">
+<li>5+ years of experience in frontend development.</li>
+<li>Strong proficiency in JavaScript (ES6+), TypeScript, and React.</li>
+<li>Experience with modern state management (Zustand, Redux, or Context API).</li>
+<li>Familiarity with server-side rendering (Next.js) and static site generation.</li>
+</ul>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/5 flex justify-between items-center">
+<div class="flex -space-x-3">
+<img alt="Reviewer" class="w-8 h-8 rounded-full border-2 border-card-dark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVuQBm9xOM9Y646YN5pYaM5zIoeBTiVgy4RdWwtw4i2Pfnka6JP_LnGDrsesQ2uNNrErbtp1Y-A3ZqvWNIz_0L2POPV-dHO3EO0JXzRu8OGEPTZlChdEdRsZszWy71KrHKbalemqDfsPUqqj0Ix6PfL55IDYkHhoKJZR5PganvVHaom-k8EWfrz25OB1w17O-Is_JyHADfy2BxMyh4LxGc52q2vhYpmK_I38fHpHbL52NNj4nJnEwyOUHS2YzfLKsyjLR67S7NFw"/>
+<img alt="Reviewer" class="w-8 h-8 rounded-full border-2 border-card-dark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxOLUWY6rOmqp-mZy6j-mDw9cBI8GNN7qicLL62mro0G-x9OPa0CxpKJZjjV5vVvbbL57A1_KFB5poshpw2_uo8XgxjLL7aDEmejr1YttJy8jmzicPtrTHzy7De_XHJCQwDt9LRQfiulbSXIW8ua23IxpNgPjKHsASFqzOA060_PdjEh4yFVhPiJmva2juFPfweT8hhRc8Fa6a3GEiIrmbyUSEyCmANz-hgQQHADrV78FVkBKIIqdYVpyAyrPhaQef5hsvTC4VCg"/>
+<div class="w-8 h-8 rounded-full border-2 border-card-dark bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">+2</div>
+</div>
+<span class="text-xs text-gray-500">Hiring Team</span>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold">Candidate Pipeline</h3>
+<select class="bg-card-dark border-none text-xs text-gray-400 focus:ring-0 rounded-lg py-1 pl-2 pr-8 cursor-pointer">
+<option>Last 30 Days</option>
+<option>All Time</option>
+</select>
+</div>
+<div class="relative h-48 w-full flex items-center justify-between px-4">
+<div class="absolute top-1/2 left-0 w-full h-1 bg-gray-800 -translate-y-1/2 rounded-full z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:border-primary group-hover:text-primary transition-colors">
+<span class="text-lg font-bold">148</span>
+</div>
+<span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Applied</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:border-blue-500 group-hover:text-blue-500 transition-colors">
+<span class="text-lg font-bold">42</span>
+</div>
+<span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Screening</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:border-secondary group-hover:text-secondary transition-colors">
+<span class="text-lg font-bold">12</span>
+</div>
+<span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Interview</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:border-yellow-500 group-hover:text-yellow-500 transition-colors">
+<span class="text-lg font-bold">2</span>
+</div>
+<span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Offer</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:border-green-500 group-hover:text-green-500 transition-colors">
+<span class="text-lg font-bold">0</span>
+</div>
+<span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Hired</span>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="glass-panel p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border-primary/20">
+<h3 class="text-lg font-bold mb-2">Manage Candidates</h3>
+<p class="text-xs text-gray-400 mb-4">You have <span class="text-white font-bold">18 new applicants</span> waiting for review.</p>
+<button class="w-full bg-primary hover:bg-[#3cd612] text-background-dark font-bold text-sm py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(73,230,25,0.2)] mb-3">
+                            Review Applicants
+                        </button>
+<button class="w-full bg-card-dark border border-accent-dark hover:bg-white/5 text-white text-sm py-3 rounded-xl transition-all">
+                            Bulk Message
+                        </button>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex-1">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-base font-bold">Recent Applicants</h3>
+<button class="text-xs text-primary hover:text-white transition-colors">View All</button>
+</div>
+<div class="space-y-4">
+<div class="p-3 rounded-xl bg-white/5 border border-transparent hover:border-primary/30 transition-all group cursor-pointer">
+<div class="flex items-start gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
+                                        JD
+                                    </div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-card-dark flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-sm font-bold text-white truncate">John Doe</h4>
+<span class="text-[10px] text-gray-500">2h ago</span>
+</div>
+<p class="text-xs text-gray-400 truncate">Senior Frontend Dev @ Tech...</p>
+<div class="flex gap-1 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-500 border border-white/5">React</span>
+<span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-500 border border-white/5">Node</span>
+</div>
+</div>
+</div>
+<div class="mt-3 flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<button class="flex-1 py-1 rounded bg-green-500/10 text-green-400 text-[10px] font-bold hover:bg-green-500/20">Accept</button>
+<button class="flex-1 py-1 rounded bg-red-500/10 text-red-400 text-[10px] font-bold hover:bg-red-500/20">Reject</button>
+</div>
+</div>
+<div class="p-3 rounded-xl bg-white/5 border border-transparent hover:border-primary/30 transition-all group cursor-pointer">
+<div class="flex items-start gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-500 flex items-center justify-center text-xs font-bold text-white">
+                                        AS
+                                    </div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-card-dark flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-sm font-bold text-white truncate">Alice Smith</h4>
+<span class="text-[10px] text-gray-500">5h ago</span>
+</div>
+<p class="text-xs text-gray-400 truncate">Fullstack Engineer @ Start...</p>
+<div class="flex gap-1 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-500 border border-white/5">Vue</span>
+<span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-500 border border-white/5">AWS</span>
+</div>
+</div>
+</div>
+<div class="mt-3 flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<button class="flex-1 py-1 rounded bg-green-500/10 text-green-400 text-[10px] font-bold hover:bg-green-500/20">Accept</button>
+<button class="flex-1 py-1 rounded bg-red-500/10 text-red-400 text-[10px] font-bold hover:bg-red-500/20">Reject</button>
+</div>
+</div>
+<div class="p-3 rounded-xl bg-white/5 border border-transparent hover:border-primary/30 transition-all group cursor-pointer">
+<div class="flex items-start gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-white">
+                                        MK
+                                    </div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h4 class="text-sm font-bold text-white truncate">Mike K.</h4>
+<span class="text-[10px] text-gray-500">1d ago</span>
+</div>
+<p class="text-xs text-gray-400 truncate">Frontend Developer</p>
+<div class="flex gap-1 mt-2">
+<span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-500 border border-white/5">Angular</span>
+</div>
+</div>
+</div>
+<div class="mt-3 flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<button class="flex-1 py-1 rounded bg-green-500/10 text-green-400 text-[10px] font-bold hover:bg-green-500/20">Accept</button>
+<button class="flex-1 py-1 rounded bg-red-500/10 text-red-400 text-[10px] font-bold hover:bg-red-500/20">Reject</button>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 text-xs font-medium text-gray-400 hover:text-white py-2 border-t border-white/5 transition-colors">
+                            View All 148 Candidates
+                        </button>
+</div>
+<div class="glass-panel p-5 rounded-2xl">
+<h3 class="text-sm font-bold mb-3 text-gray-300">Included Perks</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-1 rounded border border-gray-700">Health Insurance</span>
+<span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-1 rounded border border-gray-700">Unlimited PTO</span>
+<span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-1 rounded border border-gray-700">Remote Budget</span>
+<span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-1 rounded border border-gray-700">Stock Options</span>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-12 text-center text-xs text-gray-600 pb-6">
+<p>© 2024 hired.io Inc. Job ID: FE-2024-004</p>
+</footer>
+</div>
+</main></body></html>

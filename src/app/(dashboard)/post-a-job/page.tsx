@@ -34,7 +34,7 @@ import { useForm } from "react-hook-form";
 import type z from "zod";
 
 import useSWR from "swr";
-import { fetcher } from "@/lib/utils";
+import { fetcher } from "@/lib/helpers";
 import type { CategoryJob } from "@prisma/client";
 import Applicants from "@/components/dashboard/Applicants";
 import { useSession } from "next-auth/react";

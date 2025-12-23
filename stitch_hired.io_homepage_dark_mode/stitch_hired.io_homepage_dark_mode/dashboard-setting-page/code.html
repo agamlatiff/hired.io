@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hired.io - Company Settings</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#49e619", // Neon Green
+                        "secondary": "#a259ff", // Neon Purple accent for future tech vibe
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131811",
+                        "card-dark": "#1e261c",
+                        "accent-dark": "#2c3829",
+                        "chart-blue": "#3b82f6",
+                        "chart-purple": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "1.5rem", 
+                        "xl": "2rem", 
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #2c3829 1px, transparent 1px), linear-gradient(to bottom, #2c3829 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 38, 28, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(73, 230, 25, 0.1);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
+        }
+        .glow-text-secondary {
+            text-shadow: 0 0 10px rgba(162, 89, 255, 0.5);
+        }
+        .glow-border:focus-within {
+            box-shadow: 0 0 15px rgba(73, 230, 25, 0.2);
+            border-color: rgba(73, 230, 25, 0.5);
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+        .sidebar-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background-color: #49e619;
+            transition: height 0.3s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        .sidebar-link:hover::before, .sidebar-link.active::before {
+            height: 70%;
+        }
+        .sidebar-link.active {
+            background: rgba(73, 230, 25, 0.05);
+            color: white;
+        }
+        .settings-tab {
+            position: relative;
+        }
+        .settings-tab.active {
+            color: #49e619;
+            background-color: rgba(73, 230, 25, 0.1);
+            border-color: #49e619;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(73, 230, 25, 0.2);
+            border-radius: 20px;
+        }
+        .input-dark {
+            background-color: rgba(30, 38, 28, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .input-dark:focus {
+            border-color: #49e619;
+            box-shadow: 0 0 0 1px #49e619;
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-white overflow-hidden h-screen flex">
+<aside class="w-64 border-r border-accent-dark flex flex-col h-full bg-[#161c14]">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-background-dark shrink-0 shadow-[0_0_15px_rgba(73,230,25,0.4)]">
+<span class="material-symbols-outlined font-bold" style="font-size: 20px;">terminal</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-white">hired.io</h1>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 space-y-1">
+<div class="px-4 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Main Menu</div>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="text-sm font-medium">Job Listings</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">work</span>
+<span class="text-sm font-medium">Job Detail</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Candidates</span>
+<span class="ml-auto bg-secondary/20 text-secondary text-xs font-bold px-2 py-0.5 rounded-full">New</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span class="text-sm font-medium">Interviews</span>
+</a>
+<div class="px-4 mt-8 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Configuration</div>
+<a class="sidebar-link flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">post_add</span>
+<span class="text-sm font-medium">Post a Job</span>
+</a>
+<a class="sidebar-link active flex items-center gap-3 px-6 py-3 text-gray-300 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-accent-dark">
+<div class="bg-card-dark p-3 rounded-xl flex items-center gap-3 border border-white/5 cursor-pointer hover:border-primary/30 transition-colors">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center text-black font-bold">
+                    TC
+                </div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">TechCorp Inc.</p>
+<p class="text-xs text-gray-400 truncate">Pro Plan</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-gray-500 text-sm">unfold_more</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-background-dark relative">
+<div class="absolute inset-0 bg-grid-pattern opacity-[0.05] bg-grid pointer-events-none h-full"></div>
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="relative z-10 p-6 md:p-10 max-w-[1920px] mx-auto">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+<div>
+<h2 class="text-3xl font-bold text-white mb-1 glow-text">Company Settings</h2>
+<p class="text-gray-400 text-sm">Manage your organization profile, billing and preferences.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2.5 rounded-full bg-card-dark border border-accent-dark hover:text-white text-gray-400 transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+</button>
+<button class="bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">help</span>
+                        Support
+                    </button>
+<button class="bg-primary hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]">
+<span class="material-symbols-outlined text-lg">save</span>
+                        Save Changes
+                    </button>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-3">
+<div class="glass-panel p-4 rounded-xl sticky top-6">
+<div class="space-y-1">
+<button class="settings-tab active w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">business</span>
+                            Company Profile
+                        </button>
+<button class="settings-tab w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">group</span>
+                            Team Members
+                        </button>
+<button class="settings-tab w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">notifications</span>
+                            Notifications
+                        </button>
+<button class="settings-tab w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">credit_card</span>
+                            Billing &amp; Plan
+                        </button>
+<button class="settings-tab w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">security</span>
+                            Security
+                        </button>
+<button class="settings-tab w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-transparent">
+<span class="material-symbols-outlined">integration_instructions</span>
+                            Integrations
+                        </button>
+</div>
+<div class="mt-8 pt-6 border-t border-white/10 px-4">
+<div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+<span>Storage Used</span>
+<span>75%</span>
+</div>
+<div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-primary to-secondary h-full w-[75%]"></div>
+</div>
+<p class="text-[10px] text-gray-500 mt-2">15.2 GB of 20 GB used</p>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-9 space-y-6">
+<div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6 opacity-5">
+<span class="material-symbols-outlined text-9xl">business</span>
+</div>
+<div class="relative z-10">
+<h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_square</span>
+                            Basic Information
+                        </h3>
+<div class="flex flex-col md:flex-row gap-8 mb-8">
+<div class="shrink-0 flex flex-col items-center gap-3">
+<div class="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-background-dark font-extrabold text-4xl shadow-[0_0_25px_rgba(73,230,25,0.3)] border-2 border-white/10">
+                                    TC
+                                </div>
+<button class="text-xs font-bold text-primary hover:text-white transition-colors border border-primary/30 hover:border-primary px-3 py-1.5 rounded-full bg-primary/10">
+                                    Change Logo
+                                </button>
+</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Company Name</label>
+<div class="relative glow-border rounded-xl transition-all duration-300">
+<input class="input-dark w-full px-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all placeholder-gray-600" type="text" value="TechCorp Inc."/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm">verified</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Industry</label>
+<select class="input-dark w-full px-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all appearance-none cursor-pointer">
+<option>Software Development</option>
+<option>Fintech</option>
+<option>Healthcare</option>
+<option>E-commerce</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Company Size</label>
+<select class="input-dark w-full px-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all appearance-none cursor-pointer">
+<option>50-200 Employees</option>
+<option>1-10 Employees</option>
+<option>10-50 Employees</option>
+<option>200-500 Employees</option>
+<option>500+ Employees</option>
+</select>
+</div>
+<div class="col-span-2">
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Description</label>
+<textarea class="input-dark w-full px-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all placeholder-gray-600 h-24 resize-none">Leading the future of tech innovation. We build scalable solutions for modern enterprises focusing on AI and cloud infrastructure.</textarea>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
+<div>
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">Website URL</label>
+<div class="relative glow-border rounded-xl transition-all duration-300">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-mono">https://</span>
+<input class="input-dark w-full pl-16 pr-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all placeholder-gray-600" type="text" value="techcorp.io"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">LinkedIn Page</label>
+<div class="relative glow-border rounded-xl transition-all duration-300">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-mono">linkedin.com/company/</span>
+<input class="input-dark w-full pl-44 pr-4 py-3 rounded-xl focus:ring-0 focus:outline-none transition-all placeholder-gray-600" type="text" value="techcorp"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-8 rounded-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">groups</span>
+                                Team Management
+                            </h3>
+<button class="text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add</span> Invite Member
+                            </button>
+</div>
+<div class="overflow-hidden rounded-xl border border-white/5">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/[0.03] text-xs text-gray-500 uppercase">
+<th class="p-4 font-semibold">User</th>
+<th class="p-4 font-semibold">Role</th>
+<th class="p-4 font-semibold">Status</th>
+<th class="p-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-[10px] font-bold">JD</div>
+<div>
+<p class="font-bold text-white">Jane Doe</p>
+<p class="text-xs text-gray-500">jane@techcorp.io</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-[10px] font-bold border border-primary/20">ADMIN</span>
+</td>
+<td class="p-4">
+<span class="flex items-center gap-1.5 text-gray-300 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]"></span> Active
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+<tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-[10px] font-bold">MR</div>
+<div>
+<p class="font-bold text-white">Mike Ross</p>
+<p class="text-xs text-gray-500">mike@techcorp.io</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-white/5 text-gray-300 px-2 py-1 rounded text-[10px] font-bold border border-white/10">RECRUITER</span>
+</td>
+<td class="p-4">
+<span class="flex items-center gap-1.5 text-gray-300 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]"></span> Active
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">AS</div>
+<div>
+<p class="font-bold text-gray-400">Alex Smith</p>
+<p class="text-xs text-gray-500">alex@techcorp.io</p>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="bg-white/5 text-gray-300 px-2 py-1 rounded text-[10px] font-bold border border-white/10">VIEWER</span>
+</td>
+<td class="p-4">
+<span class="flex items-center gap-1.5 text-gray-400 text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span> Pending
+                                        </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-panel p-6 rounded-2xl h-full">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-500">notifications_active</span>
+                                Email Notifications
+                            </h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+<div>
+<p class="text-sm font-bold text-gray-200">New Applicant Alert</p>
+<p class="text-xs text-gray-500">Get notified when someone applies.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+<div>
+<p class="text-sm font-bold text-gray-200">Interview Reminders</p>
+<p class="text-xs text-gray-500">Daily summary of scheduled interviews.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+<div>
+<p class="text-sm font-bold text-gray-200">Weekly Performance Report</p>
+<p class="text-xs text-gray-500">Analytics digest sent every Monday.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+<div>
+<p class="text-sm font-bold text-gray-200">Marketing &amp; Product Updates</p>
+<p class="text-xs text-gray-500">News about Hired.io features.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl h-full flex flex-col">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500">credit_card</span>
+                                Plan &amp; Billing
+                            </h3>
+<div class="bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl p-5 border border-white/5 mb-6 relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<div>
+<p class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-1">Current Plan</p>
+<h4 class="text-2xl font-bold text-white">Pro Business</h4>
+</div>
+<span class="bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg shadow-blue-500/20">ACTIVE</span>
+</div>
+<p class="text-sm text-gray-300 mb-4 relative z-10">$299/month • Renews on Nov 12, 2024</p>
+<div class="flex gap-2 relative z-10">
+<button class="flex-1 bg-white text-black text-xs font-bold py-2 rounded hover:bg-gray-100 transition-colors">Upgrade Plan</button>
+<button class="flex-1 bg-black/30 text-white text-xs font-bold py-2 rounded border border-white/10 hover:bg-black/50 transition-colors">Cancel</button>
+</div>
+</div>
+<h4 class="text-sm font-bold text-gray-300 mb-3">Payment Method</h4>
+<div class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-black/20 mb-4">
+<div class="w-10 h-6 bg-gray-700 rounded flex items-center justify-center text-[10px] text-white font-mono">VISA</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-white">•••• •••• •••• 4242</p>
+<p class="text-[10px] text-gray-500">Expires 12/25</p>
+</div>
+<button class="text-xs text-primary font-bold hover:text-white transition-colors">Edit</button>
+</div>
+<button class="w-full text-center text-xs text-gray-400 hover:text-white mt-auto py-2 border-t border-white/5 transition-colors">
+                                Download Invoices
+                            </button>
+</div>
+</div>
+<div class="border border-red-500/20 bg-red-500/5 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+<div>
+<h3 class="text-lg font-bold text-red-400 flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined">warning</span>
+                                Danger Zone
+                            </h3>
+<p class="text-sm text-gray-400">Irreversible actions regarding your account and data.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 text-sm font-bold text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/10 transition-colors">Delete Account</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-12 text-center text-xs text-gray-600 pb-6">
+<p>© 2024 hired.io Inc. Dashboard v2.4.1</p>
+</footer>
+</main>
+</body></html>

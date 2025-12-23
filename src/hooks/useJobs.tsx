@@ -1,7 +1,8 @@
 "use client";
 
 import type { JobType } from "@/app/types";
-import { fetcher, parsingJobs } from "@/lib/utils";
+import { fetcher } from "@/lib/helpers";
+import { parsingJobs } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 

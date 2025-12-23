@@ -32,7 +32,8 @@ import {
 } from "@/constants";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
-import { cn, fetcher } from "@/lib/utils";
+import { cn } from "@/lib/cn";
+import { fetcher } from "@/lib/helpers";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";

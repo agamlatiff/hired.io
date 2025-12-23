@@ -1,7 +1,7 @@
 "use client";
 
 import type { filterFormType } from "@/app/types";
-import { fetcher, parsingCategoriesToOptions } from "@/lib/utils";
+import { fetcher, parsingCategoriesToOptions } from "@/lib/helpers";
 import { useMemo } from "react";
 import useSWR from "swr";
 

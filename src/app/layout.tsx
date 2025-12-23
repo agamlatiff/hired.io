@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { Epilogue } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const epilogue = Epilogue({ subsets: ["latin"] });
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  variable: "--font-manrope",
+});
 
 export const metadata: Metadata = {
-  title: "JobHuntly - Find Your Dream Job",
+  title: "Hired.io - High-Tech Job Portal",
   description:
-    "Find your next career opportunity at top companies. Browse jobs, explore companies, and land your dream role.",
+    "Join the exclusive network where top tech companies compete to hire you. Transparent salaries, direct access to founders, and zero spam.",
 };
 
 export default function RootLayout({
@@ -17,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={epilogue.className}>
+    <html lang="en" className="dark">
+      <body className={`${manrope.className} font-display`}>
         {children}
         <Toaster />
       </body>
