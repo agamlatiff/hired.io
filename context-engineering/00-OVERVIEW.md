@@ -72,3 +72,43 @@ hired-work/
 - **Accent Colors**: Purple (#a259ff), Cyan (#00f0ff)
 - **Font**: Manrope
 - **Effects**: Glass panels, glow effects, subtle animations
+
+---
+
+## Available Pages
+
+### Public Pages (Landing)
+
+| Page           | Route                    | Description                                  |
+| -------------- | ------------------------ | -------------------------------------------- |
+| Home           | `/`                      | Hero, featured companies & jobs, tech stacks |
+| Find Jobs      | `/find-jobs`             | Job listings with filters                    |
+| Job Detail     | `/detail/job/[id]`       | Full job description & apply                 |
+| Apply Form     | `/detail/job/[id]/apply` | Multi-step application form                  |
+| Apply Success  | `/apply-success`         | Application confirmation                     |
+| Find Companies | `/find-companies`        | Company directory                            |
+| Company Detail | `/find-companies/[id]`   | Company profile & open jobs                  |
+
+### Authentication Pages
+
+| Page    | Route          | Description          |
+| ------- | -------------- | -------------------- |
+| Sign In | `/auth/signin` | Company login        |
+| Sign Up | `/auth/signup` | Company registration |
+
+### Dashboard Pages (Protected)
+
+| Page             | Route                  | Description                  |
+| ---------------- | ---------------------- | ---------------------------- |
+| Dashboard        | `/dashboard`           | Stats, charts, activity feed |
+| Job Listings     | `/dashboard/jobs`      | Manage all job posts         |
+| Job Detail Admin | `/dashboard/jobs/[id]` | Applicants & pipeline        |
+| Post a Job       | `/dashboard/post-job`  | Create new job listing       |
+| Settings         | `/dashboard/settings`  | Company settings             |
+
+### Legacy Dashboard Routes
+
+| Page               | Route           | Description           |
+| ------------------ | --------------- | --------------------- |
+| Job Listings (Old) | `/job-listings` | Legacy job management |
+| Settings (Old)     | `/settings`     | Legacy settings       |
