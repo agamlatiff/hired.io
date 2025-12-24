@@ -213,20 +213,172 @@
 
 ---
 
-## Timeline Estimate
+## Sprint 9: UI Features 🟡
 
-| Sprint   | Focus                 | Duration |
-| -------- | --------------------- | -------- |
-| Sprint 1 | Database Schema       | 1 day    |
-| Sprint 2 | Core APIs             | 2 days   |
-| Sprint 3 | Dashboard Integration | 2 days   |
-| Sprint 4 | Forms Integration     | 1.5 days |
-| Sprint 5 | File Upload           | 1 day    |
-| Sprint 6 | Authentication        | 1.5 days |
-| Sprint 7 | Route Cleanup         | 0.5 day  |
-| Sprint 8 | Polish                | 1 day    |
+### Task 9.1: Export Functionality
 
-**Total: ~10.5 days**
+- [ ] Add export to CSV button
+- [ ] Create export API endpoint
+- [ ] Generate CSV from job data
+- [ ] Download file to user
+
+### Task 9.2: Notifications Dropdown
+
+- [ ] Create Notifications model in database
+- [ ] Create notification API endpoints
+- [ ] Build notifications dropdown component
+- [ ] Mark as read functionality
+- [ ] Real-time notification badge
+
+### Task 9.3: Grid View
+
+- [ ] Add grid view toggle button
+- [ ] Create grid layout for jobs
+- [ ] Save view preference
+- [ ] Make responsive
+
+---
+
+## Sprint 10: Advanced Features 🟢
+
+### Task 10.1: Email Notifications
+
+- [ ] Setup email service (Resend/SendGrid)
+- [ ] Create email templates
+- [ ] Send application confirmation to applicant
+- [ ] Send new application alert to company
+- [ ] Send status update emails
+
+### Task 10.2: Real-time Updates (Optional)
+
+- [ ] Setup Pusher/Ably for real-time
+- [ ] Real-time activity feed
+- [ ] Real-time applicant count updates
+- [ ] Live notification badges
+
+### Task 10.3: Interview Scheduling
+
+- [ ] Create Interview model
+- [ ] Create interview scheduling API
+- [ ] Add calendar integration (Google Calendar)
+- [ ] Send interview invites
+- [ ] Show upcoming interviews in dashboard
+
+### Task 10.4: Internal Messaging
+
+- [ ] Create Message model
+- [ ] Create messaging API
+- [ ] Build chat interface
+- [ ] Company <-> Applicant messaging
+- [ ] Message notifications
+
+---
+
+## Sprint 11: Job Seeker Dashboard 🟢
+
+### Task 11.1: User Dashboard Models
+
+- [ ] Create SavedJob model
+- [ ] Create JobAlert model
+- [ ] Add relations to User model
+
+### Task 11.2: User Dashboard Pages
+
+- [ ] Create `/dashboard/user/profile` page
+- [ ] Create `/dashboard/user/applications` page
+- [ ] Create `/dashboard/user/saved-jobs` page
+- [ ] Create `/dashboard/user/alerts` page
+
+### Task 11.3: Application History
+
+- [ ] Fetch user's applications
+- [ ] Show application status timeline
+- [ ] Show company responses
+- [ ] Filter by status
+
+### Task 11.4: Saved Jobs
+
+- [ ] Add save job button
+- [ ] Create saved jobs API
+- [ ] Show saved jobs list
+- [ ] Remove saved jobs
+
+### Task 11.5: Job Alerts
+
+- [ ] Create job alert form
+- [ ] Save alert preferences
+- [ ] Email alerts for matching jobs
+- [ ] Manage alerts (edit/delete)
+
+---
+
+## Sprint 12: Analytics & Reporting 🟢
+
+### Task 12.1: Advanced Analytics Models
+
+- [ ] Extend JobView with more data (source, device, location)
+- [ ] Create Report model for saved reports
+- [ ] Add analytics calculations
+
+### Task 12.2: Analytics Dashboard
+
+- [ ] Create `/dashboard/analytics` page
+- [ ] Job performance metrics
+- [ ] Applicant demographics
+- [ ] Time-to-hire analytics
+- [ ] Source effectiveness
+
+### Task 12.3: Reports & Export
+
+- [ ] Create report builder UI
+- [ ] Generate PDF reports
+- [ ] Export analytics to CSV/Excel
+- [ ] Schedule automated reports
+
+### Task 12.4: Candidate Insights
+
+- [ ] Skill gap analysis
+- [ ] Salary benchmarking
+- [ ] Application quality scores
+- [ ] Conversion rate tracking
+
+---
+
+## Updated Timeline Estimate
+
+| Sprint    | Focus                 | Duration |
+| --------- | --------------------- | -------- |
+| Sprint 1  | Database Schema       | 1 day    |
+| Sprint 2  | Core APIs             | 2 days   |
+| Sprint 3  | Dashboard Integration | 2 days   |
+| Sprint 4  | Forms Integration     | 1.5 days |
+| Sprint 5  | File Upload           | 1 day    |
+| Sprint 6  | Authentication        | 1.5 days |
+| Sprint 7  | Route Cleanup         | 0.5 day  |
+| Sprint 8  | Polish                | 1 day    |
+| Sprint 9  | UI Features           | 1.5 days |
+| Sprint 10 | Advanced Features     | 3 days   |
+| Sprint 11 | Job Seeker Dashboard  | 2.5 days |
+| Sprint 12 | Analytics & Reporting | 2 days   |
+
+**MVP (Sprint 1-8): ~10.5 days**
+**Full-Featured (Sprint 1-12): ~18.5 days**
+
+---
+
+## Development Phases
+
+### Phase 1: MVP (Critical) 🔴
+
+Sprints 1-8 → Core functionality working
+
+### Phase 2: Enhanced (Nice to Have) 🟠
+
+Sprint 9 → Better UX with exports & notifications
+
+### Phase 3: Advanced (Optional) 🟢
+
+Sprints 10-12 → Full-featured platform
 
 ---
 
