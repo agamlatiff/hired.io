@@ -104,9 +104,9 @@
 
 ## Sprint 4: Forms Integration 🟠
 
-### Task 4.1: Post a Job Form
+### Task 4.1: Post a Job Form ✅
 
-- [ ] Connect form to `POST /api/job`
+- [x] Connect form to `POST /api/job`
 - [ ] Add form validation (Zod)
 - [ ] Handle success/error states
 - [ ] Redirect after success
