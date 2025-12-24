@@ -76,21 +76,19 @@
 
 ---
 
-## Sprint 3: Dashboard Integration 🟠
+### Task 3.1: Main Dashboard ✅
 
-### Task 3.1: Main Dashboard
-
-- [ ] Replace hardcoded statsData with API call
-- [ ] Replace hardcoded activityData with API call
+- [x] Replace hardcoded statsData with API call
+- [x] Replace hardcoded activityData with API call
 - [ ] Replace hardcoded jobsData with API call
-- [ ] Add loading states
-- [ ] Add error handling
+- [x] Add loading states
+- [x] Add error handling
 
-### Task 3.2: Job Listings Page
+### Task 3.2: Job Listings Page ✅
 
-- [ ] Fetch jobs from API
-- [ ] Implement search functionality
-- [ ] Implement status filter
+- [x] Fetch jobs from API
+- [x] Implement search functionality
+- [x] Implement status filter
 - [ ] Implement department filter
 - [ ] Implement column sorting
 - [ ] Implement pagination
