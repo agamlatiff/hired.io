@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 const departments = ["Engineering", "Product", "Design", "Marketing", "Sales"];
 const workTypes = ["Remote", "On-site", "Hybrid"];
@@ -86,9 +87,18 @@ export default function PostJobPage() {
       }
 
       const data = await res.json();
+      toast({
+        title: "Job Created!",
+        description: status === "active" ? "Your job listing is now live." : "Your job has been saved as a draft.",
+      });
       router.push(`/dashboard/jobs/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
+      toast({
+        title: "Error",
+        description: "Failed to create job. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
