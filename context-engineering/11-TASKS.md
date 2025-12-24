@@ -107,9 +107,9 @@
 ### Task 4.1: Post a Job Form ✅
 
 - [x] Connect form to `POST /api/job`
-- [ ] Add form validation (Zod)
-- [ ] Handle success/error states
-- [ ] Redirect after success
+- [x] Add form validation (Zod)
+- [x] Handle success/error states
+- [x] Redirect after success
 
 ### Task 4.2: Settings Forms
 
