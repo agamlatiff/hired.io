@@ -53,13 +53,13 @@
 
 - [x] Create `GET /api/dashboard/stats`
 - [x] Return: activeJobs, totalApplicants, jobViews, pendingReview
-- [ ] Connect to dashboard page
+- [x] Connect to dashboard page
 
 ### Task 2.2: Activity Feed API ✅
 
 - [x] Create `GET /api/dashboard/activity`
 - [x] Return recent activities (applications, status changes)
-- [ ] Connect to dashboard activity panel
+- [x] Connect to dashboard activity panel
 
 ### Task 2.3: Job Management APIs ✅
 
@@ -80,7 +80,7 @@
 
 - [x] Replace hardcoded statsData with API call
 - [x] Replace hardcoded activityData with API call
-- [ ] Replace hardcoded jobsData with API call
+- [x] Replace hardcoded jobsData with API call
 - [x] Add loading states
 - [x] Add error handling
 
@@ -89,9 +89,9 @@
 - [x] Fetch jobs from API
 - [x] Implement search functionality
 - [x] Implement status filter
-- [ ] Implement department filter
-- [ ] Implement column sorting
-- [ ] Implement pagination
+- [x] Implement department filter
+- [x] Implement column sorting
+- [x] Implement pagination
 
 ### Task 3.3: Job Detail Admin Page ✅
 
@@ -118,12 +118,12 @@
 - [ ] Connect Notifications to API (if applicable)
 - [ ] Add save confirmation
 
-### Task 4.3: Apply Form
+### Task 4.3: Apply Form ✅
 
-- [ ] Connect to `POST /api/jobs/[id]/apply`
-- [ ] Add form validation
-- [ ] Handle file upload (resume)
-- [ ] Show success page after apply
+- [x] Connect to `POST /api/jobs/[id]/apply`
+- [x] Add form validation
+- [x] Handle file upload (resume)
+- [x] Show success page after apply
 
 ---
 
@@ -135,11 +135,11 @@
 - [x] Create upload helper function
 - [x] Add file type handling
 
-### Task 5.2: Resume Upload
+### Task 5.2: Resume Upload ✅
 
 - [x] Create Apply API endpoint
-- [ ] Implement resume upload in Apply form UI
-- [ ] Save URL to Applicant model
+- [x] Implement resume upload in Apply form UI
+- [x] Save URL to Applicant model
 
 ### Task 5.3: Image Uploads
 

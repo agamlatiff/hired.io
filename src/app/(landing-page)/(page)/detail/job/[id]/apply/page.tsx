@@ -4,18 +4,223 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabaseUploadFile, supabaseGetPublicUrl } from "@/lib/supabase";
+
+interface JobData {
+  id: string;
+  roles: string;
+  Company?: {
+    CompanyOverview?: Array<{
+      name: string;
+      image: string;
+      location: string;
+    }>;
+  };
+}
+
+interface FormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  resume?: string;
+  general?: string;
+}
 
 export default function ApplyJobPage() {
   const params = useParams();
   const router = useRouter();
-  const [coverLetter, setCoverLetter] = useState("");
+  const [job, setJob] = useState<JobData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileName, setResumeFileName] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    router.push("/apply-success");
+  // Form fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [portfolio, setPortfolio] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+  const [previousJobTitle, setPreviousJobTitle] = useState("");
+
+  // Fetch job data
+  useEffect(() => {
+    async function fetchJob() {
+      try {
+        const res = await fetch(`/api/jobs/${params.id}`);
+        if (!res.ok) throw new Error("Failed to fetch job");
+        const data = await res.json();
+        setJob(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (params.id) {
+      fetchJob();
+    }
+  }, [params.id]);
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (phone && !/^[+]?[\d\s()-]{10,}$/.test(phone)) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+
+    if (!resumeFile) {
+      newErrors.resume = "Please upload your resume";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+
+  const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({ ...prev, resume: "File size must be less than 5MB" }));
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "text/plain",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors((prev) => ({ ...prev, resume: "Please upload a PDF, DOCX, or TXT file" }));
+        return;
+      }
+
+      setResumeFile(file);
+      setResumeFileName(file.name);
+      setErrors((prev) => ({ ...prev, resume: undefined }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setSubmitting(true);
+    setErrors({});
+
+    try {
+      // Upload resume to Supabase
+      let resumeUrl = "";
+      if (resumeFile) {
+        const { data, error, filename } = await supabaseUploadFile(resumeFile, "applicant");
+        if (error) {
+          throw new Error("Failed to upload resume");
+        }
+        const { publicUrl } = supabaseGetPublicUrl(filename, "applicant");
+        resumeUrl = publicUrl;
+      }
+
+      // First, we need to get or create a user
+      // For now, we'll create a simple user record
+      const userRes = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          password: "temp_password", // In production, handle this properly
+        }),
+      });
+
+      let userId: string;
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        userId = userData.id;
+      } else {
+        // User might already exist, try to get by email
+        const existingUser = await fetch(`/api/user?email=${encodeURIComponent(email)}`);
+        if (existingUser.ok) {
+          const userData = await existingUser.json();
+          userId = userData.id;
+        } else {
+          throw new Error("Failed to create or find user");
+        }
+      }
+
+      // Submit application
+      const applicationData = {
+        userId,
+        jobId: params.id,
+        previousJobTitle: previousJobTitle || "Not specified",
+        phone: phone || "Not provided",
+        linkedin: linkedin ? `https://linkedin.com/in/${linkedin}` : "",
+        portfolio: portfolio || "",
+        coverLetter: coverLetter || "",
+        resume: resumeUrl,
+        source: "direct",
+      };
+
+      const res = await fetch("/api/jobs/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(applicationData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit application");
+      }
+
+      // Redirect to success page
+      router.push("/apply-success");
+    } catch (err) {
+      console.error(err);
+      setErrors({
+        general: err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const companyInfo = job?.Company?.CompanyOverview?.[0];
+
+  if (loading) {
+    return (
+      <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col relative">
+        <Navbar />
+        <main className="flex-grow relative z-10 pt-32 pb-20 px-4 md:px-10 lg:px-20 flex items-center justify-center">
+          <div className="animate-pulse text-gray-400">Loading...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col relative">
@@ -51,7 +256,7 @@ export default function ApplyJobPage() {
               href={`/detail/job/${params.id}`}
               className="hover:text-neon-green transition-colors"
             >
-              Senior Frontend Engineer
+              {job?.roles || "Job"}
             </Link>
             <span className="material-symbols-outlined text-[10px]">
               chevron_right
@@ -65,9 +270,9 @@ export default function ApplyJobPage() {
             <div className="glass-panel relative rounded-3xl p-8 border border-white/10 flex items-center gap-6">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white flex items-center justify-center shrink-0 p-3 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                 <img
-                  alt="Vercel Logo"
+                  alt={companyInfo?.name || "Company"}
                   className="w-full h-full object-contain"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAmRxDHv2vweGovYx9DWWH3IOHQUMsap5anKHu2FlbXHWuB_LDnq8eBMNLOBom2vsXEvaQPlESS6KPwIZvZyUqCpW6fScnO1QRU19Zy7gzUCEbI9XatG3gVtJky5DbWxn2k7KQfu_nBMMtAshbXYw2dbz6_AlM7SM0L13rzrEdvAypuNvqSlyj9vCdIyRdXZTLo1O0KIy9axy5lpolMI2xcLP9SdG4yjC_rKsmw1GnST3BgILu0pZt79zXqxyTjAeUmCAj3o7_eg"
+                  src={companyInfo?.image || "/images/placeholder-company.png"}
                 />
               </div>
               <div>
@@ -75,26 +280,34 @@ export default function ApplyJobPage() {
                   Applying for
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                  Senior Frontend Engineer
+                  {job?.roles || "Job Position"}
                 </h1>
                 <p className="text-gray-400 mt-1 flex items-center gap-2 text-sm flex-wrap">
                   <span className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-base">
                       domain
                     </span>
-                    Vercel
+                    {companyInfo?.name || "Company"}
                   </span>
                   <span className="w-1 h-1 rounded-full bg-gray-600 mx-1" />
                   <span className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-base">
                       location_on
                     </span>
-                    San Francisco, CA (Remote Friendly)
+                    {companyInfo?.location || "Location"}
                   </span>
                 </p>
               </div>
             </div>
           </div>
+
+          {/* Error Message */}
+          {errors.general && (
+            <div className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 flex items-center gap-3">
+              <span className="material-symbols-outlined">error</span>
+              {errors.general}
+            </div>
+          )}
 
           {/* Application Form */}
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -119,14 +332,19 @@ export default function ApplyJobPage() {
                       badge
                     </span>
                     <input
-                      className="w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                      className={`w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none ${errors.firstName ? "border-red-500" : ""}`}
                       id="firstName"
                       name="firstName"
                       placeholder="Jane"
                       required
                       type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                   </div>
+                  {errors.firstName && (
+                    <p className="text-red-400 text-xs ml-1">{errors.firstName}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label
@@ -140,14 +358,19 @@ export default function ApplyJobPage() {
                       badge
                     </span>
                     <input
-                      className="w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                      className={`w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none ${errors.lastName ? "border-red-500" : ""}`}
                       id="lastName"
                       name="lastName"
                       placeholder="Doe"
                       required
                       type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
+                  {errors.lastName && (
+                    <p className="text-red-400 text-xs ml-1">{errors.lastName}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label
@@ -161,14 +384,19 @@ export default function ApplyJobPage() {
                       mail
                     </span>
                     <input
-                      className="w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                      className={`w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none ${errors.email ? "border-red-500" : ""}`}
                       id="email"
                       name="email"
                       placeholder="jane.doe@example.com"
                       required
                       type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
+                  {errors.email && (
+                    <p className="text-red-400 text-xs ml-1">{errors.email}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label
@@ -182,15 +410,42 @@ export default function ApplyJobPage() {
                       call
                     </span>
                     <input
-                      className="w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                      className={`w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none ${errors.phone ? "border-red-500" : ""}`}
                       id="phone"
                       name="phone"
                       placeholder="+1 (555) 000-0000"
                       type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="text-red-400 text-xs ml-1">{errors.phone}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label
+                    className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1"
+                    htmlFor="previousJobTitle"
+                  >
+                    Current/Previous Job Title
+                  </label>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                      work
+                    </span>
+                    <input
+                      className="w-full input-field rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none"
+                      id="previousJobTitle"
+                      name="previousJobTitle"
+                      placeholder="Senior Developer"
+                      type="text"
+                      value={previousJobTitle}
+                      onChange={(e) => setPreviousJobTitle(e.target.value)}
                     />
                   </div>
                 </div>
-                <div className="col-span-1 md:col-span-2 space-y-2">
+                <div className="space-y-2">
                   <label
                     className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1"
                     htmlFor="portfolio"
@@ -207,6 +462,8 @@ export default function ApplyJobPage() {
                       name="portfolio"
                       placeholder="https://janedoe.dev"
                       type="url"
+                      value={portfolio}
+                      onChange={(e) => setPortfolio(e.target.value)}
                     />
                   </div>
                 </div>
@@ -219,36 +476,60 @@ export default function ApplyJobPage() {
                 <span className="p-2 rounded-lg bg-neon-purple/10 text-neon-purple border border-neon-purple/20">
                   <span className="material-symbols-outlined">description</span>
                 </span>
-                Resume / CV
+                Resume / CV <span className="text-red-500">*</span>
               </h2>
-              <div className="border-2 border-dashed border-gray-700 hover:border-neon-purple/50 bg-card-dark/30 rounded-2xl p-10 text-center transition-all cursor-pointer group relative overflow-hidden">
+              <div
+                className={`border-2 border-dashed ${errors.resume ? "border-red-500" : resumeFile ? "border-neon-green/50" : "border-gray-700 hover:border-neon-purple/50"} bg-card-dark/30 rounded-2xl p-10 text-center transition-all cursor-pointer group relative overflow-hidden`}
+              >
                 <input
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   id="resume-upload"
                   name="resume"
                   type="file"
                   accept=".pdf,.docx,.txt"
+                  onChange={handleResumeChange}
                 />
                 <div className="relative z-0">
-                  <div className="w-16 h-16 rounded-full bg-neon-purple/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <span className="material-symbols-outlined text-neon-purple text-3xl">
-                      cloud_upload
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-neon-purple transition-colors">
-                    Click to upload or drag and drop
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4">
-                    PDF, DOCX or TXT (Max 5MB)
-                  </p>
-                  <button
-                    type="button"
-                    className="bg-card-dark border border-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium group-hover:bg-neon-purple group-hover:text-white group-hover:border-neon-purple transition-all"
-                  >
-                    Select File
-                  </button>
+                  {resumeFile ? (
+                    <>
+                      <div className="w-16 h-16 rounded-full bg-neon-green/10 flex items-center justify-center mx-auto mb-4">
+                        <span className="material-symbols-outlined text-neon-green text-3xl">
+                          check_circle
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">
+                        {resumeFileName}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-4">
+                        Click to replace file
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-16 h-16 rounded-full bg-neon-purple/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <span className="material-symbols-outlined text-neon-purple text-3xl">
+                          cloud_upload
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-neon-purple transition-colors">
+                        Click to upload or drag and drop
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-4">
+                        PDF, DOCX or TXT (Max 5MB)
+                      </p>
+                      <button
+                        type="button"
+                        className="bg-card-dark border border-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm font-medium group-hover:bg-neon-purple group-hover:text-white group-hover:border-neon-purple transition-all"
+                      >
+                        Select File
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
+              {errors.resume && (
+                <p className="text-red-400 text-xs mt-2">{errors.resume}</p>
+              )}
             </section>
 
             {/* Professional Profiles */}
@@ -281,6 +562,8 @@ export default function ApplyJobPage() {
                       name="linkedin"
                       placeholder="username"
                       type="text"
+                      value={linkedin}
+                      onChange={(e) => setLinkedin(e.target.value)}
                     />
                   </div>
                 </div>
@@ -303,6 +586,8 @@ export default function ApplyJobPage() {
                       name="github"
                       placeholder="username"
                       type="text"
+                      value={github}
+                      onChange={(e) => setGithub(e.target.value)}
                     />
                   </div>
                 </div>
@@ -322,7 +607,7 @@ export default function ApplyJobPage() {
                   className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1"
                   htmlFor="coverLetter"
                 >
-                  Cover Letter / Why Vercel?
+                  Cover Letter / Why this role?
                 </label>
                 <textarea
                   className="w-full input-field rounded-xl py-4 px-4 text-white placeholder-gray-600 focus:ring-0 focus:outline-none min-h-[160px]"
@@ -357,18 +642,31 @@ export default function ApplyJobPage() {
                 <button
                   type="button"
                   onClick={() => router.back()}
-                  className="flex-1 md:flex-none h-14 px-8 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white font-bold transition-all"
+                  disabled={submitting}
+                  className="flex-1 md:flex-none h-14 px-8 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white font-bold transition-all disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 md:flex-none bg-neon-green hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-10 h-14 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 whitespace-nowrap text-lg flex items-center justify-center gap-2"
+                  disabled={submitting}
+                  className="flex-1 md:flex-none bg-neon-green hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-10 h-14 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 whitespace-nowrap text-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span>Submit Application</span>
-                  <span className="material-symbols-outlined text-xl font-bold">
-                    send
-                  </span>
+                  {submitting ? (
+                    <>
+                      <span className="animate-spin material-symbols-outlined">
+                        progress_activity
+                      </span>
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Submit Application</span>
+                      <span className="material-symbols-outlined text-xl font-bold">
+                        send
+                      </span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
