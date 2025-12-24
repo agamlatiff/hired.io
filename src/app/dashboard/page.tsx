@@ -1,118 +1,105 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Sample data
-const statsData = [
-  {
-    label: "Active Jobs",
-    value: "12",
-    change: "+2",
-    changeLabel: "since last week",
-    icon: "work",
-    iconColor: "text-neon-green/30",
-    changeColor: "text-neon-green",
-  },
-  {
-    label: "Total Applicants",
-    value: "843",
-    change: "+12%",
-    changeLabel: "vs last month",
-    icon: "group_add",
-    iconColor: "text-neon-purple/30",
-    changeColor: "text-neon-purple",
-  },
-  {
-    label: "Job Views",
-    value: "12.5k",
-    progress: 65,
-    icon: "visibility",
-    iconColor: "text-blue-500/30",
-  },
-  {
-    label: "Pending Review",
-    value: "45",
-    change: "Action Required",
-    icon: "schedule",
-    iconColor: "text-orange-500/30",
-    changeColor: "text-orange-400",
-  },
-];
+interface Stats {
+  activeJobs: number;
+  totalApplicants: number;
+  jobViews: number;
+  pendingReview: number;
+}
 
-const activityData = [
-  {
-    name: "John Doe",
-    initials: "JD",
-    gradient: "from-purple-500 to-pink-500",
-    action: "applied for",
-    target: "Senior Frontend Engineer",
-    targetColor: "text-neon-green",
-    time: "2 minutes ago",
-  },
-  {
-    name: "Alice Smith",
-    initials: "AS",
-    gradient: "from-blue-500 to-cyan-500",
-    action: "moved to",
-    target: "Technical Interview",
-    targetColor: "text-neon-purple",
-    time: "15 minutes ago",
-  },
-  {
-    name: null,
-    initials: null,
-    icon: "schedule",
-    action: "Interview scheduled with",
-    target: "Mike Ross",
-    targetColor: "text-white",
-    time: "1 hour ago",
-  },
-  {
-    name: "Maria K.",
-    initials: "MK",
-    gradient: "from-yellow-500 to-orange-500",
-    action: "commented on",
-    target: "Backend Dev #402",
-    targetColor: "text-gray-400",
-    time: "2 hours ago",
-  },
-];
-
-const jobsData = [
-  {
-    title: "Senior Frontend Engineer",
-    skills: "React, TypeScript",
-    posted: "2d ago",
-    type: "REMOTE",
-    applicants: 44,
-    status: "Active",
-    statusColor: "text-neon-green",
-  },
-  {
-    title: "Backend Team Lead",
-    skills: "Node.js, AWS",
-    posted: "5d ago",
-    type: "HYBRID",
-    applicants: 20,
-    status: "Active",
-    statusColor: "text-neon-green",
-  },
-  {
-    title: "Product Designer",
-    skills: "Figma, UI/UX",
-    posted: "1w ago",
-    type: "REMOTE",
-    applicants: 127,
-    status: "Paused",
-    statusColor: "text-yellow-500",
-  },
-];
-
-const chartBars = [30, 45, 20, 60, 75, 50, 80, 65, 40, 55, 35, 45, 60, 70, 85, 50];
+interface Activity {
+  id: string;
+  type: string;
+  message: string;
+  createdAt: string;
+}
 
 export default function DashboardPage() {
   const [chartView, setChartView] = useState<"day" | "week">("day");
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        setLoading(true);
+        const [statsRes, activityRes] = await Promise.all([
+          fetch("/api/dashboard/stats"),
+          fetch("/api/dashboard/activity"),
+        ]);
+
+        if (!statsRes.ok || !activityRes.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+
+        const statsData = await statsRes.json();
+        const activityData = await activityRes.json();
+
+        setStats(statsData);
+        setActivities(activityData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
+
+  const statsData = stats
+    ? [
+      {
+        label: "Active Jobs",
+        value: stats.activeJobs.toString(),
+        icon: "work",
+        iconColor: "text-neon-green/30",
+      },
+      {
+        label: "Total Applicants",
+        value: stats.totalApplicants.toString(),
+        icon: "group_add",
+        iconColor: "text-neon-purple/30",
+      },
+      {
+        label: "Job Views",
+        value: stats.jobViews.toLocaleString(),
+        icon: "visibility",
+        iconColor: "text-blue-500/30",
+      },
+      {
+        label: "Pending Review",
+        value: stats.pendingReview.toString(),
+        change: stats.pendingReview > 0 ? "Action Required" : "All Clear",
+        icon: "schedule",
+        iconColor: "text-orange-500/30",
+        changeColor: stats.pendingReview > 0 ? "text-orange-400" : "text-green-400",
+      },
+    ]
+    : [];
+
+  const chartBars = [30, 45, 20, 60, 75, 50, 80, 65, 40, 55, 35, 45, 60, 70, 85, 50];
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <p className="text-red-500 text-lg mb-4">Error: {error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-neon-green text-background-dark px-6 py-2 rounded-full"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -156,50 +143,50 @@ export default function DashboardPage() {
       <div className="grid grid-cols-12 gap-6">
         {/* Stats Cards */}
         <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {statsData.map((stat) => (
-            <div
-              key={stat.label}
-              className="glass-panel p-5 rounded-2xl flex flex-col justify-between h-32 relative overflow-hidden group"
-            >
-              <div className="absolute right-0 top-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                <span
-                  className={`material-symbols-outlined ${stat.iconColor} text-4xl`}
+          {loading ? (
+            // Loading skeleton
+            Array(4)
+              .fill(0)
+              .map((_, i) => (
+                <div
+                  key={i}
+                  className="glass-panel p-5 rounded-2xl h-32 animate-pulse"
                 >
-                  {stat.icon}
-                </span>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1">
-                  {stat.label}
-                </p>
-                <h3 className="text-3xl font-bold text-white">{stat.value}</h3>
-              </div>
-              {stat.progress ? (
-                <div className="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
-                  <div
-                    className="bg-blue-500 h-full"
-                    style={{ width: `${stat.progress}%` }}
-                  />
+                  <div className="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
+                  <div className="h-8 bg-gray-700 rounded w-1/3"></div>
                 </div>
-              ) : (
-                <div className="flex items-center gap-2 text-xs">
+              ))
+          ) : (
+            statsData.map((stat) => (
+              <div
+                key={stat.label}
+                className="glass-panel p-5 rounded-2xl flex flex-col justify-between h-32 relative overflow-hidden group"
+              >
+                <div className="absolute right-0 top-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
                   <span
-                    className={`flex items-center ${stat.changeColor} bg-${stat.changeColor?.split("-")[1]}/10 px-1.5 py-0.5 rounded text-[10px] font-bold`}
+                    className={`material-symbols-outlined ${stat.iconColor} text-4xl`}
                   >
-                    {stat.change?.startsWith("+") && (
-                      <span className="material-symbols-outlined text-xs mr-0.5">
-                        trending_up
-                      </span>
-                    )}
-                    {stat.change}
+                    {stat.icon}
                   </span>
-                  {stat.changeLabel && (
-                    <span className="text-gray-500">{stat.changeLabel}</span>
-                  )}
                 </div>
-              )}
-            </div>
-          ))}
+                <div>
+                  <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold mb-1">
+                    {stat.label}
+                  </p>
+                  <h3 className="text-3xl font-bold text-white">{stat.value}</h3>
+                </div>
+                {stat.change && (
+                  <div className="flex items-center gap-2 text-xs">
+                    <span
+                      className={`flex items-center ${stat.changeColor} bg-${stat.changeColor?.split("-")[1]}/10 px-1.5 py-0.5 rounded text-[10px] font-bold`}
+                    >
+                      {stat.change}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         {/* Main Charts Area */}
@@ -237,7 +224,7 @@ export default function DashboardPage() {
                 >
                   {i === 7 && (
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-900 text-xs px-2 py-1 rounded text-white opacity-0 group-hover:opacity-100 whitespace-nowrap border border-gray-700 pointer-events-none">
-                      Today: 65 apps
+                      Today: {stats?.totalApplicants || 0} apps
                     </div>
                   )}
                 </div>
@@ -260,7 +247,9 @@ export default function DashboardPage() {
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Views</span>
-                  <span className="text-white font-mono">12,402</span>
+                  <span className="text-white font-mono">
+                    {loading ? "..." : stats?.jobViews.toLocaleString()}
+                  </span>
                 </div>
                 <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
                   <div className="h-full bg-blue-500 w-full rounded-full" />
@@ -268,20 +257,13 @@ export default function DashboardPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-gray-400">Clicks</span>
-                  <span className="text-white font-mono">3,205</span>
-                </div>
-                <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-400 w-[25%] rounded-full" />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Applications</span>
-                  <span className="text-white font-mono">843</span>
+                  <span className="text-white font-mono">
+                    {loading ? "..." : stats?.totalApplicants.toString()}
+                  </span>
                 </div>
                 <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-neon-purple w-[6%] rounded-full" />
+                  <div className="h-full bg-neon-purple w-[25%] rounded-full" />
                 </div>
               </div>
             </div>
@@ -383,136 +365,53 @@ export default function DashboardPage() {
               className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar"
               style={{ maxHeight: "400px" }}
             >
-              {activityData.map((activity, i) => (
-                <div
-                  key={i}
-                  className="flex gap-3 items-start p-3 rounded-xl bg-white/5 border border-transparent hover:border-neon-green/20 transition-all cursor-pointer"
-                >
-                  {activity.icon ? (
+              {loading ? (
+                Array(3)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex gap-3 p-3 rounded-xl bg-white/5 animate-pulse"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-gray-700"></div>
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3 bg-gray-700 rounded w-3/4"></div>
+                        <div className="h-2 bg-gray-700 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                  ))
+              ) : activities.length === 0 ? (
+                <p className="text-gray-500 text-sm text-center py-8">
+                  No recent activity
+                </p>
+              ) : (
+                activities.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className="flex gap-3 items-start p-3 rounded-xl bg-white/5 border border-transparent hover:border-neon-green/20 transition-all cursor-pointer"
+                  >
                     <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold shrink-0">
                       <span className="material-symbols-outlined text-sm">
-                        {activity.icon}
+                        {activity.type === "application"
+                          ? "person_add"
+                          : activity.type === "status_change"
+                            ? "swap_horiz"
+                            : "schedule"}
                       </span>
                     </div>
-                  ) : (
-                    <div
-                      className={`w-8 h-8 rounded-full bg-gradient-to-br ${activity.gradient} flex items-center justify-center text-[10px] font-bold shrink-0`}
-                    >
-                      {activity.initials}
-                    </div>
-                  )}
-                  <div>
-                    <p className="text-sm text-gray-200">
-                      {activity.name && (
-                        <span className="font-bold text-white">
-                          {activity.name}
-                        </span>
-                      )}{" "}
-                      {activity.action}{" "}
-                      <span className={activity.targetColor}>
-                        {activity.target}
+                    <div>
+                      <p className="text-sm text-gray-200">{activity.message}</p>
+                      <span className="text-[10px] text-gray-500 mt-1 block">
+                        {new Date(activity.createdAt).toLocaleString()}
                       </span>
-                    </p>
-                    <span className="text-[10px] text-gray-500 mt-1 block">
-                      {activity.time}
-                    </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
             <button className="w-full mt-4 text-xs font-medium text-gray-400 hover:text-white py-2 border-t border-white/5 transition-colors">
               View All Activity
             </button>
-          </div>
-        </div>
-
-        {/* Jobs Table */}
-        <div className="col-span-12">
-          <div className="glass-panel rounded-2xl overflow-hidden">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-              <h3 className="text-lg font-bold">Active Job Listings</h3>
-              <Link
-                href="/dashboard/jobs"
-                className="text-sm text-neon-green hover:text-white transition-colors"
-              >
-                View All Jobs
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="text-xs text-gray-500 border-b border-white/5 bg-white/[0.02]">
-                    <th className="p-4 font-semibold uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="p-4 font-semibold uppercase tracking-wider">
-                      Type
-                    </th>
-                    <th className="p-4 font-semibold uppercase tracking-wider">
-                      Applicants
-                    </th>
-                    <th className="p-4 font-semibold uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="p-4 font-semibold uppercase tracking-wider text-right">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm text-gray-300">
-                  {jobsData.map((job, i) => (
-                    <tr
-                      key={i}
-                      className="hover:bg-white/5 transition-colors group border-b border-white/5 last:border-0"
-                    >
-                      <td className="p-4">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-white group-hover:text-neon-green transition-colors">
-                            {job.title}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {job.skills} • Posted {job.posted}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span className="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-1 rounded border border-gray-700">
-                          {job.type}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center gap-2">
-                          <div className="flex -space-x-2">
-                            <div className="w-6 h-6 rounded-full bg-gray-600 border border-card-dark" />
-                            <div className="w-6 h-6 rounded-full bg-gray-500 border border-card-dark" />
-                            <div className="w-6 h-6 rounded-full bg-gray-400 border border-card-dark flex items-center justify-center text-[8px] text-black font-bold">
-                              +{job.applicants}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`flex items-center gap-1.5 ${job.statusColor} text-xs font-bold`}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full ${job.statusColor === "text-neon-green" ? "bg-neon-green" : "bg-yellow-500"}`}
-                          />
-                          {job.status}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right">
-                        <button className="text-gray-400 hover:text-white p-1">
-                          <span className="material-symbols-outlined text-lg">
-                            more_vert
-                          </span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
