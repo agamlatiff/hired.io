@@ -112,7 +112,7 @@ async function main() {
 
   console.log('✅ Industries created');
 
-  // Seed Sample Jobs
+  // Seed Sample Jobs with new schema fields
   const sampleJobs = [
     {
       id: 'job-frontend-engineer',
@@ -134,6 +134,13 @@ async function main() {
         { benefit: 'Learning Budget', description: 'Rp 5.000.000/tahun untuk kursus dan konferensi' },
       ]),
       categoryId: 'software-engineering',
+      // New fields
+      status: 'active',
+      views: 245,
+      department: 'Engineering',
+      location: 'Jakarta, Indonesia',
+      experienceLevel: 'Mid-Level',
+      currency: 'IDR',
     },
     {
       id: 'job-backend-engineer',
@@ -155,6 +162,13 @@ async function main() {
         { benefit: 'Unlimited PTO', description: 'Cuti tidak terbatas dengan approval' },
       ]),
       categoryId: 'software-engineering',
+      // New fields
+      status: 'active',
+      views: 312,
+      department: 'Engineering',
+      location: 'Jakarta, Indonesia (Remote-friendly)',
+      experienceLevel: 'Senior',
+      currency: 'IDR',
     },
     {
       id: 'job-ui-ux-designer',
@@ -176,6 +190,13 @@ async function main() {
         { benefit: 'Career Growth', description: 'Path to Design Lead/Manager' },
       ]),
       categoryId: 'product-design',
+      // New fields
+      status: 'active',
+      views: 189,
+      department: 'Product & Design',
+      location: 'Bandung, Indonesia',
+      experienceLevel: 'Mid-Level',
+      currency: 'IDR',
     },
     {
       id: 'job-data-analyst',
@@ -197,6 +218,13 @@ async function main() {
         { benefit: 'Team Outing', description: 'Team building setiap kuartal' },
       ]),
       categoryId: 'data-analytics',
+      // New fields
+      status: 'active',
+      views: 156,
+      department: 'Data & Analytics',
+      location: 'Jakarta, Indonesia',
+      experienceLevel: 'Junior',
+      currency: 'IDR',
     },
     {
       id: 'job-marketing-intern',
@@ -218,6 +246,13 @@ async function main() {
         { benefit: 'Full-Time Opportunity', description: 'Kesempatan jadi karyawan tetap' },
       ]),
       categoryId: 'marketing',
+      // New fields
+      status: 'active',
+      views: 423,
+      department: 'Marketing',
+      location: 'Jakarta, Indonesia',
+      experienceLevel: 'Entry-Level',
+      currency: 'IDR',
     },
   ];
 
