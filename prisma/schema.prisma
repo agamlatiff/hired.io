@@ -24,10 +24,15 @@ model Company {
   name               String
   password           String
   email              String               @unique
+  logo               String?
+  plan               String               @default("free")
+  createdAt          DateTime             @default(now())
   CompanySocialMedia CompanySocialMedia[]
   CompanyTeam        CompanyTeam[]
   CompanyOverview    CompanyOverview[]
   Job                Job[]
+  Activity           Activity[]
+  Notification       Notification[]
 }
 
 model CompanySocialMedia {
@@ -67,46 +72,105 @@ model CompanyOverview {
 }
 
 model Job {
-  id             String       @id @default(cuid())
-  roles          String
-  datePosted     DateTime     @default(now())
-  dueDate        DateTime
-  jobType        String
-  applicants     Int
-  needs          Int
-  salaryFrom     String
-  salaryTo       String
-  requiredSkills String[]
-  description    String
-  responsibility String
-  whoYouAre      String
-  niceToHaves    String
-  benefits       Json
-  companyId      String?
-  categoryId     String?
-  Company        Company?     @relation(fields: [companyId], references: [id])
-  CategoryJob    CategoryJob? @relation(fields: [categoryId], references: [id])
-  Applicant      Applicant[]
+  id              String       @id @default(cuid())
+  roles           String
+  datePosted      DateTime     @default(now())
+  dueDate         DateTime
+  jobType         String
+  applicants      Int
+  needs           Int
+  salaryFrom      String
+  salaryTo        String
+  requiredSkills  String[]
+  description     String
+  responsibility  String
+  whoYouAre       String
+  niceToHaves     String
+  benefits        Json
+  status          String       @default("draft")
+  views           Int          @default(0)
+  department      String?
+  location        String?
+  experienceLevel String?
+  currency        String       @default("USD")
+  companyId       String?
+  categoryId      String?
+  Company         Company?     @relation(fields: [companyId], references: [id])
+  CategoryJob     CategoryJob? @relation(fields: [categoryId], references: [id])
+  Applicant       Applicant[]
+  JobView         JobView[]
 }
 
 model User {
-  id         String      @id @default(cuid())
-  name       String
-  password   String
-  email      String      @unique
-  Applicants Applicant[]
+  id           String         @id @default(cuid())
+  name         String
+  password     String
+  email        String         @unique
+  avatar       String?
+  headline     String?
+  location     String?
+  skills       String[]
+  experience   Json?
+  education    Json?
+  Applicants   Applicant[]
+  Notification Notification[]
 }
 
 model Applicant {
-  id               String  @id @default(cuid())
+  id               String   @id @default(cuid())
   userId           String
-  user             User?   @relation(fields: [userId], references: [id])
+  user             User?    @relation(fields: [userId], references: [id])
   jobId            String?
-  Job              Job?    @relation(fields: [jobId], references: [id])
+  Job              Job?     @relation(fields: [jobId], references: [id])
   previousJobTitle String
   phone            String
   linkedin         String
   portfolio        String
   coverLetter      String
   resume           String
+  status           String   @default("new")
+  appliedAt        DateTime @default(now())
+  notes            String?
+  rating           Int?
+  source           String?
+}
+
+model JobView {
+  id       String   @id @default(cuid())
+  jobId    String
+  job      Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  viewedAt DateTime @default(now())
+  source   String?
+
+  @@index([jobId])
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type      String
+  message   String
+  targetId  String?
+  createdAt DateTime @default(now())
+
+  @@index([companyId])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?
+  companyId String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([companyId])
 }
