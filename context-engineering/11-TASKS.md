@@ -6,73 +6,73 @@
 
 ## Sprint 1: Database Schema Updates 🔴
 
-### Task 1.1: Update Job Model
+### Task 1.1: Update Job Model ✅
 
-- [ ] Add `status` field (enum: active, paused, closed, draft)
-- [ ] Add `views` field (Int, default: 0)
-- [ ] Add `department` field (String)
-- [ ] Add `location` field (String)
-- [ ] Add `experienceLevel` field (String)
-- [ ] Add `currency` field (String, default: "USD")
+- [x] Add `status` field (enum: active, paused, closed, draft)
+- [x] Add `views` field (Int, default: 0)
+- [x] Add `department` field (String)
+- [x] Add `location` field (String)
+- [x] Add `experienceLevel` field (String)
+- [x] Add `currency` field (String, default: "USD")
 
-### Task 1.2: Update Applicant Model
+### Task 1.2: Update Applicant Model ✅
 
-- [ ] Add `status` field (enum: new, screening, interview, offered, rejected)
-- [ ] Add `appliedAt` field (DateTime, default: now)
-- [ ] Add `notes` field (String, optional)
-- [ ] Add `rating` field (Int, optional, 1-5)
-- [ ] Add `source` field (String: direct, linkedin, referral)
+- [x] Add `status` field (enum: new, screening, interview, offered, rejected)
+- [x] Add `appliedAt` field (DateTime, default: now)
+- [x] Add `notes` field (String, optional)
+- [x] Add `rating` field (Int, optional, 1-5)
+- [x] Add `source` field (String: direct, linkedin, referral)
 
-### Task 1.3: Update User Model
+### Task 1.3: Update User Model ✅
 
-- [ ] Add `avatar` field (String, optional)
-- [ ] Add `headline` field (String, optional)
-- [ ] Add `location` field (String, optional)
-- [ ] Add `skills` field (String[])
-- [ ] Add `experience` field (Json, optional)
-- [ ] Add `education` field (Json, optional)
+- [x] Add `avatar` field (String, optional)
+- [x] Add `headline` field (String, optional)
+- [x] Add `location` field (String, optional)
+- [x] Add `skills` field (String[])
+- [x] Add `experience` field (Json, optional)
+- [x] Add `education` field (Json, optional)
 
-### Task 1.4: Update Company Model
+### Task 1.4: Update Company Model ✅
 
-- [ ] Add `logo` field (String, optional)
-- [ ] Add `plan` field (String, default: "free")
-- [ ] Add `createdAt` field (DateTime, default: now)
+- [x] Add `logo` field (String, optional)
+- [x] Add `plan` field (String, default: "free")
+- [x] Add `createdAt` field (DateTime, default: now)
 
-### Task 1.5: Create New Models
+### Task 1.5: Create New Models ✅
 
-- [ ] Create `JobView` model for analytics
-- [ ] Create `Activity` model for activity feed
-- [ ] Run `prisma migrate dev --name add_missing_fields`
+- [x] Create `JobView` model for analytics
+- [x] Create `Activity` model for activity feed
+- [x] Run `prisma migrate dev --name add_missing_fields`
 - [ ] Update seed.ts with new fields
 
 ---
 
 ## Sprint 2: Core API Development 🟠
 
-### Task 2.1: Dashboard Stats API
+### Task 2.1: Dashboard Stats API ✅
 
-- [ ] Create `GET /api/dashboard/stats`
-- [ ] Return: activeJobs, totalApplicants, jobViews, pendingReview
+- [x] Create `GET /api/dashboard/stats`
+- [x] Return: activeJobs, totalApplicants, jobViews, pendingReview
 - [ ] Connect to dashboard page
 
-### Task 2.2: Activity Feed API
+### Task 2.2: Activity Feed API ✅
 
-- [ ] Create `GET /api/dashboard/activity`
-- [ ] Return recent activities (applications, status changes)
+- [x] Create `GET /api/dashboard/activity`
+- [x] Return recent activities (applications, status changes)
 - [ ] Connect to dashboard activity panel
 
-### Task 2.3: Job Management APIs
+### Task 2.3: Job Management APIs ✅
 
-- [ ] Update `POST /api/job` with new fields
-- [ ] Create `PATCH /api/job/[id]` for updates
-- [ ] Create `PATCH /api/job/[id]/status` for status change
-- [ ] Create `DELETE /api/job/[id]`
+- [x] Update `POST /api/job` with new fields
+- [x] Create `PATCH /api/job/[id]` for updates
+- [x] Create `PATCH /api/job/[id]/status` for status change
+- [x] Create `DELETE /api/job/[id]`
 
-### Task 2.4: Applicant Management APIs
+### Task 2.4: Applicant Management APIs ✅
 
-- [ ] Create `GET /api/jobs/[id]/applicants`
-- [ ] Create `PATCH /api/applicants/[id]/status`
-- [ ] Create `GET /api/applicants/[id]` for detail
+- [x] Create `GET /api/jobs/[id]/applicants`
+- [x] Create `PATCH /api/applicants/[id]/status`
+- [x] Create `GET /api/applicants/[id]` for detail
 
 ---
 
