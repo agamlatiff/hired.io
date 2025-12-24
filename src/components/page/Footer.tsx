@@ -61,7 +61,7 @@ const Footer = () => {
               Employers
             </h4>
             <Link
-              href="/dashboard/post-a-job"
+              href="/dashboard/post-job"
               className="text-gray-400 hover:text-neon-green text-sm transition-colors"
             >
               Post a Job

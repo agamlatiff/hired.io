@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 const Header = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const navCreateJobPage = () => router.push("/post-a-job");
+  const navCreateJobPage = () => router.push("/dashboard/post-job");
   return (
     <div className="pb-3 mb-8 border-b border-border flex flex-row items-center justify-between">
       <div>
