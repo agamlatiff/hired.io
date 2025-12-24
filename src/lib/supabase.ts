@@ -23,9 +23,25 @@ function randomString(length: number) {
 
 export const supabaseUploadFile = async (
   file: File | string,
-  bucket: "company" | "applicant"
+  bucket: "company" | "applicant" | "avatars"
 ) => {
-  const filename = `${randomString(6)}.jpg`;
+  // Determine file extension from file type
+  let extension = "jpg";
+  if (file instanceof File) {
+    const mimeToExt: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/gif": "gif",
+      "image/webp": "webp",
+      "application/pdf": "pdf",
+      "application/msword": "doc",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+      "text/plain": "txt",
+    };
+    extension = mimeToExt[file.type] || "jpg";
+  }
+
+  const filename = `${randomString(12)}.${extension}`;
 
   const { data, error } = await supabaseClient.storage
     .from(bucket)
@@ -43,7 +59,7 @@ export const supabaseUploadFile = async (
 
 export const supabaseGetPublicUrl = (
   filename: string,
-  bucket: "company" | "applicant"
+  bucket: "company" | "applicant" | "avatars"
 ) => {
   const { data } = supabaseClient.storage
     .from(bucket)
@@ -56,7 +72,7 @@ export const supabaseGetPublicUrl = (
 
 export const supabaseDeleteFile = (
   filename: string,
-  bucket: "company" | "applicant"
+  bucket: "company" | "applicant" | "avatars"
 ) => {
   const { data } = supabaseClient.storage
     .from(bucket)
@@ -70,7 +86,7 @@ export const supabaseDeleteFile = (
 export const supabaseUpdateFile = async (
   file: File | string,
   filename: string,
-  bucket: "company" | "applicant"
+  bucket: "company" | "applicant" | "avatars"
 ) => {
   const { data, error } = await supabaseClient.storage
     .from(bucket)

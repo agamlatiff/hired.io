@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
+import ImageUpload from "@/components/ui/image-upload";
+import { toast } from "@/hooks/use-toast";
 
 const settingsTabs = [
   { icon: "business", label: "Company Profile" },
@@ -64,8 +66,8 @@ export default function SettingsPage() {
   // Company data
   const [companyData, setCompanyData] = useState<CompanyData | null>(null);
 
-  // Form states
   const [companyName, setCompanyName] = useState("");
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [industry, setIndustry] = useState("");
   const [employeeCount, setEmployeeCount] = useState("");
   const [description, setDescription] = useState("");
@@ -91,6 +93,7 @@ export default function SettingsPage() {
       const social = data.CompanySocialMedia?.[0];
 
       setCompanyName(overview?.name || data.name || "");
+      setCompanyLogo(data.logo || overview?.image || null);
       setIndustry(overview?.industry || "");
       setEmployeeCount(overview?.employee || "");
       setDescription(overview?.description || "");
@@ -185,8 +188,8 @@ export default function SettingsPage() {
         <div className="flex items-center gap-4">
           {saveMessage && (
             <div className={`text-sm px-4 py-2 rounded-lg ${saveMessage.type === "success"
-                ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                : "bg-red-500/10 text-red-400 border border-red-500/20"
+              ? "bg-green-500/10 text-green-400 border border-green-500/20"
+              : "bg-red-500/10 text-red-400 border border-red-500/20"
               }`}>
               {saveMessage.text}
             </div>
@@ -282,13 +285,28 @@ export default function SettingsPage() {
                     Basic Information
                   </h3>
                   <div className="flex flex-col md:flex-row gap-8 mb-8">
-                    <div className="shrink-0 flex flex-col items-center gap-3">
-                      <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-neon-green to-blue-600 flex items-center justify-center text-background-dark font-extrabold text-4xl shadow-[0_0_25px_rgba(73,230,25,0.3)] border-2 border-white/10">
-                        {companyName.substring(0, 2).toUpperCase() || "TC"}
-                      </div>
-                      <button className="text-xs font-bold text-neon-green hover:text-white transition-colors border border-neon-green/30 hover:border-neon-green px-3 py-1.5 rounded-full bg-neon-green/10">
-                        Change Logo
-                      </button>
+                    <div className="shrink-0 flex flex-col items-center">
+                      <ImageUpload
+                        currentImage={companyLogo}
+                        onUploadComplete={(url) => {
+                          setCompanyLogo(url);
+                          toast({
+                            title: "Logo Updated",
+                            description: "Company logo has been uploaded successfully.",
+                          });
+                        }}
+                        onError={(error) => {
+                          toast({
+                            title: "Upload Failed",
+                            description: error,
+                            variant: "destructive",
+                          });
+                        }}
+                        type="logo"
+                        size="lg"
+                        shape="square"
+                        placeholder={companyName}
+                      />
                     </div>
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="col-span-2">

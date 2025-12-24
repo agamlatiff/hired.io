@@ -15,8 +15,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import type z from "zod";
+import { useState } from "react";
+
+type SignupType = "company" | "user";
 
 const SignUpPage = () => {
+  const [signupType, setSignupType] = useState<SignupType>("company");
+  const [loading, setLoading] = useState(false);
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -25,8 +31,12 @@ const SignUpPage = () => {
   const router = useRouter();
 
   const onSubmit = async (val: z.infer<typeof signUpFormSchema>) => {
+    setLoading(true);
+
     try {
-      await fetch("/api/company/new-user", {
+      const endpoint = signupType === "company" ? "/api/company/new-user" : "/api/user";
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,83 +44,182 @@ const SignUpPage = () => {
         body: JSON.stringify(val),
       });
 
+      if (!res.ok) {
+        throw new Error("Registration failed");
+      }
+
+      toast({
+        title: "Account Created!",
+        description: "Please sign in with your new account.",
+      });
+
       await router.push("/auth/signin");
     } catch (e) {
       console.log(e);
       toast({
         title: "Error",
-        description: "Please try again",
+        description: "Registration failed. Please try again.",
+        variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="relative w-full h-screen">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="border border-border p-5">
-          <div className="font-semibold text-center text-2xl mb-2">Sign Up</div>
-          <div className="text-sm text-gray-500">
-            Enter your data to access dashboard
+    <div className="relative w-full min-h-screen bg-background-dark">
+      {/* Background Effects */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] bg-grid" />
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-neon-green/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-neon-purple/5 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-block">
+              <span className="text-3xl font-black text-white">
+                hired<span className="text-neon-green">.io</span>
+              </span>
+            </Link>
           </div>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="mt-5 space-y-5"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Enter your name..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          {/* Signup Card */}
+          <div className="glass-panel border border-white/10 rounded-2xl p-8">
+            <div className="font-bold text-center text-2xl text-white mb-2">
+              Create Account
+            </div>
+            <div className="text-sm text-gray-400 text-center mb-6">
+              Join hired.io today
+            </div>
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Enter your email..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Signup Type Switcher */}
+            <div className="flex bg-card-dark rounded-xl p-1 mb-8">
+              <button
+                type="button"
+                onClick={() => setSignupType("company")}
+                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${signupType === "company"
+                    ? "bg-neon-green text-background-dark"
+                    : "text-gray-400 hover:text-white"
+                  }`}
+              >
+                <span className="material-symbols-outlined text-lg">business</span>
+                Employer
+              </button>
+              <button
+                type="button"
+                onClick={() => setSignupType("user")}
+                className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${signupType === "user"
+                    ? "bg-neon-green text-background-dark"
+                    : "text-gray-400 hover:text-white"
+                  }`}
+              >
+                <span className="material-symbols-outlined text-lg">person</span>
+                Job Seeker
+              </button>
+            </div>
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">
+                        {signupType === "company" ? "Company Name" : "Full Name"}
+                      </label>
+                      <FormControl>
+                        <Input
+                          placeholder={signupType === "company" ? "Your company name..." : "Your full name..."}
+                          className="w-full px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white placeholder-gray-600 focus:border-neon-green focus:ring-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button className="w-full">Sign Up</Button>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">
+                        Email Address
+                      </label>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email..."
+                          className="w-full px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white placeholder-gray-600 focus:border-neon-green focus:ring-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <div className="text-sm">
-                Already have an account{" "}
-                <Link href={"/auth/signin"} className="text-primary">
-                  Sign In
-                </Link>
-              </div>
-            </form>
-          </Form>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">
+                        Password
+                      </label>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Create a password..."
+                          className="w-full px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white placeholder-gray-600 focus:border-neon-green focus:ring-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  className="w-full bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)]"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <span className="material-symbols-outlined animate-spin text-lg">
+                        progress_activity
+                      </span>
+                      Creating Account...
+                    </span>
+                  ) : (
+                    <>Create {signupType === "company" ? "Employer" : "Job Seeker"} Account</>
+                  )}
+                </Button>
+
+                <div className="text-sm text-center text-gray-400">
+                  Already have an account?{" "}
+                  <Link href="/auth/signin" className="text-neon-green hover:underline font-bold">
+                    Sign In
+                  </Link>
+                </div>
+              </form>
+            </Form>
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-gray-600 mt-8">
+            By signing up, you agree to our{" "}
+            <Link href="#" className="text-neon-green hover:underline">Terms</Link> and{" "}
+            <Link href="#" className="text-neon-green hover:underline">Privacy Policy</Link>.
+          </p>
         </div>
       </div>
     </div>

@@ -4,23 +4,23 @@
 
 ## 📊 MVP Status Summary (Sprint 1-8)
 
-| Sprint   | Status         | Completion |
-| -------- | -------------- | ---------- |
-| Sprint 1 | ✅ COMPLETE    | 100%       |
-| Sprint 2 | ✅ COMPLETE    | 100%       |
-| Sprint 3 | ✅ COMPLETE    | 100%       |
-| Sprint 4 | ✅ COMPLETE    | 100%       |
-| Sprint 5 | 🟡 Partial     | 80%        |
-| Sprint 6 | 🔴 Not Started | 0%         |
-| Sprint 7 | ✅ COMPLETE    | 100%       |
-| Sprint 8 | ✅ COMPLETE    | 90%        |
+| Sprint   | Status      | Completion |
+| -------- | ----------- | ---------- |
+| Sprint 1 | ✅ COMPLETE | 100%       |
+| Sprint 2 | ✅ COMPLETE | 100%       |
+| Sprint 3 | ✅ COMPLETE | 100%       |
+| Sprint 4 | ✅ COMPLETE | 100%       |
+| Sprint 5 | ✅ COMPLETE | 100%       |
+| Sprint 6 | � Partial   | 33%        |
+| Sprint 7 | ✅ COMPLETE | 100%       |
+| Sprint 8 | ✅ COMPLETE | 90%        |
 
-**Overall MVP Progress: ~85% Complete**
+**Overall MVP Progress: ~90% Complete**
 
 ### Remaining MVP Tasks:
 
-- Task 5.3: Image Uploads (company logo, team photos, user avatar)
-- Sprint 6: User (Job Seeker) Authentication
+- Sprint 6.2: Password Features (forgot password)
+- Sprint 6.3: OAuth (optional)
 - Task 8.3: Testing
 
 ---
@@ -162,21 +162,21 @@
 - [x] Implement resume upload in Apply form UI
 - [x] Save URL to Applicant model
 
-### Task 5.3: Image Uploads
+### Task 5.3: Image Uploads ✅
 
-- [ ] Implement company logo upload
-- [ ] Implement team member photo upload
-- [ ] Implement user avatar upload
+- [x] Implement company logo upload
+- [x] Implement team member photo upload
+- [x] Implement user avatar upload
 
 ---
 
 ## Sprint 6: Authentication 🟡
 
-### Task 6.1: User (Job Seeker) Auth
+### Task 6.1: User (Job Seeker) Auth ✅
 
-- [ ] Update auth.ts to support User model
-- [ ] Create user-specific signin flow
-- [ ] Add role check (company vs user)
+- [x] Update auth.ts to support User model
+- [x] Create user-specific signin flow
+- [x] Add role check (company vs user)
 
 ### Task 6.2: Password Features
 
