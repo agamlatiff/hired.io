@@ -111,12 +111,12 @@
 - [x] Handle success/error states
 - [x] Redirect after success
 
-### Task 4.2: Settings Forms
+### Task 4.2: Settings Forms ✅
 
-- [ ] Connect Company Profile to API
-- [ ] Connect Team Management to API
-- [ ] Connect Notifications to API (if applicable)
-- [ ] Add save confirmation
+- [x] Connect Company Profile to API
+- [x] Connect Team Management to API
+- [x] Connect Notifications to API (if applicable)
+- [x] Add save confirmation
 
 ### Task 4.3: Apply Form ✅
 
