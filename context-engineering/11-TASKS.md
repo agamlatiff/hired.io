@@ -2,6 +2,27 @@
 
 > Task breakdown berdasarkan Gap Analysis untuk mengimplementasi fitur yang kurang.
 
+## 📊 MVP Status Summary (Sprint 1-8)
+
+| Sprint   | Status         | Completion |
+| -------- | -------------- | ---------- |
+| Sprint 1 | ✅ COMPLETE    | 100%       |
+| Sprint 2 | ✅ COMPLETE    | 100%       |
+| Sprint 3 | ✅ COMPLETE    | 100%       |
+| Sprint 4 | ✅ COMPLETE    | 100%       |
+| Sprint 5 | 🟡 Partial     | 80%        |
+| Sprint 6 | 🔴 Not Started | 0%         |
+| Sprint 7 | ✅ COMPLETE    | 100%       |
+| Sprint 8 | ✅ COMPLETE    | 90%        |
+
+**Overall MVP Progress: ~85% Complete**
+
+### Remaining MVP Tasks:
+
+- Task 5.3: Image Uploads (company logo, team photos, user avatar)
+- Sprint 6: User (Job Seeker) Authentication
+- Task 8.3: Testing
+
 ---
 
 ## Sprint 1: Database Schema Updates ✅ COMPLETE
