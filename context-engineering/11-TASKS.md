@@ -93,12 +93,12 @@
 - [ ] Implement column sorting
 - [ ] Implement pagination
 
-### Task 3.3: Job Detail Admin Page
+### Task 3.3: Job Detail Admin Page ✅
 
-- [ ] Fetch job detail from API
-- [ ] Fetch applicants from API
-- [ ] Implement status update for applicants
-- [ ] Add loading states
+- [x] Fetch job detail from API
+- [x] Fetch applicants from API
+- [x] Implement status update for applicants
+- [x] Add loading states
 
 ---
 
