@@ -1,0 +1,217 @@
+# todo.md - The Memory
+
+> Progress tracker dengan 3 task utama untuk hired.io.
+
+---
+
+## Status Proyek
+
+| Metrik             | Status         |
+| ------------------ | -------------- |
+| **MVP Progress**   | ~90% Complete  |
+| **Build**          | ✅ Passing     |
+| **Database**       | ✅ Fully Setup |
+| **API Layer**      | ✅ Operational |
+| **Authentication** | 🟡 Partial     |
+
+---
+
+## Task 1: Finalisasi MVP (Sprint 6 & 8) 🟡
+
+> Menyelesaikan fitur authentication dan testing yang tersisa.
+
+### Apa yang Sudah Selesai
+
+- [x] Database schema lengkap (21+ fields, 3 new models)
+- [x] 6 API endpoints fully functional
+- [x] Dashboard dengan real data (zero hardcoded)
+- [x] Job listings dengan search, filter, sort, pagination
+- [x] File upload system (resume, logo, avatar)
+- [x] User/Job Seeker authentication support
+- [x] Route cleanup (old `(dashboard)` folder deleted)
+- [x] Loading states & error handling
+
+### Yang Perlu Dikerjakan
+
+#### 1.1 Password Reset Feature
+
+- [ ] Buat halaman `/auth/forgot-password`
+- [ ] Buat API `POST /api/auth/reset-password`
+- [ ] Setup email service (Resend/SendGrid) untuk kirim reset link
+- [ ] Buat halaman reset password dengan token verification
+
+**Files to modify:**
+
+- `src/app/(auth)/forgot-password/page.tsx` - NEW
+- `src/app/api/auth/reset-password/route.ts` - NEW
+- `src/lib/email.ts` - NEW (optional)
+
+#### 1.2 Testing Semua Fitur
+
+- [ ] Test semua API endpoints dengan Postman/Thunder Client
+- [ ] Test form submissions (Post Job, Apply, Settings)
+- [ ] Test auth flows (Company & User login/register)
+- [ ] Test file uploads (resume, images)
+- [ ] Verify build tetap passing setelah testing
+
+**Test checklist:**
+
+```bash
+# API Testing
+GET  /api/dashboard/stats       ✅ Returns real stats
+GET  /api/dashboard/activity    ✅ Returns activity feed
+POST /api/job                   [ ] Create job
+GET  /api/jobs/[id]/applicants  [ ] Get applicant list
+POST /api/jobs/[id]/apply       [ ] Submit application
+
+# Auth Testing
+POST /api/auth/signin (company) [ ] Login berhasil
+POST /api/auth/signin (user)    [ ] Login berhasil
+```
+
+---
+
+## Task 2: Enhanced Features (Sprint 9-10) 🟢
+
+> Fitur-fitur yang meningkatkan UX tapi tidak critical untuk launch.
+
+### 2.1 Export to CSV
+
+- [ ] Tambah tombol Export di `/dashboard/jobs`
+- [ ] Buat API `GET /api/jobs/export`
+- [ ] Generate CSV dari job/applicant data
+- [ ] Download file ke user
+
+### 2.2 Notifications System
+
+- [ ] Buat model `Notification` di Prisma (sudah ada)
+- [ ] Buat API `GET /api/notifications`
+- [ ] Build notifications dropdown di dashboard header
+- [ ] Mark as read functionality
+- [ ] Real-time badge count
+
+### 2.3 Email Notifications
+
+- [ ] Setup email service (Resend/SendGrid)
+- [ ] Create email templates:
+  - Application confirmation (to applicant)
+  - New application alert (to company)
+  - Status update notification
+- [ ] Send emails on relevant events
+
+### 2.4 OAuth Providers (Optional)
+
+- [ ] Setup Google OAuth
+- [ ] Setup GitHub OAuth
+- [ ] Link OAuth accounts to existing users
+
+**Dependencies:**
+
+- Resend API Key atau SendGrid API Key
+- Google OAuth credentials
+- GitHub OAuth credentials
+
+---
+
+## Task 3: Advanced Features (Sprint 11-12) 🔵
+
+> Fitur lanjutan untuk platform yang mature.
+
+### 3.1 Job Seeker Dashboard
+
+- [ ] Buat model `SavedJob` dan `JobAlert`
+- [ ] Create pages:
+  - `/dashboard/user/profile` - Edit profil
+  - `/dashboard/user/applications` - Riwayat lamaran
+  - `/dashboard/user/saved-jobs` - Job yang disimpan
+  - `/dashboard/user/alerts` - Job alerts settings
+- [ ] Application status timeline
+- [ ] Save/unsave job functionality
+
+### 3.2 Interview Scheduling
+
+- [ ] Buat model `Interview`
+- [ ] Create interview scheduling API
+- [ ] Calendar integration (Google Calendar)
+- [ ] Send interview invites via email
+- [ ] Show upcoming interviews di dashboard
+
+### 3.3 Analytics & Reporting
+
+- [ ] Buat halaman `/dashboard/analytics`
+- [ ] Job performance metrics (views, applications, conversion)
+- [ ] Applicant demographics
+- [ ] Time-to-hire analytics
+- [ ] Export reports to PDF/Excel
+
+### 3.4 Internal Messaging
+
+- [ ] Buat model `Message`
+- [ ] Create messaging API
+- [ ] Build chat interface
+- [ ] Company ↔ Applicant messaging
+
+---
+
+## Quick Reference
+
+### Development Commands
+
+```bash
+# Start development
+npm run dev
+
+# Database
+npx prisma studio        # Open database GUI
+npx prisma migrate dev   # Create migration
+npx prisma generate      # Generate client
+npx prisma db seed       # Seed database
+
+# Build & verify
+npm run build
+npm run lint
+```
+
+### Key Files
+
+| Purpose         | File                                      |
+| --------------- | ----------------------------------------- |
+| Database schema | `prisma/schema.prisma`                    |
+| Auth config     | `src/lib/auth.ts`                         |
+| Main dashboard  | `src/app/dashboard/page.tsx`              |
+| Job listings    | `src/app/dashboard/jobs/page.tsx`         |
+| Post job form   | `src/app/dashboard/post-job/page.tsx`     |
+| Dashboard stats | `src/app/api/dashboard/stats/route.ts`    |
+| Activity feed   | `src/app/api/dashboard/activity/route.ts` |
+
+### Environment Variables
+
+```env
+DATABASE_URL="postgresql://..."
+DIRECT_URL="postgresql://..."
+NEXTAUTH_SECRET="your-secret"
+NEXTAUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_SUPABASE_URL="https://xxx.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+```
+
+---
+
+## Timeline Estimates
+
+| Task      | Focus                  | Duration |
+| --------- | ---------------------- | -------- |
+| Task 1    | MVP Finalisasi         | ~2 days  |
+| Task 2    | Enhanced Features      | ~4 days  |
+| Task 3    | Advanced Features      | ~7 days  |
+| **Total** | Full-Featured Platform | ~13 days |
+
+---
+
+## Tips
+
+1. **Check Build** - Run `npm run build` sebelum commit
+2. **Use Types** - Prisma auto-generate types
+3. **Session** - Access via `getServerSession(authOptions)`
+4. **Activity Log** - Buat activity log untuk setiap major action
+5. **API Auth** - Semua protected API perlu auth check
