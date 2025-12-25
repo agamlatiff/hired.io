@@ -8,11 +8,11 @@
 
 | Metrik             | Status         |
 | ------------------ | -------------- |
-| **MVP Progress**   | ~90% Complete  |
+| **MVP Progress**   | ~95% Complete  |
 | **Build**          | ✅ Passing     |
 | **Database**       | ✅ Fully Setup |
 | **API Layer**      | ✅ Operational |
-| **Authentication** | 🟡 Partial     |
+| **Authentication** | ✅ Working     |
 
 ---
 
@@ -37,8 +37,6 @@
 
 - [ ] Buat halaman `/auth/forgot-password`
 - [ ] Buat API `POST /api/auth/reset-password`
-- [ ] Setup email service (Resend/SendGrid) untuk kirim reset link
-- [ ] Buat halaman reset password dengan token verification
 
 **Files to modify:**
 
@@ -60,14 +58,42 @@
 # API Testing
 GET  /api/dashboard/stats       ✅ Returns real stats
 GET  /api/dashboard/activity    ✅ Returns activity feed
-POST /api/job                   [ ] Create job
+GET  /api/jobs                  ✅ Fixed - was 404, created route.ts
+POST /api/job                   ✅ Fixed - dueDate/needs type conversion
 GET  /api/jobs/[id]/applicants  [ ] Get applicant list
 POST /api/jobs/[id]/apply       [ ] Submit application
 
 # Auth Testing
-POST /api/auth/signin (company) [ ] Login berhasil
+POST /api/auth/signin (company) ✅ Login berhasil (admin@hiredwork.com)
 POST /api/auth/signin (user)    [ ] Login berhasil
 ```
+
+---
+
+#### 1.3 Custom Seed Data ✅
+
+- [x] Buat seed file dengan data realistis
+- [x] 3 Companies (GojekTech, Tokopedia, Ruangguru)
+- [x] 15 Job Listings (mix roles & locations)
+- [x] 20 Users/Job Seekers (nama Indonesia)
+- [x] Sample applications dengan berbagai status
+- [ ] Run seed ke database
+
+**Jalankan seed:**
+
+```bash
+npx prisma db seed
+```
+
+**Login credentials setelah seed:**
+
+| Role    | Email                    | Password    |
+| ------- | ------------------------ | ----------- |
+| Company | hr@gojektech.co.id       | admin123    |
+| Company | careers@tokopedia.com    | password123 |
+| Company | talent@ruangguru.com     | password123 |
+| User    | budi.santoso@gmail.com   | password123 |
+| User    | siti.nurhaliza@gmail.com | password123 |
 
 ---
 
