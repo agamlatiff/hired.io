@@ -5,8 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 
-const departments = ["Engineering", "Product", "Design", "Marketing", "Sales"];
-const workTypes = ["Remote", "On-site", "Hybrid"];
+import { DEPARTMENTS, WORK_TYPES } from "@/constants";
 
 export default function PostJobPage() {
   const router = useRouter();
@@ -176,7 +175,7 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     className="w-full bg-background-dark border border-accent-dark rounded-xl px-4 py-3 text-white focus:ring-0 focus:border-neon-green focus:outline-none"
                   >
-                    {departments.map(dept => <option key={dept}>{dept}</option>)}
+                    {DEPARTMENTS.map(dept => <option key={dept}>{dept}</option>)}
                   </select>
                 </div>
               </div>
@@ -199,7 +198,7 @@ export default function PostJobPage() {
                     onChange={handleChange}
                     className="w-full bg-background-dark border border-accent-dark rounded-xl px-4 py-3 text-white focus:ring-0 focus:border-neon-green focus:outline-none"
                   >
-                    {workTypes.map(type => <option key={type}>{type}</option>)}
+                    {WORK_TYPES.map(type => <option key={type}>{type}</option>)}
                   </select>
                 </div>
               </div>

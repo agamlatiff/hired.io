@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { JOB_APPLICANTS_COLUMNS, JOB_APPLICANTS_DATA } from "@/constants";
+import { JOB_APPLICANTS_COLUMNS } from "@/constants";
 import ButtonActionTable from "./ButtonActionTable";
 import type { Applicant } from "@prisma/client";
 import type { FC } from "react";

@@ -44,7 +44,92 @@
 - `src/app/api/auth/reset-password/route.ts` - NEW
 - `src/lib/email.ts` - NEW (optional)
 
-#### 1.2 Testing Semua Fitur
+---
+
+#### 1.2 Custom Seed Data ✅
+
+- [x] Buat seed file dengan data realistis
+- [x] 3 Companies (GojekTech, Tokopedia, Ruangguru)
+- [x] 15 Job Listings (mix roles & locations)
+- [x] 20 Users/Job Seekers (nama Indonesia)
+- [x] Sample applications dengan berbagai status
+- [x] Run seed ke database
+
+**Jalankan seed:**
+
+```bash
+npx prisma db seed
+```
+
+**Login credentials setelah seed:**
+
+| Role    | Email                    | Password    |
+| ------- | ------------------------ | ----------- |
+| Company | hr@gojektech.co.id       | admin123    |
+| Company | careers@tokopedia.com    | password123 |
+| Company | talent@ruangguru.com     | password123 |
+| User    | budi.santoso@gmail.com   | password123 |
+| User    | siti.nurhaliza@gmail.com | password123 |
+
+---
+
+#### 1.3 Data Layer Refactoring
+
+> Pisahkan query data ke reusable functions, hapus dummy data, SOLID principle.
+
+##### 1.3.1 Create Data Services Layer
+
+- [x] Buat folder `src/data/` dengan service files:
+  - `companies.ts` - Company queries (getById, getFeatured, getAll)
+  - `jobs.ts` - Job queries (getById, getFeatured, getAll)
+  - `categories.ts` - Category/Industry queries
+  - `index.ts` - Barrel exports
+
+##### 1.3.2 Remove Dummy Data from Landing Pages 🔴
+
+| File                      | Dummy Variables                                             | Lines |
+| ------------------------- | ----------------------------------------------------------- | ----- |
+| `(page)/page.tsx`         | `topCompanies`, `featuredJobs`, `techChips`, `trendingTech` | ~118  |
+| `find-jobs/page.tsx`      | `sampleJobs`, `jobTypes`, `experienceLevels`, `techStacks`  | ~86   |
+| `find-companies/page.tsx` | `companiesData`                                             | ~82   |
+
+- [x] `page.tsx` - Hapus 4 arrays, fetch dari API
+- [x] `find-jobs/page.tsx` - Hapus sampleJobs, fetch dari `/api/jobs`
+- [x] `find-companies/page.tsx` - Hapus companiesData
+
+##### 1.3.3 Clean Up Constants
+
+- [x] Hapus dari `src/constants/index.ts`:
+  - `JOB_LISTING_DATA` (unused)
+  - `JOB_APPLICANTS_DATA` (unused)
+  - `CATEGORIES_OPTIONS` (irrelevant)
+- [x] Tambahkan config baru:
+  - `DEPARTMENTS`
+  - `WORK_TYPES`
+  - `CURRENCIES`
+  - `CLIENT_LOGOS`
+
+##### 1.3.4 Move Hardcoded Data
+
+| From                           | To                  | Data                       |
+| ------------------------------ | ------------------- | -------------------------- |
+| `post-job/page.tsx`            | `constants/`        | `departments`, `workTypes` |
+| `Clients.tsx`                  | `constants/`        | `clients` array            |
+| `detail/company/[id]/page.tsx` | `data/companies.ts` | `getDetailCompany()`       |
+
+**New folder structure:**
+
+```
+src/data/
+├── index.ts
+├── companies.ts
+├── jobs.ts
+└── categories.ts
+```
+
+---
+
+#### 1.4 Testing Semua Fitur
 
 - [ ] Test semua API endpoints dengan Postman/Thunder Client
 - [ ] Test form submissions (Post Job, Apply, Settings)
@@ -67,33 +152,6 @@ POST /api/jobs/[id]/apply       [ ] Submit application
 POST /api/auth/signin (company) ✅ Login berhasil (admin@hiredwork.com)
 POST /api/auth/signin (user)    [ ] Login berhasil
 ```
-
----
-
-#### 1.3 Custom Seed Data ✅
-
-- [x] Buat seed file dengan data realistis
-- [x] 3 Companies (GojekTech, Tokopedia, Ruangguru)
-- [x] 15 Job Listings (mix roles & locations)
-- [x] 20 Users/Job Seekers (nama Indonesia)
-- [x] Sample applications dengan berbagai status
-- [ ] Run seed ke database
-
-**Jalankan seed:**
-
-```bash
-npx prisma db seed
-```
-
-**Login credentials setelah seed:**
-
-| Role    | Email                    | Password    |
-| ------- | ------------------------ | ----------- |
-| Company | hr@gojektech.co.id       | admin123    |
-| Company | careers@tokopedia.com    | password123 |
-| Company | talent@ruangguru.com     | password123 |
-| User    | budi.santoso@gmail.com   | password123 |
-| User    | siti.nurhaliza@gmail.com | password123 |
 
 ---
 

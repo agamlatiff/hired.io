@@ -13,6 +13,7 @@ export type optionType = {
   label: string;
 };
 
+// Table columns
 export const JOB_LISTING_COLUMNS: string[] = [
   "Roles",
   "Status",
@@ -25,114 +26,64 @@ export const JOB_LISTING_COLUMNS: string[] = [
 
 export const JOB_APPLICANTS_COLUMNS: string[] = ["Name"];
 
-export const JOB_APPLICANTS_DATA = [
-  {
-    name: "Agam",
-    appliedDate: "15 Aug 2023",
-  },
-];
-
-export const JOB_LISTING_DATA = [
-  {
-    roles: "Software Engineer",
-    status: "Live",
-    datePosted: "12 Aug 2023",
-    dueDate: "12 Sep 2023",
-    jobType: "Full-Time",
-    applicants: 1,
-    needs: 10,
-  },
-];
-
+// Form options
 export const LOCATION_OPTIONS: optionType[] = [
-  {
-    id: "Indonesia",
-    label: "Indonesia",
-  },
-  {
-    id: "Malaysia",
-    label: "Malaysia",
-  },
-  {
-    id: "Singapore",
-    label: "Singapore",
-  },
-  {
-    id: "Thailand",
-    label: "Thailand",
-  },
-];
-
-export const EMPLOYEE_OPTIONS: optionType[] = [
-  {
-    id: "1-50",
-    label: "1-50",
-  },
-  {
-    id: "51-100",
-    label: "51-100",
-  },
-
-  {
-    id: "151-200",
-    label: "151-200",
-  },
-  {
-    id: "251-500",
-    label: "251-500",
-  },
-  {
-    id: "501-1000",
-    label: "501-1000",
-  },
-  {
-    id: "1000-above",
-    label: "1000-above",
-  },
+  { id: "Indonesia", label: "Indonesia" },
+  { id: "Malaysia", label: "Malaysia" },
+  { id: "Singapore", label: "Singapore" },
+  { id: "Thailand", label: "Thailand" },
+  { id: "Remote", label: "Remote" },
 ];
 
 export const LOCATION_OPTIONS_PAGE: optionType[] = [
-  {
-    id: "Indonesia",
-    label: "Indonesia",
-  },
-  {
-    id: "Malaysia",
-    label: "Malaysia",
-  },
-  {
-    id: "Singapura",
-    label: "Singapura",
-  },
-  {
-    id: "Thailand",
-    label: "Thailand",
-  },
+  { id: "Indonesia", label: "Indonesia" },
+  { id: "Malaysia", label: "Malaysia" },
+  { id: "Singapore", label: "Singapore" },
+  { id: "Thailand", label: "Thailand" },
 ];
 
-export const CATEGORIES_OPTIONS: optionType[] = [
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
+export const EMPLOYEE_OPTIONS: optionType[] = [
+  { id: "1-50", label: "1-50" },
+  { id: "51-100", label: "51-100" },
+  { id: "101-200", label: "101-200" },
+  { id: "201-500", label: "201-500" },
+  { id: "501-1000", label: "501-1000" },
+  { id: "1000+", label: "1000+" },
+];
+
+// Post Job form options
+export const DEPARTMENTS = [
+  "Engineering",
+  "Product",
+  "Design",
+  "Marketing",
+  "Sales",
+  "Operations",
+  "Finance",
+  "HR",
+] as const;
+
+export const WORK_TYPES = ["Remote", "On-site", "Hybrid"] as const;
+
+export const CURRENCIES = [
+  { id: "USD", label: "USD ($)", symbol: "$" },
+  { id: "EUR", label: "EUR (€)", symbol: "€" },
+  { id: "GBP", label: "GBP (£)", symbol: "£" },
+  { id: "IDR", label: "IDR (Rp)", symbol: "Rp" },
+] as const;
+
+export const EXPERIENCE_LEVELS = [
+  { id: "entry", label: "Entry Level (0-2 years)" },
+  { id: "mid", label: "Mid Level (2-5 years)" },
+  { id: "senior", label: "Senior (5-8 years)" },
+  { id: "lead", label: "Lead / Manager (8+ years)" },
+] as const;
+
+// Landing page assets
+export const CLIENT_LOGOS = [
+  "/images/jobox.png",
+  "/images/design.png",
+  "/images/wave.png",
+  "/images/twins.png",
+  "/images/bubles.png",
 ];

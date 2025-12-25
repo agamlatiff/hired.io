@@ -15,8 +15,7 @@ import {
 } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
-import prisma from "@/lib/prisma";
-import { supabasePublicUrl } from "@/lib/supabase";
+import { getCompanyById } from "@/data/companies";
 import { dateFormat } from "@/lib/helpers";
 import type { CompanyTeam } from "@prisma/client";
 
@@ -27,42 +26,9 @@ type Params = {
 interface DetailCompanyPageProps {
   params: Params;
 }
-async function getDetailCompany(id: string) {
-  const data = await prisma.company.findFirst({
-    where: {
-      id,
-    },
-    include: {
-      CompanyOverview: true,
-      CompanySocialMedia: true,
-      CompanyTeam: true,
-      _count: {
-        select: {
-          Job: true,
-        },
-      },
-    },
-  });
-
-  let imageUrl;
-
-  if (data?.CompanyOverview[0].image) {
-    imageUrl = await supabasePublicUrl(
-      data.CompanyOverview[0].image,
-      "company"
-    );
-  } else {
-    imageUrl = "/images/company2.png";
-  }
-
-  return {
-    ...data,
-    imageUrl,
-  };
-}
 
 const DetailCompanyPage: FC<DetailCompanyPageProps> = async ({ params }) => {
-  const data = await getDetailCompany(params.id);
+  const data = await getCompanyById(params.id);
 
   return (
     <>
@@ -93,7 +59,7 @@ const DetailCompanyPage: FC<DetailCompanyPageProps> = async ({ params }) => {
               <div>
                 <div className="mt-10 inline-flex gap-6 items-start">
                   <Image
-                    src={data.imageUrl}
+                    src={data.logo || "/images/placeholder-company.png"}
                     alt="company"
                     width={150}
                     height={150}
