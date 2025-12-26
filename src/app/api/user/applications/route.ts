@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -16,22 +15,14 @@ export async function GET() {
       select: { id: true },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const applications = await prisma.applicant.findMany({
       where: { userId: user.id },
       include: {
         Job: {
           include: {
-            Company: {
-              select: {
-                id: true,
-                name: true,
-                logo: true,
-              },
-            },
+            Company: { select: { id: true, name: true, logo: true } },
           },
         },
       },
@@ -40,10 +31,7 @@ export async function GET() {
 
     return NextResponse.json(applications);
   } catch (error) {
-    console.error("Error fetching applications:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch applications" },
-      { status: 500 }
-    );
+    console.error("Error:", error);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
