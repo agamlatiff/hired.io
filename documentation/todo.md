@@ -245,13 +245,21 @@ npx playwright show-report    # View HTML report
 - `src/app/dashboard/user/saved-jobs/page.tsx` - Saved jobs list
 - `src/app/dashboard/user/alerts/page.tsx` - Job alerts manager
 
-### 3.2 Interview Scheduling
+### 3.2 Interview Scheduling ✅
 
-- [ ] Buat model `Interview`
-- [ ] Create interview scheduling API
-- [ ] Calendar integration (Google Calendar)
-- [ ] Send interview invites via email
-- [ ] Show upcoming interviews di dashboard
+- [x] Buat model `Interview`
+- [x] Create interview scheduling API
+- [x] Show upcoming interviews di dashboard
+- [ ] Calendar integration (Google Calendar) - Future
+- [ ] Send interview invites via email - Future
+
+**New files:**
+
+- `prisma/schema.prisma` - Added Interview model
+- `src/app/api/company/interviews/route.ts` - Company CRUD
+- `src/app/api/user/interviews/route.ts` - User GET
+- `src/app/dashboard/interviews/page.tsx` - Company view
+- `src/app/dashboard/user/interviews/page.tsx` - User view
 
 ### 3.3 Analytics & Reporting
 

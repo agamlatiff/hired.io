@@ -33,6 +33,7 @@ model Company {
   Job                Job[]
   Activity           Activity[]
   Notification       Notification[]
+  Interview          Interview[]
 }
 
 model CompanySocialMedia {
@@ -136,6 +137,7 @@ model Applicant {
   notes            String?
   rating           Int?
   source           String?
+  Interview        Interview[]
 }
 
 model JobView {
@@ -203,4 +205,24 @@ model JobAlert {
   createdAt DateTime @default(now())
 
   @@index([userId])
+}
+
+model Interview {
+  id           String    @id @default(cuid())
+  applicantId  String
+  applicant    Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  scheduledAt  DateTime
+  duration     Int       @default(60) // minutes
+  type         String    @default("video") // video, phone, onsite
+  location     String?   // meeting link or address
+  notes        String?
+  status       String    @default("scheduled") // scheduled, completed, cancelled, rescheduled
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([applicantId])
+  @@index([companyId])
+  @@index([scheduledAt])
 }
