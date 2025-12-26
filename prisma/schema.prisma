@@ -99,6 +99,7 @@ model Job {
   CategoryJob     CategoryJob? @relation(fields: [categoryId], references: [id])
   Applicant       Applicant[]
   JobView         JobView[]
+  SavedBy         SavedJob[]
 }
 
 model User {
@@ -114,6 +115,8 @@ model User {
   education    Json?
   Applicants   Applicant[]
   Notification Notification[]
+  SavedJobs    SavedJob[]
+  JobAlerts    JobAlert[]
 }
 
 model Applicant {
@@ -173,4 +176,31 @@ model Notification {
 
   @@index([userId])
   @@index([companyId])
+}
+
+model SavedJob {
+  id      String   @id @default(cuid())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId   String
+  job     Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  savedAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+  @@index([userId])
+}
+
+model JobAlert {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyword   String?
+  location  String?
+  jobType   String?
+  minSalary Int?
+  frequency String   @default("daily")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

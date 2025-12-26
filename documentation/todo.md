@@ -129,28 +129,46 @@ src/data/
 
 ---
 
-#### 1.4 Testing Semua Fitur
+#### 1.4 Automated Testing dengan Playwright
 
-- [ ] Test semua API endpoints dengan Postman/Thunder Client
-- [ ] Test form submissions (Post Job, Apply, Settings)
-- [ ] Test auth flows (Company & User login/register)
-- [ ] Test file uploads (resume, images)
-- [ ] Verify build tetap passing setelah testing
+> Lihat `documentation/testing.md` untuk setup guide lengkap.
 
-**Test checklist:**
+##### Setup
 
 ```bash
-# API Testing
-GET  /api/dashboard/stats       ✅ Returns real stats
-GET  /api/dashboard/activity    ✅ Returns activity feed
-GET  /api/jobs                  ✅ Fixed - was 404, created route.ts
-POST /api/job                   ✅ Fixed - dueDate/needs type conversion
-GET  /api/jobs/[id]/applicants  [ ] Get applicant list
-POST /api/jobs/[id]/apply       [ ] Submit application
+npm install -D @playwright/test
+npx playwright install
+```
 
-# Auth Testing
-POST /api/auth/signin (company) ✅ Login berhasil (admin@hiredwork.com)
-POST /api/auth/signin (user)    [ ] Login berhasil
+##### Test Files to Create
+
+- [ ] `tests/api/dashboard.spec.ts` - Dashboard API tests
+- [ ] `tests/api/jobs.spec.ts` - Jobs API tests
+- [ ] `tests/e2e/auth.spec.ts` - Auth flow tests
+- [ ] `tests/e2e/post-job.spec.ts` - Post job form tests
+- [ ] `tests/e2e/apply-job.spec.ts` - Apply to job tests
+- [ ] `playwright.config.ts` - Playwright config
+
+##### Test Checklist
+
+| Endpoint/Flow               | Test File                     | Status |
+| --------------------------- | ----------------------------- | ------ |
+| GET /api/dashboard/stats    | `tests/api/dashboard.spec.ts` | [ ]    |
+| GET /api/dashboard/activity | `tests/api/dashboard.spec.ts` | [ ]    |
+| GET /api/jobs               | `tests/api/jobs.spec.ts`      | [ ]    |
+| POST /api/job               | `tests/api/jobs.spec.ts`      | [ ]    |
+| GET /api/jobs/[id]/apply    | `tests/api/jobs.spec.ts`      | [ ]    |
+| Company login               | `tests/e2e/auth.spec.ts`      | [ ]    |
+| User login                  | `tests/e2e/auth.spec.ts`      | [ ]    |
+| Post job form               | `tests/e2e/post-job.spec.ts`  | [ ]    |
+| File uploads                | `tests/e2e/upload.spec.ts`    | [ ]    |
+
+##### Run Tests
+
+```bash
+npx playwright test           # Run all tests
+npx playwright test --ui      # Debug mode
+npx playwright show-report    # View HTML report
 ```
 
 ---
@@ -201,16 +219,31 @@ POST /api/auth/signin (user)    [ ] Login berhasil
 
 > Fitur lanjutan untuk platform yang mature.
 
-### 3.1 Job Seeker Dashboard
+### 3.1 Job Seeker Dashboard ✅
 
-- [ ] Buat model `SavedJob` dan `JobAlert`
-- [ ] Create pages:
+- [x] Buat model `SavedJob` dan `JobAlert`
+- [x] Create pages:
   - `/dashboard/user/profile` - Edit profil
   - `/dashboard/user/applications` - Riwayat lamaran
   - `/dashboard/user/saved-jobs` - Job yang disimpan
   - `/dashboard/user/alerts` - Job alerts settings
-- [ ] Application status timeline
-- [ ] Save/unsave job functionality
+- [x] Application status timeline
+- [x] Save/unsave job functionality
+
+**New files created:**
+
+- `prisma/schema.prisma` - Added SavedJob, JobAlert models
+- `src/app/api/user/profile/route.ts` - Profile API
+- `src/app/api/user/applications/route.ts` - Applications API
+- `src/app/api/user/saved-jobs/route.ts` - Saved jobs API
+- `src/app/api/user/alerts/route.ts` - Job alerts API
+- `src/components/dashboard/UserSidebar.tsx` - User navigation
+- `src/app/dashboard/user/layout.tsx` - User dashboard layout
+- `src/app/dashboard/user/page.tsx` - Overview page
+- `src/app/dashboard/user/profile/page.tsx` - Profile editor
+- `src/app/dashboard/user/applications/page.tsx` - Application history
+- `src/app/dashboard/user/saved-jobs/page.tsx` - Saved jobs list
+- `src/app/dashboard/user/alerts/page.tsx` - Job alerts manager
 
 ### 3.2 Interview Scheduling
 
