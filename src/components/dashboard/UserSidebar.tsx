@@ -11,6 +11,7 @@ const mainMenuItems: NavItem[] = [
   { label: "My Applications", href: "/dashboard/user/applications", icon: "description" },
   { label: "Saved Jobs", href: "/dashboard/user/saved-jobs", icon: "bookmark" },
   { label: "Interviews", href: "/dashboard/user/interviews", icon: "event" },
+  { label: "Messages", href: "/dashboard/user/messages", icon: "chat" },
 ];
 
 const configMenuItems: NavItem[] = [

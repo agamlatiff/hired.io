@@ -34,6 +34,8 @@ model Company {
   Activity           Activity[]
   Notification       Notification[]
   Interview          Interview[]
+  ConversationsAsCompany Conversation[]
+  SentMessages       Message[]     @relation("CompanyMessages")
 }
 
 model CompanySocialMedia {
@@ -118,6 +120,8 @@ model User {
   Notification Notification[]
   SavedJobs    SavedJob[]
   JobAlerts    JobAlert[]
+  ConversationsAsUser Conversation[]
+  SentMessages       Message[]     @relation("UserMessages")
 }
 
 model Applicant {
@@ -225,4 +229,37 @@ model Interview {
   @@index([applicantId])
   @@index([companyId])
   @@index([scheduledAt])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+
+  @@unique([companyId, userId])
+  @@index([companyId])
+  @@index([userId])
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  conversationId String
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderType     String        // "company" or "user"
+  senderCompanyId String?
+  senderCompany  Company?      @relation("CompanyMessages", fields: [senderCompanyId], references: [id])
+  senderUserId   String?
+  senderUser     User?         @relation("UserMessages", fields: [senderUserId], references: [id])
+  content        String
+  read           Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+
+  @@index([conversationId])
+  @@index([createdAt])
 }

@@ -261,20 +261,35 @@ npx playwright show-report    # View HTML report
 - `src/app/dashboard/interviews/page.tsx` - Company view
 - `src/app/dashboard/user/interviews/page.tsx` - User view
 
-### 3.3 Analytics & Reporting
+### 3.3 Analytics & Reporting ✅
 
-- [ ] Buat halaman `/dashboard/analytics`
-- [ ] Job performance metrics (views, applications, conversion)
-- [ ] Applicant demographics
-- [ ] Time-to-hire analytics
-- [ ] Export reports to PDF/Excel
+- [x] Buat halaman `/dashboard/analytics`
+- [x] Job performance metrics (views, applications, conversion)
+- [x] Applicant demographics (status breakdown, sources)
+- [x] Time-to-hire analytics
+- [ ] Export reports to PDF/Excel - Future
 
-### 3.4 Internal Messaging
+**New files:**
 
-- [ ] Buat model `Message`
-- [ ] Create messaging API
-- [ ] Build chat interface
-- [ ] Company ↔ Applicant messaging
+- `src/app/api/company/analytics/route.ts` - Analytics API
+- `src/app/dashboard/analytics/page.tsx` - Analytics dashboard
+
+### 3.4 Internal Messaging ✅
+
+- [x] Buat model `Message` dan `Conversation`
+- [x] Create messaging API
+- [x] Build chat interface
+- [x] Company ↔ Applicant messaging
+
+**New files:**
+
+- `prisma/schema.prisma` - Added Conversation, Message models
+- `src/app/api/company/messages/route.ts` - Company conversations
+- `src/app/api/company/messages/[conversationId]/route.ts` - Messages
+- `src/app/api/user/messages/route.ts` - User conversations
+- `src/app/api/user/messages/[conversationId]/route.ts` - Messages
+- `src/app/dashboard/messages/page.tsx` - Company chat UI
+- `src/app/dashboard/user/messages/page.tsx` - User chat UI
 
 ---
 
