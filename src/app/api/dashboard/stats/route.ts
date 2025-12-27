@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
 
     // Get active jobs count
     const activeJobs = await prisma.job.count({

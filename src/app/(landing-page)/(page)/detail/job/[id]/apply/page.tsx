@@ -6,14 +6,17 @@ import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import { useState, useEffect } from "react";
 import { supabaseUploadFile, supabaseGetPublicUrl } from "@/lib/supabase";
+import { useSession } from "next-auth/react";
 
 interface JobData {
   id: string;
   roles: string;
+  location?: string;
   Company?: {
+    name: string;
+    logo?: string;
     CompanyOverview?: Array<{
       name: string;
-      image: string;
       location: string;
     }>;
   };
@@ -29,6 +32,7 @@ interface FormErrors {
 }
 
 export default function ApplyJobPage() {
+  const { data: session, status } = useSession();
   const params = useParams();
   const router = useRouter();
   const [job, setJob] = useState<JobData | null>(null);
@@ -49,11 +53,28 @@ export default function ApplyJobPage() {
   const [coverLetter, setCoverLetter] = useState("");
   const [previousJobTitle, setPreviousJobTitle] = useState("");
 
+  // Pre-fill form if user is logged in
+  useEffect(() => {
+    if (session?.user) {
+      // Assuming session.user has name and email. 
+      // You might want to fetch full profile here if needed, 
+      // but for now let's use what we have in session or keep blank for manual entry 
+      // if names aren't split in session.
+      if (session.user.email) setEmail(session.user.email);
+      // Split name if possible
+      if (session.user.name) {
+        const parts = session.user.name.split(" ");
+        if (parts.length > 0) setFirstName(parts[0]);
+        if (parts.length > 1) setLastName(parts.slice(1).join(" "));
+      }
+    }
+  }, [session]);
+
   // Fetch job data
   useEffect(() => {
     async function fetchJob() {
       try {
-        const res = await fetch(`/api/jobs/${params.id}`);
+        const res = await fetch(`/api/job/${params.id}`);
         if (!res.ok) throw new Error("Failed to fetch job");
         const data = await res.json();
         setJob(data);
@@ -140,38 +161,23 @@ export default function ApplyJobPage() {
       if (resumeFile) {
         const { data, error, filename } = await supabaseUploadFile(resumeFile, "applicant");
         if (error) {
-          throw new Error("Failed to upload resume");
+          console.error("[RESUME_UPLOAD_ERROR]", error);
+          throw new Error(`Failed to upload resume: ${error.message || "Unknown storage error. Please check Supabase bucket permissions."}`);
         }
         const { publicUrl } = supabaseGetPublicUrl(filename, "applicant");
         resumeUrl = publicUrl;
       }
 
-      // First, we need to get or create a user
-      // For now, we'll create a simple user record
-      const userRes = await fetch("/api/user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: `${firstName} ${lastName}`,
-          email,
-          password: "temp_password", // In production, handle this properly
-        }),
-      });
-
-      let userId: string;
-      if (userRes.ok) {
-        const userData = await userRes.json();
-        userId = userData.id;
-      } else {
-        // User might already exist, try to get by email
-        const existingUser = await fetch(`/api/user?email=${encodeURIComponent(email)}`);
-        if (existingUser.ok) {
-          const userData = await existingUser.json();
-          userId = userData.id;
-        } else {
-          throw new Error("Failed to create or find user");
-        }
+      // Require authentication
+      if (status !== "authenticated" || !session?.user) {
+        setErrors({ general: "You must be logged in to apply." });
+        // Optional: Redirect to login
+        router.push(`/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`);
+        return;
       }
+
+      const userId = session.user.id;
+
 
       // Submit application
       const applicationData = {
@@ -196,8 +202,14 @@ export default function ApplyJobPage() {
         throw new Error("Failed to submit application");
       }
 
-      // Redirect to success page
-      router.push("/apply-success");
+      // Redirect to success page with job info
+      const successParams = new URLSearchParams({
+        jobTitle: job?.roles || "Position",
+        companyName: job?.Company?.name || "Company",
+        companyLogo: job?.Company?.logo || "",
+        jobId: params.id as string,
+      });
+      router.push(`/apply-success?${successParams.toString()}`);
     } catch (err) {
       console.error(err);
       setErrors({
@@ -208,7 +220,7 @@ export default function ApplyJobPage() {
     }
   };
 
-  const companyInfo = job?.Company?.CompanyOverview?.[0];
+  const companyOverview = job?.Company?.CompanyOverview?.[0];
 
   if (loading) {
     return (
@@ -269,11 +281,17 @@ export default function ApplyJobPage() {
             <div className="absolute -inset-1 bg-gradient-to-r from-neon-green/20 via-transparent to-neon-purple/20 rounded-3xl blur-lg opacity-40 group-hover:opacity-60 transition duration-700" />
             <div className="glass-panel relative rounded-3xl p-8 border border-white/10 flex items-center gap-6">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white flex items-center justify-center shrink-0 p-3 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                <img
-                  alt={companyInfo?.name || "Company"}
-                  className="w-full h-full object-contain"
-                  src={companyInfo?.image || "/images/placeholder-company.png"}
-                />
+                {job?.Company?.logo ? (
+                  <img
+                    alt={job?.Company?.name || "Company"}
+                    className="w-full h-full object-contain"
+                    src={job.Company.logo}
+                  />
+                ) : (
+                  <span className="text-black font-bold text-2xl">
+                    {(job?.Company?.name || "C").charAt(0)}
+                  </span>
+                )}
               </div>
               <div>
                 <h2 className="text-sm text-neon-green font-bold tracking-widest uppercase mb-1">
@@ -287,14 +305,14 @@ export default function ApplyJobPage() {
                     <span className="material-symbols-outlined text-base">
                       domain
                     </span>
-                    {companyInfo?.name || "Company"}
+                    {job?.Company?.name || "Company"}
                   </span>
                   <span className="w-1 h-1 rounded-full bg-gray-600 mx-1" />
                   <span className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-base">
                       location_on
                     </span>
-                    {companyInfo?.location || "Location"}
+                    {companyOverview?.location || job?.location || "Remote"}
                   </span>
                 </p>
               </div>

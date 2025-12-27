@@ -11,7 +11,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
+    const role = session.user.role;
+
+    if (role !== "company") {
+      return NextResponse.json({ error: "Only companies can post jobs" }, { status: 403 });
+    }
     const data = await request.json();
 
     // Transform data for Prisma

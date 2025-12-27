@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
 
     // Get recent activities for the company
     const activities = await prisma.activity.findMany({

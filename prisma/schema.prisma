@@ -20,22 +20,24 @@ model Industry {
 }
 
 model Company {
-  id                 String               @id @default(cuid())
-  name               String
-  password           String
-  email              String               @unique
-  logo               String?
-  plan               String               @default("free")
-  createdAt          DateTime             @default(now())
-  CompanySocialMedia CompanySocialMedia[]
-  CompanyTeam        CompanyTeam[]
-  CompanyOverview    CompanyOverview[]
-  Job                Job[]
-  Activity           Activity[]
-  Notification       Notification[]
-  Interview          Interview[]
+  id                     String               @id @default(cuid())
+  name                   String
+  password               String
+  email                  String               @unique
+  logo                   String?
+  plan                   String               @default("free")
+  createdAt              DateTime             @default(now())
+  CompanySocialMedia     CompanySocialMedia[]
+  CompanyTeam            CompanyTeam[]
+  CompanyOverview        CompanyOverview[]
+  Job                    Job[]
+  Activity               Activity[]
+  Notification           Notification[]
+  Interview              Interview[]
   ConversationsAsCompany Conversation[]
-  SentMessages       Message[]     @relation("CompanyMessages")
+  SentMessages           Message[]            @relation("CompanyMessages")
+  resetToken             String?
+  resetTokenExpiry       DateTime?
 }
 
 model CompanySocialMedia {
@@ -106,38 +108,40 @@ model Job {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  password     String
-  email        String         @unique
-  avatar       String?
-  headline     String?
-  location     String?
-  skills       String[]
-  experience   Json?
-  education    Json?
-  Applicants   Applicant[]
-  Notification Notification[]
-  SavedJobs    SavedJob[]
-  JobAlerts    JobAlert[]
+  id                  String         @id @default(cuid())
+  name                String
+  password            String
+  email               String         @unique
+  avatar              String?
+  headline            String?
+  location            String?
+  skills              String[]
+  experience          Json?
+  education           Json?
+  Applicants          Applicant[]
+  Notification        Notification[]
+  SavedJobs           SavedJob[]
+  JobAlerts           JobAlert[]
   ConversationsAsUser Conversation[]
-  SentMessages       Message[]     @relation("UserMessages")
+  SentMessages        Message[]      @relation("UserMessages")
+  resetToken          String?
+  resetTokenExpiry    DateTime?
 }
 
 model Applicant {
-  id               String   @id @default(cuid())
+  id               String      @id @default(cuid())
   userId           String
-  user             User?    @relation(fields: [userId], references: [id])
+  user             User?       @relation(fields: [userId], references: [id])
   jobId            String?
-  Job              Job?     @relation(fields: [jobId], references: [id])
+  Job              Job?        @relation(fields: [jobId], references: [id])
   previousJobTitle String
   phone            String
   linkedin         String
   portfolio        String
   coverLetter      String
   resume           String
-  status           String   @default("new")
-  appliedAt        DateTime @default(now())
+  status           String      @default("new")
+  appliedAt        DateTime    @default(now())
   notes            String?
   rating           Int?
   source           String?
@@ -212,19 +216,19 @@ model JobAlert {
 }
 
 model Interview {
-  id           String    @id @default(cuid())
-  applicantId  String
-  applicant    Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  companyId    String
-  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  scheduledAt  DateTime
-  duration     Int       @default(60)
-  type         String    @default("video")
-  location     String?
-  notes        String?
-  status       String    @default("scheduled")
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id          String    @id @default(cuid())
+  applicantId String
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  scheduledAt DateTime
+  duration    Int       @default(60)
+  type        String    @default("video")
+  location    String?
+  notes       String?
+  status      String    @default("scheduled")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([applicantId])
   @@index([companyId])
@@ -248,17 +252,17 @@ model Conversation {
 }
 
 model Message {
-  id             String        @id @default(cuid())
-  conversationId String
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderType     String        // "company" or "user"
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderType      String // "company" or "user"
   senderCompanyId String?
-  senderCompany  Company?      @relation("CompanyMessages", fields: [senderCompanyId], references: [id])
-  senderUserId   String?
-  senderUser     User?         @relation("UserMessages", fields: [senderUserId], references: [id])
-  content        String
-  read           Boolean       @default(false)
-  createdAt      DateTime      @default(now())
+  senderCompany   Company?     @relation("CompanyMessages", fields: [senderCompanyId], references: [id])
+  senderUserId    String?
+  senderUser      User?        @relation("UserMessages", fields: [senderUserId], references: [id])
+  content         String
+  read            Boolean      @default(false)
+  createdAt       DateTime     @default(now())
 
   @@index([conversationId])
   @@index([createdAt])

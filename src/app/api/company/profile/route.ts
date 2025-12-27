@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
 
     const company = await prisma.company.findUnique({
       where: { id: companyId },
@@ -44,7 +44,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
     const body = await request.json();
 
     // Update company basic info

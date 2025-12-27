@@ -1,10 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 
-export default function ApplySuccessPage() {
+function ApplySuccessContent() {
+  const searchParams = useSearchParams();
+
+  const jobTitle = searchParams.get("jobTitle") || "Position";
+  const companyName = searchParams.get("companyName") || "Company";
+  const companyLogo = searchParams.get("companyLogo");
+  const jobId = searchParams.get("jobId");
+
   return (
     <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col relative">
       {/* Background Effects */}
@@ -42,25 +51,31 @@ export default function ApplySuccessPage() {
             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
               Great news! We&apos;ve successfully received your application for
               the{" "}
-              <strong className="text-white">Senior Frontend Engineer</strong>{" "}
-              position at <strong className="text-white">Vercel</strong>.
+              <strong className="text-white">{jobTitle}</strong>{" "}
+              position at <strong className="text-white">{companyName}</strong>.
             </p>
 
             {/* Job Card */}
             <div className="glass-panel rounded-xl p-4 mb-10 flex items-center justify-center gap-4 inline-flex mx-auto pr-8 hover:bg-white/5 transition-colors duration-300 cursor-default">
               <div className="w-12 h-12 rounded-lg bg-white p-2 flex items-center justify-center shrink-0 shadow-lg">
-                <img
-                  alt="Vercel Logo"
-                  className="w-full h-full object-contain"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAmRxDHv2vweGovYx9DWWH3IOHQUMsap5anKHu2FlbXHWuB_LDnq8eBMNLOBom2vsXEvaQPlESS6KPwIZvZyUqCpW6fScnO1QRU19Zy7gzUCEbI9XatG3gVtJky5DbWxn2k7KQfu_nBMMtAshbXYw2dbz6_AlM7SM0L13rzrEdvAypuNvqSlyj9vCdIyRdXZTLo1O0KIy9axy5lpolMI2xcLP9SdG4yjC_rKsmw1GnST3BgILu0pZt79zXqxyTjAeUmCAj3o7_eg"
-                />
+                {companyLogo ? (
+                  <img
+                    alt={`${companyName} Logo`}
+                    className="w-full h-full object-contain"
+                    src={companyLogo}
+                  />
+                ) : (
+                  <span className="text-black font-bold text-xl">
+                    {companyName.charAt(0)}
+                  </span>
+                )}
               </div>
               <div className="text-left">
                 <div className="text-base font-bold text-white leading-tight">
-                  Senior Frontend Engineer
+                  {jobTitle}
                 </div>
                 <div className="text-xs text-gray-500 font-mono mt-1">
-                  REQ-2024-FE-01
+                  {companyName}
                 </div>
               </div>
             </div>
@@ -143,5 +158,19 @@ export default function ApplySuccessPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function ApplySuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col items-center justify-center">
+          <div className="animate-pulse text-gray-400">Loading...</div>
+        </div>
+      }
+    >
+      <ApplySuccessContent />
+    </Suspense>
   );
 }

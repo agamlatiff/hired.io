@@ -2,62 +2,54 @@ import Link from "next/link";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import HeroSection from "@/components/page/HeroSection";
-import { getCompanies, getJobs } from "@/data";
+import { getCompanies, getJobs, getTechStackCounts } from "@/data";
 
-// Trending tech stacks (Keeping as static for now as per plan, or can be fetched if needed, but sticking to static for simplicity/speed)
-const trendingTech = [
-  {
-    name: "React",
-    jobs: "2,400+",
-    icon: "code",
-    color: "text-blue-400",
-    bg: "bg-blue-500/10",
-  },
-  {
-    name: "Node.js",
-    jobs: "1,800+",
-    icon: "terminal",
-    color: "text-green-400",
-    bg: "bg-green-500/10",
-  },
-  {
-    name: "Python",
-    jobs: "3,100+",
-    icon: "bolt",
-    color: "text-yellow-400",
-    bg: "bg-yellow-500/10",
-  },
-  {
-    name: "AWS",
-    jobs: "4,000+",
-    icon: "cloud",
-    color: "text-cyan-400",
-    bg: "bg-cyan-500/10",
-  },
-  {
-    name: "Rust",
-    jobs: "600+",
-    icon: "memory",
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-  },
-  {
-    name: "Solidity",
-    jobs: "450+",
-    icon: "layers",
-    color: "text-purple-400",
-    bg: "bg-purple-500/10",
-  },
-];
+// Tech display config (icon and color mapping)
+const techConfig: Record<string, { icon: string; color: string; bg: string }> = {
+  React: { icon: "code", color: "text-blue-400", bg: "bg-blue-500/10" },
+  "Node.js": { icon: "terminal", color: "text-green-400", bg: "bg-green-500/10" },
+  Node: { icon: "terminal", color: "text-green-400", bg: "bg-green-500/10" },
+  Python: { icon: "bolt", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+  AWS: { icon: "cloud", color: "text-cyan-400", bg: "bg-cyan-500/10" },
+  Rust: { icon: "memory", color: "text-orange-400", bg: "bg-orange-500/10" },
+  Solidity: { icon: "layers", color: "text-purple-400", bg: "bg-purple-500/10" },
+  TypeScript: { icon: "javascript", color: "text-blue-500", bg: "bg-blue-500/10" },
+  JavaScript: { icon: "javascript", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+  Go: { icon: "data_object", color: "text-blue-300", bg: "bg-blue-500/10" },
+  Golang: { icon: "data_object", color: "text-blue-300", bg: "bg-blue-500/10" },
+  Docker: { icon: "deployed_code", color: "text-blue-400", bg: "bg-blue-500/10" },
+  Kubernetes: { icon: "deployed_code", color: "text-blue-500", bg: "bg-blue-500/10" },
+  PostgreSQL: { icon: "database", color: "text-blue-400", bg: "bg-blue-500/10" },
+  MongoDB: { icon: "database", color: "text-green-400", bg: "bg-green-500/10" },
+  Redis: { icon: "database", color: "text-red-400", bg: "bg-red-500/10" },
+  GraphQL: { icon: "api", color: "text-purple-400", bg: "bg-purple-500/10" },
+  Vue: { icon: "code", color: "text-green-400", bg: "bg-green-500/10" },
+  Angular: { icon: "code", color: "text-red-400", bg: "bg-red-500/10" },
+  "Next.js": { icon: "deployed_code", color: "text-white", bg: "bg-gray-500/10" },
+};
+
+// Default config for unknown techs
+const defaultTechConfig = { icon: "code", color: "text-gray-400", bg: "bg-gray-500/10" };
 
 export default async function HomePage() {
   const companies = await getCompanies();
   const jobs = await getJobs();
+  const techCounts = await getTechStackCounts();
 
   // Take top 4 companies
   const displayedCompanies = companies.slice(0, 4);
   // Take top 4 jobs
   const displayedJobs = jobs.slice(0, 4);
+
+  // Get top 6 trending techs with real counts
+  const trendingTech = techCounts.slice(0, 6).map((tech) => {
+    const config = techConfig[tech.name] || defaultTechConfig;
+    return {
+      name: tech.name,
+      jobs: `${tech.count}`,
+      ...config,
+    };
+  });
 
   return (
     <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col">

@@ -77,7 +77,7 @@ export async function PATCH(
     if (data.status) {
       await prisma.activity.create({
         data: {
-          companyId: (session.user as any).id,
+          companyId: session.user.id,
           type: "status_change",
           message: `Applicant status changed to ${data.status}`,
           targetId: params.id,

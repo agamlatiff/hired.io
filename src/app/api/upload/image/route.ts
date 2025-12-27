@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const companyId = (session.user as any).id;
+    const companyId = session.user.id;
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const type = formData.get("type") as string; // "logo" | "team" | "avatar"

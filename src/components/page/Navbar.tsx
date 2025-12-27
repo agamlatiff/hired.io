@@ -1,13 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import MenuAuth from "./MenuAuth";
 
+const navLinks = [
+  { href: "/find-jobs", label: "Find Jobs" },
+  { href: "/find-companies", label: "Companies" },
+  { href: "/salaries", label: "Salaries" },
+  { href: "/dashboard", label: "For Employers" },
+];
+
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session } = useSession();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
@@ -26,30 +39,18 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="hidden md:flex items-center gap-8">
-          <Link
-            href="/find-jobs"
-            className="text-sm font-semibold text-white hover:text-neon-green transition-colors"
-          >
-            Find Jobs
-          </Link>
-          <Link
-            href="/find-companies"
-            className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-          >
-            Companies
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-          >
-            Salaries
-          </Link>
-          <Link
-            href="/dashboard"
-            className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-          >
-            For Employers
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`text-sm transition-colors ${isActive(link.href)
+                  ? "font-semibold text-neon-green"
+                  : "font-medium text-gray-400 hover:text-white"
+                }`}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         {/* Auth Buttons */}

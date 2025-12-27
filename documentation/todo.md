@@ -137,7 +137,45 @@ src/data/
 
 ---
 
-#### 1.4 Automated Testing dengan Playwright
+#### 1.5 Replace Remaining Dummy Data ✅
+
+> Refactored landing page detail pages to fetch real data from database.
+
+- [x] `find-companies/[id]/page.tsx` - Refactored to use `getCompanyById()`
+  - Converted from client component to server component
+  - Displays real company info, tech stack, open jobs, social links
+- [x] `detail/job/[id]/page.tsx` - Refactored to use `getJobById()`
+  - Displays real job data, salary, skills, company info
+  - Added `getSimilarJobs()` to fetch related jobs
+
+**Files modified:**
+
+- `src/app/(landing-page)/(page)/find-companies/[id]/page.tsx`
+- `src/app/(landing-page)/(page)/detail/job/[id]/page.tsx`
+- `src/data/jobs.ts` - Added `getSimilarJobs()` and `getTechStackCounts()`
+
+---
+
+#### 1.6 Trending Tech Data ✅
+
+> Landing page now shows real job counts by tech stack.
+
+- [x] Created `getTechStackCounts()` utility in `src/data/jobs.ts`
+- [x] Updated `(page)/page.tsx` to use real counts from database
+- [x] Shows top 6 trending technologies with actual job counts
+
+**All pages now use real data:**
+
+- ✅ `(page)/page.tsx` - Companies, Jobs, Trending Tech
+- ✅ `find-jobs/page.tsx` - Job listings
+- ✅ `find-companies/page.tsx` - Company listings
+- ✅ `find-companies/[id]/page.tsx` - Company detail
+- ✅ `detail/company/[id]/page.tsx` - Company detail (old design)
+- ✅ `detail/job/[id]/page.tsx` - Job detail
+
+---
+
+#### 1.7 Automated Testing dengan Playwright
 
 > Lihat `documentation/testing.md` untuk setup guide lengkap.
 
@@ -268,8 +306,6 @@ npx playwright show-report    # View HTML report
 - [x] Buat model `Interview`
 - [x] Create interview scheduling API
 - [x] Show upcoming interviews di dashboard
-- [ ] Calendar integration (Google Calendar) - Future
-- [ ] Send interview invites via email - Future
 
 **New files:**
 
@@ -363,6 +399,110 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
 | Task 2    | Enhanced Features      | ~4 days  |
 | Task 3    | Advanced Features      | ~7 days  |
 | **Total** | Full-Featured Platform | ~13 days |
+
+---
+
+## Task 4: Production Readiness (Audit Results) 🔴
+
+> Comprehensive audit to ensure security, stability and performance before launch.
+
+### 4.1 Security Fixes ✅
+
+> Critical vulnerabilities addressed on 2025-12-27.
+
+- [x] **Fix Guest User Creation**
+  - Removed `temp_password` usage in `apply/page.tsx`
+  - Enforced login check before application submission
+- [x] **Secure Password Reset**
+  - Added `resetToken` (hashed) & `expiry` to Schema
+  - Updated API to generate/verify crypto tokens
+- [x] **API Authorization Hardening**
+  - Added `middleware.ts` for Dashboard RBAC
+  - Secured `POST /api/job` (Company only)
+  - Secured `POST /api/jobs/apply` (User only)
+
+### 4.2 Type Safety & Code Quality ✅
+
+> Completed 2025-12-27. All `as any` casts removed.
+
+- [x] **Create `next-auth.d.ts`**
+  - Extended `Session` with `id` and `role`
+  - File: `src/types/next-auth.d.ts`
+- [x] **Create `getSessionUser` Helper**
+  - Added `requireCompany()` and `requireUser()` functions
+  - File: `src/lib/session.ts`
+- [x] **Fix `as any` Casts in API Routes:**
+  - [x] `src/app/api/upload/image/route.ts`
+  - [x] `src/app/api/jobs/route.ts`
+  - [x] `src/app/api/company/profile/route.ts`
+  - [x] `src/app/api/dashboard/stats/route.ts`
+  - [x] `src/app/api/job/route.ts`
+  - [x] `src/app/api/dashboard/activity/route.ts`
+  - [x] `src/app/api/applicants/[id]/route.ts`
+  - [x] `src/lib/auth.ts`
+  - [x] `src/app/(landing-page)/(page)/detail/job/[id]/apply/page.tsx`
+
+### 4.3 Data Layer & Validation 🟡
+
+> Zero fake data policy & input sanitization.
+
+- [ ] **Dashboard Data:**
+  - [ ] Replace `chartBars` static array with real aggregation API
+  - [ ] Replace `Candidate Sources` hardcoded % with real Applicant data
+  - [ ] Connect `View All Activity` button
+- [ ] **API Validation (Zod):**
+  - [ ] `POST /api/jobs/apply`
+  - [ ] `POST /api/job`
+  - [ ] `POST /api/user/profile`
+
+### 4.4 UI Cleanup (Remove "Pajangan") 🟢
+
+> Remove or implement non-functional UI elements.
+
+- [ ] **Dashboard Header:**
+  - [ ] **Search Bar:** Implement search logic OR Hide for MVP
+  - [ ] **Notification Button:** Replace with `NotificationsDropdown` component
+- [ ] **Landing Page Footer:**
+  - [ ] Remove/Update dead links (Salary calc, Pricing, etc)
+- [ ] **General:**
+  - [ ] Check all "Do Nothing" buttons
+
+### 4.5 Testing Infrastructure 🟡
+
+- [ ] **Setup Playwright** (`playwright.config.ts`)
+- [ ] **Core E2E Scenarios:**
+  - [ ] Job Seeker Apply Flow
+  - [ ] Company Post Job Flow
+- [ ] **API Tests:**
+  - [ ] Auth Endpoints
+  - [ ] Dashboard Stats
+
+### 4.6 Polish & Deployment 🟢
+
+- [ ] **Loading States:** Audit all async pages
+- [ ] **SEO:** Add `generateMetadata` to dynamic pages
+- [ ] **Build Check:** Run `npm run build` locally
+
+### 4.7 UI Cleanup (Remove "Pajangan") 🟢
+
+- [ ] **Dashboard Header:** Connect/Hide Search Bar & Fix Notifications
+- [ ] **Footer:** Remove placeholder links
+- [ ] **General:** Connect "View All Activity" button
+
+### 4.8 UI/UX Enhancements (User Request) 🔵
+
+> Visual polish and functionality gaps identified.
+
+- [ ] **Mobile Responsiveness:**
+  - [ ] Implement Mobile Menu (Hamburger) in `Navbar.tsx`
+  - [ ] Fix Dashboard Sidebar on mobile (Collapsible?)
+- [ ] **Empty States & Feedback:**
+  - [ ] Add "Create First Job" CTA in empty job list
+  - [ ] Add Toast Notifications (Success/Error) for Actions
+  - [ ] Add Loading Progress Bar (NProgress)
+- [ ] **Auth UX:**
+  - [ ] Add 'Forgot Password' link to Sign In page
+  - [ ] Improve User Dropdown in Navbar (Dashboard link)
 
 ---
 
