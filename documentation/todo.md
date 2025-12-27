@@ -177,20 +177,30 @@ npx playwright show-report    # View HTML report
 
 > Fitur-fitur yang meningkatkan UX tapi tidak critical untuk launch.
 
-### 2.1 Export to CSV
+### 2.1 Export to CSV ✅
 
-- [ ] Tambah tombol Export di `/dashboard/jobs`
-- [ ] Buat API `GET /api/jobs/export`
-- [ ] Generate CSV dari job/applicant data
-- [ ] Download file ke user
+- [x] Tambah tombol Export di `/dashboard/jobs`
+- [x] Buat API `GET /api/company/export`
+- [x] Generate CSV dari job/applicant data
+- [x] Download file ke user
 
-### 2.2 Notifications System
+**New files:**
 
-- [ ] Buat model `Notification` di Prisma (sudah ada)
-- [ ] Buat API `GET /api/notifications`
-- [ ] Build notifications dropdown di dashboard header
-- [ ] Mark as read functionality
-- [ ] Real-time badge count
+- `src/app/api/company/export/route.ts` - CSV export API
+- `src/components/dashboard/ExportButton.tsx` - Export button component
+
+### 2.2 Notifications System ✅
+
+- [x] Buat model `Notification` di Prisma (sudah ada)
+- [x] Buat API `GET /api/notifications`
+- [x] Build notifications dropdown di dashboard header
+- [x] Mark as read functionality
+- [x] Real-time badge count
+
+**New files:**
+
+- `src/app/api/notifications/route.ts` - Notifications API
+- `src/components/dashboard/NotificationsDropdown.tsx` - Dropdown component
 
 ### 2.3 Email Notifications
 

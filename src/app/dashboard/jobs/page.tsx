@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
+import ExportButton from "@/components/dashboard/ExportButton";
 
 interface Job {
   id: string;
@@ -140,6 +141,7 @@ export default function JobListingsPage() {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <ExportButton type="jobs" />
           <Link
             href="/dashboard/post-job"
             className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-6 py-3 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]"
@@ -326,8 +328,8 @@ export default function JobListingsPage() {
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${currentPage === page
-                      ? "bg-neon-green text-background-dark"
-                      : "bg-card-dark border border-accent-dark hover:bg-white/5"
+                    ? "bg-neon-green text-background-dark"
+                    : "bg-card-dark border border-accent-dark hover:bg-white/5"
                     }`}
                 >
                   {page}
