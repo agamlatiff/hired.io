@@ -40,16 +40,17 @@
 
 ### Yang Perlu Dikerjakan
 
-#### 1.1 Password Reset Feature
+#### 1.1 Password Reset Feature ✅
 
-- [ ] Buat halaman `/auth/forgot-password`
-- [ ] Buat API `POST /api/auth/reset-password`
+- [x] Buat halaman `/auth/forgot-password`
+- [x] Buat halaman `/auth/reset-password`
+- [x] Buat API `POST/PUT /api/auth/reset-password`
 
-**Files to modify:**
+**Files created:**
 
-- `src/app/(auth)/forgot-password/page.tsx` - NEW
-- `src/app/api/auth/reset-password/route.ts` - NEW
-- `src/lib/email.ts` - NEW (optional)
+- `src/app/auth/forgot-password/page.tsx`
+- `src/app/auth/reset-password/page.tsx`
+- `src/app/api/auth/reset-password/route.ts`
 
 ---
 
