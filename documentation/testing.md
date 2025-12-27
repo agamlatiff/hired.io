@@ -279,3 +279,41 @@ npx playwright test --debug
 # View report
 npx playwright show-report
 ```
+
+---
+
+## Manual Testing Results (2025-12-27)
+
+### Bug Fixed
+
+| Bug                     | Description                                                                                              | Fix                                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| SessionProvider Missing | `useSession` not wrapped in `<SessionProvider />` causing Analytics, Interviews, Messages pages to crash | Added `NextAuthProvider` to `src/app/dashboard/layout.tsx` and `src/app/dashboard/user/layout.tsx` |
+
+### Test Results
+
+| Feature           | Page                       | Status  |
+| ----------------- | -------------------------- | ------- |
+| Landing Page      | `/`                        | ✅ PASS |
+| Find Jobs         | `/find-jobs`               | ✅ PASS |
+| Find Companies    | `/find-companies`          | ✅ PASS |
+| Company Login     | `/auth/signin`             | ✅ PASS |
+| Company Dashboard | `/dashboard`               | ✅ PASS |
+| Job Listings      | `/dashboard/jobs`          | ✅ PASS |
+| Analytics         | `/dashboard/analytics`     | ✅ PASS |
+| Interviews        | `/dashboard/interviews`    | ✅ PASS |
+| Messages          | `/dashboard/messages`      | ✅ PASS |
+| Export CSV        | `/dashboard/jobs` (button) | ✅ PASS |
+| User Dashboard    | `/dashboard/user`          | ✅ PASS |
+
+### Test Credentials
+
+**Company:**
+
+- Email: `hr@techcorp.id`
+- Password: `password123`
+
+**Job Seeker:**
+
+- Email: `budi.santoso@gmail.com`
+- Password: `password123`

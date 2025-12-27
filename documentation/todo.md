@@ -8,11 +8,18 @@
 
 | Metrik             | Status         |
 | ------------------ | -------------- |
-| **MVP Progress**   | ~95% Complete  |
+| **MVP Progress**   | ~98% Complete  |
 | **Build**          | ✅ Passing     |
 | **Database**       | ✅ Fully Setup |
 | **API Layer**      | ✅ Operational |
 | **Authentication** | ✅ Working     |
+| **Testing**        | ✅ Passed      |
+
+### Bugs Fixed (2025-12-27)
+
+| Bug                     | Description                                       | Fix                                           |
+| ----------------------- | ------------------------------------------------- | --------------------------------------------- |
+| SessionProvider Missing | `useSession` not wrapped in `<SessionProvider />` | Added `NextAuthProvider` to dashboard layouts |
 
 ---
 
