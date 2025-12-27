@@ -73,7 +73,7 @@ async function main() {
       name: 'GojekTech Indonesia',
       email: 'hr@gojektech.co.id',
       password: adminPassword,
-      logo: '/images/companies/gojektech.png',
+      logo: '/images/company.png',
       plan: 'premium',
     },
   });
@@ -81,7 +81,7 @@ async function main() {
   await prisma.companyOverview.create({
     data: {
       name: 'GojekTech Indonesia',
-      image: '/images/companies/gojektech.png',
+      image: '/images/company.png',
       website: 'https://gojektech.co.id',
       location: 'Jakarta, Indonesia',
       employee: '500-1000',
@@ -110,7 +110,7 @@ async function main() {
       name: 'Tokopedia Digital',
       email: 'careers@tokopedia.com',
       password: hashedPassword,
-      logo: '/images/companies/tokopedia.png',
+      logo: '/images/company2.png',
       plan: 'premium',
     },
   });
@@ -118,7 +118,7 @@ async function main() {
   await prisma.companyOverview.create({
     data: {
       name: 'Tokopedia Digital',
-      image: '/images/companies/tokopedia.png',
+      image: '/images/company2.png',
       website: 'https://tokopedia.com',
       location: 'Jakarta Selatan, Indonesia',
       employee: '1000+',
@@ -147,7 +147,7 @@ async function main() {
       name: 'Ruangguru Edutech',
       email: 'talent@ruangguru.com',
       password: hashedPassword,
-      logo: '/images/companies/ruangguru.png',
+      logo: '/images/logo.png',
       plan: 'standard',
     },
   });
@@ -155,7 +155,7 @@ async function main() {
   await prisma.companyOverview.create({
     data: {
       name: 'Ruangguru Edutech',
-      image: '/images/companies/ruangguru.png',
+      image: '/images/logo.png',
       website: 'https://ruangguru.com',
       location: 'Jakarta, Indonesia',
       employee: '200-500',
