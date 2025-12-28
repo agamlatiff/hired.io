@@ -1,254 +1,381 @@
-# todo.md - The Memory
+# todo.md - hired.io Restructuring Plan
 
-> Progress tracker dengan 3 task utama untuk hired.io.
-
----
-
-## Status Proyek
-
-| Metrik             | Status         |
-| ------------------ | -------------- |
-| **MVP Progress**   | ~98% Complete  |
-| **Build**          | ✅ Passing     |
-| **Database**       | ✅ Fully Setup |
-| **API Layer**      | ✅ Operational |
-| **Authentication** | ✅ Working     |
-| **Testing**        | ✅ Passed      |
-
-### Bugs Fixed (2025-12-27)
-
-| Bug                     | Description                                       | Fix                                           |
-| ----------------------- | ------------------------------------------------- | --------------------------------------------- |
-| SessionProvider Missing | `useSession` not wrapped in `<SessionProvider />` | Added `NextAuthProvider` to dashboard layouts |
+> Dokumen audit lengkap untuk merombak hired.io dari segi fungsionalitas, clean code, dan arsitektur.
 
 ---
 
-## Task 1: Finalisasi MVP (Sprint 6 & 8) 🟡
+## Status Hasil Audit (2025-12-28)
 
-> Menyelesaikan fitur authentication dan testing yang tersisa.
-
-### Apa yang Sudah Selesai
-
-- [x] Database schema lengkap (21+ fields, 3 new models)
-- [x] 6 API endpoints fully functional
-- [x] Dashboard dengan real data (zero hardcoded)
-- [x] Job listings dengan search, filter, sort, pagination
-- [x] File upload system (resume, logo, avatar)
-- [x] User/Job Seeker authentication support
-- [x] Route cleanup (old `(dashboard)` folder deleted)
-- [x] Loading states & error handling
-
-### Yang Perlu Dikerjakan
-
-#### 1.1 Password Reset Feature ✅
-
-- [x] Buat halaman `/auth/forgot-password`
-- [x] Buat halaman `/auth/reset-password`
-- [x] Buat API `POST/PUT /api/auth/reset-password`
-
-**Files created:**
-
-- `src/app/auth/forgot-password/page.tsx`
-- `src/app/auth/reset-password/page.tsx`
-- `src/app/api/auth/reset-password/route.ts`
+| Aspek                       | Temuan                          | Severity    |
+| --------------------------- | ------------------------------- | ----------- |
+| **Broken Pages**            | `/salaries` (404 di Navbar)     | 🔴 Critical |
+| **Non-Functional Features** | 6+ fitur cuma pajangan          | 🔴 Critical |
+| **Dummy Data**              | Hardcoded values di beberapa UI | 🟡 Medium   |
+| **Missing Tests**           | 0 test files exist              | 🟡 Medium   |
+| **Architecture**            | Mostly clean, data layer exists | 🟢 Good     |
 
 ---
 
-#### 1.2 Custom Seed Data ✅
+## Priority 0: Deep Scan Findings (2025-12-28) 🔴
 
-- [x] Buat seed file dengan data realistis
-- [x] 3 Companies (GojekTech, Tokopedia, Ruangguru)
-- [x] 15 Job Listings (mix roles & locations)
-- [x] 20 Users/Job Seekers (nama Indonesia)
-- [x] Sample applications dengan berbagai status
-- [x] Run seed ke database
+> Hasil scanning mendalam yang menemukan issue-issue baru.
 
-**Jalankan seed:**
+### 0.1 DUPLICATE Auth Pages!
 
-```bash
-npx prisma db seed
+**Ada 2 versi signin page yang berbeda:**
+
+| Path                                    | Fitur                                                                       | Status          |
+| --------------------------------------- | --------------------------------------------------------------------------- | --------------- |
+| `(auth)/auth/signin/page.tsx`           | Login switcher (company/user), Forgot Password → `/auth/forgot-password` ✅ | **AKTIF**       |
+| `(landing-page)/(auth)/signin/page.tsx` | OAuth buttons, Forgot Password → `#` ❌                                     | **DEPRECATED?** |
+
+**Issues di `(landing-page)/(auth)/signin`:**
+
+- [ ] Line 98: `href="#"` - Forgot Password button points to `#` not `/auth/forgot-password`
+- [ ] Lines 150-177: OAuth buttons (Google/GitHub) - 100% PAJANGAN, tidak functional
+
+**Todo:**
+
+- [ ] Tentukan mana yang primary signin page
+- [ ] Delete atau merge yang deprecated
+- [ ] Jika keep both, fix the `#` link dan implement OAuth
+
+---
+
+### 0.2 DashboardSidebar Hardcoded Company
+
+**File:** `src/components/dashboard/DashboardSidebar.tsx`
+
+| Line | Hardcoded Value |
+| ---- | --------------- |
+| 146  | `TC` (initials) |
+| 149  | `TechCorp Inc.` |
+| 150  | `Pro Plan`      |
+
+**Current Code (Line 143-156):**
+
+```tsx
+// This should fetch real company data!
+<div className="w-10 h-10 rounded-full... font-bold">
+  TC  // ❌ Hardcoded
+</div>
+<div>
+  <p className="...">TechCorp Inc.</p>  // ❌ Hardcoded
+  <p className="...">Pro Plan</p>  // ❌ Hardcoded
+</div>
 ```
 
-**Login credentials setelah seed:**
+**Todo:**
 
-| Role    | Email                    | Password    |
-| ------- | ------------------------ | ----------- |
-| Company | hr@gojektech.co.id       | admin123    |
-| Company | careers@tokopedia.com    | password123 |
-| Company | talent@ruangguru.com     | password123 |
-| User    | budi.santoso@gmail.com   | password123 |
-| User    | siti.nurhaliza@gmail.com | password123 |
+- [ ] Fetch company data via API or session
+- [ ] Display real company name dan plan
 
 ---
 
-#### 1.3 Data Layer Refactoring
+### 0.3 HeroSection Static Stats
 
-> Pisahkan query data ke reusable functions, hapus dummy data, SOLID principle.
+**File:** `src/components/page/HeroSection.tsx`
 
-##### 1.3.1 Create Data Services Layer
+| Line | Hardcoded Value                      |
+| ---- | ------------------------------------ |
+| 42   | `Over 500+ new dev jobs added today` |
 
-- [x] Buat folder `src/data/` dengan service files:
-  - `companies.ts` - Company queries (getById, getFeatured, getAll)
-  - `jobs.ts` - Job queries (getById, getFeatured, getAll)
-  - `categories.ts` - Category/Industry queries
-  - `index.ts` - Barrel exports
+**Todo:**
 
-##### 1.3.2 Remove Dummy Data from Landing Pages 🔴
+- [ ] Fetch real job count dari database
+- [ ] **Atau:** Hapus badge jika tidak akurat
 
-| File                      | Dummy Variables                                             | Lines |
-| ------------------------- | ----------------------------------------------------------- | ----- |
-| `(page)/page.tsx`         | `topCompanies`, `featuredJobs`, `techChips`, `trendingTech` | ~118  |
-| `find-jobs/page.tsx`      | `sampleJobs`, `jobTypes`, `experienceLevels`, `techStacks`  | ~86   |
-| `find-companies/page.tsx` | `companiesData`                                             | ~82   |
+---
 
-- [x] `page.tsx` - Hapus 4 arrays, fetch dari API
-- [x] `find-jobs/page.tsx` - Hapus sampleJobs, fetch dari `/api/jobs`
-- [x] `find-companies/page.tsx` - Hapus companiesData
+### 0.4 Console.log Statements (9 found)
 
-##### 1.3.3 Clean Up Constants
+**Should be removed for production:**
 
-- [x] Hapus dari `src/constants/index.ts`:
-  - `JOB_LISTING_DATA` (unused)
-  - `JOB_APPLICANTS_DATA` (unused)
-  - `CATEGORIES_OPTIONS` (irrelevant)
-- [x] Tambahkan config baru:
-  - `DEPARTMENTS`
-  - `WORK_TYPES`
-  - `CURRENCIES`
-  - `CLIENT_LOGOS`
+| File                      | Line  | Context                       |
+| ------------------------- | ----- | ----------------------------- |
+| `SocialMediaForm.tsx`     | 70    | Error handler                 |
+| `OverviewForm.tsx`        | 114   | Error handler                 |
+| `FormModalApply.tsx`      | 84    | Error handler                 |
+| `DialogAddTeam.tsx`       | 67    | Error handler                 |
+| `reset-password/route.ts` | 54-57 | **DEV ONLY: logs reset link** |
+| `signup/page.tsx`         | 58    | Error handler                 |
 
-##### 1.3.4 Move Hardcoded Data
+**Todo:**
 
-| From                           | To                  | Data                       |
-| ------------------------------ | ------------------- | -------------------------- |
-| `post-job/page.tsx`            | `constants/`        | `departments`, `workTypes` |
-| `Clients.tsx`                  | `constants/`        | `clients` array            |
-| `detail/company/[id]/page.tsx` | `data/companies.ts` | `getDetailCompany()`       |
+- [ ] Replace dengan proper error logging service
+- [ ] Remove dev console.logs before production
 
-**New folder structure:**
+---
+
+### 0.5 TODO Comment in Code
+
+**File:** `src/app/api/auth/reset-password/route.ts`
+
+- Line 59: `// TODO: Implement actual email sending here using the resetLink`
+
+**Status:** Password reset link dikirim ke console, bukan email!
+
+---
+
+### 0.6 Unused/Duplicate Hooks
+
+**Potentially unused hooks in `src/hooks/`:**
+
+| Hook                           | API Used    | Possibly Unused? |
+| ------------------------------ | ----------- | ---------------- |
+| `useCategoryCompanyFilter.tsx` | -           | Check usage      |
+| `useCategoryJobFilter.tsx`     | -           | Check usage      |
+| `useFeaturedJobs.tsx`          | `/api/jobs` | Check usage      |
+
+**Todo:**
+
+- [ ] Search codebase for usage
+- [ ] Delete if truly unused
+
+---
+
+### 0.7 🔴 CRITICAL BUG: OverviewForm.tsx Wrong Dropdown Data!
+
+**File:** `src/components/dashboard/OverviewForm.tsx`
+
+**BUG: Dropdowns menampilkan data yang SALAH:**
+
+| Field    | Line | Harusnya            | Tapi Pakai               |
+| -------- | ---- | ------------------- | ------------------------ |
+| Location | 191  | `LOCATION_OPTIONS`  | `Industry` data dari API |
+| Employee | 224  | `EMPLOYEE_OPTIONS`  | `LOCATION_OPTIONS` ❌    |
+| Industry | 257  | `Industry` API data | `EMPLOYEE_OPTIONS` ❌    |
+
+**Impact:** User akan melihat pilihan yang tidak masuk akal!
+
+**Dead Links (3x):**
+
+- Line 200: `href="/examples/forms"` → 404
+- Line 235: `href="/examples/forms"` → 404
+- Line 268: `href="/examples/forms"` → 404
+
+**Todo:**
+
+- [ ] Fix dropdown: Employee → gunakan `EMPLOYEE_OPTIONS`
+- [ ] Fix dropdown: Industry → gunakan `data` dari API
+- [ ] Fix dropdown: Location → gunakan `LOCATION_OPTIONS`
+- [ ] Remove atau fix `/examples/forms` links
+
+---
+
+### 0.8 Type Safety Issues (50+ `any` types)
+
+**Files dengan banyak `any`:**
+
+| File                       | Count | Priority |
+| -------------------------- | ----- | -------- |
+| `utils.ts`                 | 13    | Medium   |
+| `helpers.ts`               | 7     | Medium   |
+| `InputBenefits.tsx`        | 5     | Low      |
+| `InputSkills.tsx`          | 3     | Low      |
+| `CKEditor.tsx`             | 3     | Low      |
+| `Applicants.tsx`           | 2     | Low      |
+| `ExploreDataContainer.tsx` | 5     | Low      |
+
+**Todo:**
+
+- [ ] Replace `any` dengan proper types
+- [ ] Create shared interfaces untuk common data shapes
+
+---
+
+### 0.9 Dead Links (`href="#"`) - 9 Found!
+
+**Files dengan dead links:**
+
+| File                                    | Line           | Link Text            |
+| --------------------------------------- | -------------- | -------------------- |
+| `(auth)/auth/signup/page.tsx`           | 220            | Terms of Service     |
+| `(auth)/auth/signup/page.tsx`           | 221            | Privacy Policy       |
+| `apply/page.tsx`                        | 650            | Terms of Service     |
+| `apply/page.tsx`                        | 654            | Privacy Policy       |
+| `(landing-page)/(auth)/layout.tsx`      | 45, 84, 87, 90 | Various footer links |
+| `(landing-page)/(auth)/signin/page.tsx` | 98             | Forgot Password      |
+
+**Todo:**
+
+- [ ] Buat halaman `/terms` dan `/privacy` atau remove links
+- [ ] Fix Forgot Password link → `/auth/forgot-password`
+- [ ] Clean up auth layout dead links
+
+---
+
+### 0.10 Password & Schema Issues
+
+**Password Length:**
+
+- Reset password: 6 character minimum (weak)
+- Sign up schema: No minimum length requirement ❌
+
+**Social Media Schema Too Strict:**
+
+- `socialMediaFormSchema` requires ALL fields (facebook, instagram, linkedin, twitter, youtube)
+- Most companies won't have all these filled
+
+**Todo:**
+
+- [ ] Add password strength validation to signup (min 8 chars, etc.)
+- [ ] Make social media fields optional in schema
+
+---
+
+### 0.11 Environment Variable Mismatch 🟡
+
+**Issue:** Inconsistent naming for Supabase Anon Key.
+
+| File                          | Variable Used                     |
+| ----------------------------- | --------------------------------- |
+| `src/lib/supabase.ts`         | `NEXT_PUBLIC_SUPABASE_PUBLIC_KEY` |
+| `src/lib/supabase-storage.ts` | `NEXT_PUBLIC_SUPABASE_ANON_KEY`   |
+
+**Impact:** Application might crash if `.env` doesn't have BOTH variables set to the same value.
+
+**Todo:**
+
+- [ ] Standardize to `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- [ ] Update `supabase.ts`
+
+---
+
+## Priority 1: Broken Pages & Dead Links 🔴
+
+### 1.1 Salaries Page (TIDAK ADA!)
+
+**Problem:** Navbar punya link ke `/salaries` tapi halaman tidak exist → 404 error.
+
+| File                             | Line | Isu                                        |
+| -------------------------------- | ---- | ------------------------------------------ |
+| `src/components/page/Navbar.tsx` | ~13  | `{ href: "/salaries", label: "Salaries" }` |
+
+**Solusi (Pilih salah satu):**
+
+- [ ] **Option A:** Buat halaman `/salaries` dengan fitur salary explorer
+- [ ] **Option B:** Hapus link dari Navbar (sementara)
+
+**Jika pilih Option A (Recommended):**
 
 ```
-src/data/
-├── index.ts
-├── companies.ts
-├── jobs.ts
-└── categories.ts
+src/app/(landing-page)/(page)/salaries/
+├── page.tsx         - Main salaries page
+└── SalariesClient.tsx - Client component
 ```
 
----
+**Fitur yang bisa diimplementasikan:**
 
-#### 1.5 Replace Remaining Dummy Data ✅
-
-> Refactored landing page detail pages to fetch real data from database.
-
-- [x] `find-companies/[id]/page.tsx` - Refactored to use `getCompanyById()`
-  - Converted from client component to server component
-  - Displays real company info, tech stack, open jobs, social links
-- [x] `detail/job/[id]/page.tsx` - Refactored to use `getJobById()`
-  - Displays real job data, salary, skills, company info
-  - Added `getSimilarJobs()` to fetch related jobs
-
-**Files modified:**
-
-- `src/app/(landing-page)/(page)/find-companies/[id]/page.tsx`
-- `src/app/(landing-page)/(page)/detail/job/[id]/page.tsx`
-- `src/data/jobs.ts` - Added `getSimilarJobs()` and `getTechStackCounts()`
+- Salary range by job title
+- Filter by location/experience
+- Data dari existing jobs (aggregate salaryFrom/salaryTo)
 
 ---
 
-#### 1.6 Trending Tech Data ✅
+## Priority 2: Settings Page - Fitur Pajangan 🔴
 
-> Landing page now shows real job counts by tech stack.
+**File:** `src/app/dashboard/settings/page.tsx` (604 lines)
 
-- [x] Created `getTechStackCounts()` utility in `src/data/jobs.ts`
-- [x] Updated `(page)/page.tsx` to use real counts from database
-- [x] Shows top 6 trending technologies with actual job counts
+### 2.1 Tabs yang Tidak Functional
 
-**All pages now use real data:**
+| Tab                | Status                  | Backend?               |
+| ------------------ | ----------------------- | ---------------------- |
+| Company Profile    | ✅ Works                | `/api/company/profile` |
+| Team Members       | ✅ Works (display only) | From CompanyTeam       |
+| **Notifications**  | ❌ PAJANGAN             | No API                 |
+| **Billing & Plan** | ❌ PAJANGAN             | No API                 |
+| **Security**       | ❌ PAJANGAN             | No API                 |
+| **Integrations**   | ❌ PAJANGAN             | No API                 |
 
-- ✅ `(page)/page.tsx` - Companies, Jobs, Trending Tech
-- ✅ `find-jobs/page.tsx` - Job listings
-- ✅ `find-companies/page.tsx` - Company listings
-- ✅ `find-companies/[id]/page.tsx` - Company detail
-- ✅ `detail/company/[id]/page.tsx` - Company detail (old design)
-- ✅ `detail/job/[id]/page.tsx` - Job detail
+### 2.2 Hardcoded/Dummy Values
 
----
+| Item         | Location     | Hardcoded Value           |
+| ------------ | ------------ | ------------------------- |
+| Storage Used | Line 249-258 | "75%", "15.2 GB of 20 GB" |
+| Plan Pricing | Line 563     | "$299/month"              |
 
-#### 1.7 Automated Testing dengan Playwright
+### 2.3 Todo: Implementasi Settings Tabs
 
-> Lihat `documentation/testing.md` untuk setup guide lengkap.
+#### 2.3.1 Notifications Tab
 
-##### Setup
+- [ ] Buat model `NotificationPreference` di Prisma
+- [ ] Buat API `GET/PATCH /api/company/notification-preferences`
+- [ ] Connect toggle switches ke API
+- [ ] Simpan preferensi ke database
 
-```bash
-npm install -D @playwright/test
-npx playwright install
-```
+#### 2.3.2 Billing & Plan Tab
 
-##### Test Files to Create
+- [ ] Integrate dengan payment provider (Stripe/Midtrans)
+- [ ] Buat halaman upgrade plan
+- [ ] Invoice history dari database
+- [ ] **Atau:** Hapus tab ini jika tidak akan diimplementasi
 
-- [ ] `tests/api/dashboard.spec.ts` - Dashboard API tests
-- [ ] `tests/api/jobs.spec.ts` - Jobs API tests
-- [ ] `tests/e2e/auth.spec.ts` - Auth flow tests
-- [ ] `tests/e2e/post-job.spec.ts` - Post job form tests
-- [ ] `tests/e2e/apply-job.spec.ts` - Apply to job tests
-- [ ] `playwright.config.ts` - Playwright config
+#### 2.3.3 Security Tab
 
-##### Test Checklist
+- [ ] Change password functionality
+- [ ] Two-factor authentication (optional)
+- [ ] Session management
+- [ ] **Minimum:** Implement change password
 
-| Endpoint/Flow               | Test File                     | Status |
-| --------------------------- | ----------------------------- | ------ |
-| GET /api/dashboard/stats    | `tests/api/dashboard.spec.ts` | [ ]    |
-| GET /api/dashboard/activity | `tests/api/dashboard.spec.ts` | [ ]    |
-| GET /api/jobs               | `tests/api/jobs.spec.ts`      | [ ]    |
-| POST /api/job               | `tests/api/jobs.spec.ts`      | [ ]    |
-| GET /api/jobs/[id]/apply    | `tests/api/jobs.spec.ts`      | [ ]    |
-| Company login               | `tests/e2e/auth.spec.ts`      | [ ]    |
-| User login                  | `tests/e2e/auth.spec.ts`      | [ ]    |
-| Post job form               | `tests/e2e/post-job.spec.ts`  | [ ]    |
-| File uploads                | `tests/e2e/upload.spec.ts`    | [ ]    |
+#### 2.3.4 Integrations Tab
 
-##### Run Tests
+- [ ] Define what integrations to support
+- [ ] ATS integrations? Slack? Calendar?
+- [ ] **Atau:** Hapus tab ini jika tidak akan diimplementasi
 
-```bash
-npx playwright test           # Run all tests
-npx playwright test --ui      # Debug mode
-npx playwright show-report    # View HTML report
-```
+#### 2.3.5 Invite Member Button
+
+- [ ] Button "Invite Member" tidak functional (line 438-441)
+- [ ] Buat modal invite flow
+- [ ] Email invitation system
 
 ---
 
-## Task 2: Enhanced Features (Sprint 9-10) 🟢
+## Priority 3: Fitur Pajangan Lainnya 🟡
 
-> Fitur-fitur yang meningkatkan UX tapi tidak critical untuk launch.
+### 3.1 Dashboard Header Buttons
 
-### 2.1 Export to CSV ✅
+**File:** `src/app/dashboard/settings/page.tsx`
 
-- [x] Tambah tombol Export di `/dashboard/jobs`
-- [x] Buat API `GET /api/company/export`
-- [x] Generate CSV dari job/applicant data
-- [x] Download file ke user
+| Button             | Line    | Status              |
+| ------------------ | ------- | ------------------- |
+| Notifications Bell | 199-204 | ❌ Tidak functional |
+| Support Button     | 205-208 | ❌ Tidak functional |
 
-**New files:**
+**Todo:**
 
-- `src/app/api/company/export/route.ts` - CSV export API
-- `src/components/dashboard/ExportButton.tsx` - Export button component
+- [ ] Notification bell → sudah ada `NotificationsDropdown` di dashboard utama, reuse komponen ini
+- [ ] Support button → Link ke email/form atau hapus
 
-### 2.2 Notifications System ✅
+### 3.2 Upgrade Plan / Manage Buttons
 
-- [x] Buat model `Notification` di Prisma (sudah ada)
-- [x] Buat API `GET /api/notifications`
-- [x] Build notifications dropdown di dashboard header
-- [x] Mark as read functionality
-- [x] Real-time badge count
+**Lines 566-571:**
 
-**New files:**
+- "Upgrade Plan" button → tidak ada action
+- "Manage" button → tidak ada action
+- "Download Invoices" link → tidak ada action
 
-- `src/app/api/notifications/route.ts` - Notifications API
-- `src/components/dashboard/NotificationsDropdown.tsx` - Dropdown component
+**Todo:**
 
-### 2.3 Email Notifications
+- [ ] Implement atau hapus buttons ini
+
+### 3.3 Delete Account
+
+**Lines 592-593:**
+
+- Button ada tapi tidak functional
+
+**Todo:**
+
+- [ ] Implement delete account flow dengan confirmation
+- [ ] **Atau:** Hapus jika tidak akan diimplementasi
+
+---
+
+## Priority 4: Email Notifications (Dari todo.md lama) 🟡
+
+### 4.1 Task 2.3 - Belum Selesai
 
 - [ ] Setup email service (Resend/SendGrid)
 - [ ] Create email templates:
@@ -257,7 +384,43 @@ npx playwright show-report    # View HTML report
   - Status update notification
 - [ ] Send emails on relevant events
 
-### 2.4 OAuth Providers (Optional)
+**Dependencies:**
+
+- Resend API Key atau SendGrid API Key
+
+---
+
+## Priority 5: Testing Infrastructure 🟡
+
+### 5.1 Status: TIDAK ADA TEST SAMA SEKALI
+
+**Temuan:**
+
+- 0 `.spec.ts` files
+- 0 test configuration
+- No Playwright, no Vitest, no Jest
+
+### 5.2 Todo: Setup Testing
+
+#### 5.2.1 E2E Tests (Playwright)
+
+- [ ] Install Playwright: `npm install -D @playwright/test`
+- [ ] Buat `playwright.config.ts`
+- [ ] Test files to create:
+  - `tests/e2e/auth.spec.ts` - Login/register flows
+  - `tests/e2e/apply-job.spec.ts` - Apply to job flow
+  - `tests/e2e/post-job.spec.ts` - Post job flow
+
+#### 5.2.2 API Tests
+
+- [ ] `tests/api/dashboard.spec.ts`
+- [ ] `tests/api/jobs.spec.ts`
+
+---
+
+## Priority 6: OAuth Providers (Task 2.4) 🟢
+
+**Status:** Optional, belum dikerjakan
 
 - [ ] Setup Google OAuth
 - [ ] Setup GitHub OAuth
@@ -265,85 +428,128 @@ npx playwright show-report    # View HTML report
 
 **Dependencies:**
 
-- Resend API Key atau SendGrid API Key
 - Google OAuth credentials
 - GitHub OAuth credentials
 
 ---
 
-## Task 3: Advanced Features (Sprint 11-12) 🔵
+## Priority 7: Analytics Export (Task 3.3) 🟢
 
-> Fitur lanjutan untuk platform yang mature.
+**Status:** Partial - analytics page works, export tidak
 
-### 3.1 Job Seeker Dashboard ✅
+- [ ] Export reports to PDF/Excel
+- [ ] Buat API `/api/company/analytics/export`
+- [ ] Support format: PDF, Excel, CSV
 
-- [x] Buat model `SavedJob` dan `JobAlert`
-- [x] Create pages:
-  - `/dashboard/user/profile` - Edit profil
-  - `/dashboard/user/applications` - Riwayat lamaran
-  - `/dashboard/user/saved-jobs` - Job yang disimpan
-  - `/dashboard/user/alerts` - Job alerts settings
-- [x] Application status timeline
-- [x] Save/unsave job functionality
+---
 
-**New files created:**
+## Priority 8: Code Quality & Architecture 🟢
 
-- `prisma/schema.prisma` - Added SavedJob, JobAlert models
-- `src/app/api/user/profile/route.ts` - Profile API
-- `src/app/api/user/applications/route.ts` - Applications API
-- `src/app/api/user/saved-jobs/route.ts` - Saved jobs API
-- `src/app/api/user/alerts/route.ts` - Job alerts API
-- `src/components/dashboard/UserSidebar.tsx` - User navigation
-- `src/app/dashboard/user/layout.tsx` - User dashboard layout
-- `src/app/dashboard/user/page.tsx` - Overview page
-- `src/app/dashboard/user/profile/page.tsx` - Profile editor
-- `src/app/dashboard/user/applications/page.tsx` - Application history
-- `src/app/dashboard/user/saved-jobs/page.tsx` - Saved jobs list
-- `src/app/dashboard/user/alerts/page.tsx` - Job alerts manager
+### 8.1 Status: SUDAH BAIK
 
-### 3.2 Interview Scheduling ✅
+**Positif:**
 
-- [x] Buat model `Interview`
-- [x] Create interview scheduling API
-- [x] Show upcoming interviews di dashboard
+- ✅ Data layer exists (`src/data/`)
+- ✅ Prisma schema well-structured (270 lines, 17 models)
+- ✅ API routes properly organized
+- ✅ Type safety mostly implemented
+- ✅ Middleware for auth exists
 
-**New files:**
+### 8.2 Minor Improvements
 
-- `prisma/schema.prisma` - Added Interview model
-- `src/app/api/company/interviews/route.ts` - Company CRUD
-- `src/app/api/user/interviews/route.ts` - User GET
-- `src/app/dashboard/interviews/page.tsx` - Company view
-- `src/app/dashboard/user/interviews/page.tsx` - User view
+- [ ] Remove duplicate in todo.md (4.4 dan 4.7 sama)
+- [ ] `FindJobsClient.tsx` terlalu besar (631 lines) - bisa di-split
 
-### 3.3 Analytics & Reporting ✅
+---
 
-- [x] Buat halaman `/dashboard/analytics`
-- [x] Job performance metrics (views, applications, conversion)
-- [x] Applicant demographics (status breakdown, sources)
-- [x] Time-to-hire analytics
-- [ ] Export reports to PDF/Excel - Future
+## Halaman yang Sudah Functional ✅
 
-**New files:**
+### Landing Pages
 
-- `src/app/api/company/analytics/route.ts` - Analytics API
-- `src/app/dashboard/analytics/page.tsx` - Analytics dashboard
+| Page           | Path                     | Status                                                           |
+| -------------- | ------------------------ | ---------------------------------------------------------------- |
+| Homepage       | `/`                      | ✅ Real data via `getCompanies`, `getJobs`, `getTechStackCounts` |
+| Find Jobs      | `/find-jobs`             | ✅ Real data + filtering                                         |
+| Find Companies | `/find-companies`        | ✅ Real data                                                     |
+| Job Detail     | `/detail/job/[id]`       | ✅ Real data                                                     |
+| Company Detail | `/detail/company/[id]`   | ✅ Real data                                                     |
+| Apply Job      | `/detail/job/[id]/apply` | ✅ Works                                                         |
 
-### 3.4 Internal Messaging ✅
+### Dashboard (Company)
 
-- [x] Buat model `Message` dan `Conversation`
-- [x] Create messaging API
-- [x] Build chat interface
-- [x] Company ↔ Applicant messaging
+| Page       | Path                    | Status                      |
+| ---------- | ----------------------- | --------------------------- |
+| Overview   | `/dashboard`            | ✅ Real data via API        |
+| Jobs List  | `/dashboard/jobs`       | ✅ Real data                |
+| Job Detail | `/dashboard/jobs/[id]`  | ✅ Real data                |
+| Post Job   | `/dashboard/post-job`   | ✅ Works                    |
+| Analytics  | `/dashboard/analytics`  | ✅ Real data                |
+| Activity   | `/dashboard/activity`   | ✅ Real data                |
+| Messages   | `/dashboard/messages`   | ✅ Real data + send works   |
+| Interviews | `/dashboard/interviews` | ✅ Real data                |
+| Settings   | `/dashboard/settings`   | ⚠️ Partial (see Priority 2) |
 
-**New files:**
+### Dashboard (User/Job Seeker)
 
-- `prisma/schema.prisma` - Added Conversation, Message models
-- `src/app/api/company/messages/route.ts` - Company conversations
-- `src/app/api/company/messages/[conversationId]/route.ts` - Messages
-- `src/app/api/user/messages/route.ts` - User conversations
-- `src/app/api/user/messages/[conversationId]/route.ts` - Messages
-- `src/app/dashboard/messages/page.tsx` - Company chat UI
-- `src/app/dashboard/user/messages/page.tsx` - User chat UI
+| Page         | Path                           | Status       |
+| ------------ | ------------------------------ | ------------ |
+| Overview     | `/dashboard/user`              | ✅ Real data |
+| Profile      | `/dashboard/user/profile`      | ✅ Works     |
+| Applications | `/dashboard/user/applications` | ✅ Real data |
+| Saved Jobs   | `/dashboard/user/saved-jobs`   | ✅ Real data |
+| Alerts       | `/dashboard/user/alerts`       | ✅ Works     |
+| Messages     | `/dashboard/user/messages`     | ✅ Works     |
+| Interviews   | `/dashboard/user/interviews`   | ✅ Real data |
+
+### Auth
+
+| Page            | Path                    | Status   |
+| --------------- | ----------------------- | -------- |
+| Sign In         | `/auth/signin`          | ✅ Works |
+| Sign Up         | `/auth/signup`          | ✅ Works |
+| Forgot Password | `/auth/forgot-password` | ✅ Works |
+| Reset Password  | `/auth/reset-password`  | ✅ Works |
+
+---
+
+## API Endpoints Summary
+
+| Folder               | Count | Status                                                               |
+| -------------------- | ----- | -------------------------------------------------------------------- |
+| `/api/applicants`    | 1     | ✅                                                                   |
+| `/api/auth`          | 2     | ✅                                                                   |
+| `/api/companies`     | 2     | ✅                                                                   |
+| `/api/company`       | 11    | ✅ (analytics, export, interviews, messages, profile, etc.)          |
+| `/api/dashboard`     | 3     | ✅ (stats, activity, chart)                                          |
+| `/api/job`           | 4     | ✅                                                                   |
+| `/api/jobs`          | 7     | ✅                                                                   |
+| `/api/notifications` | 1     | ✅                                                                   |
+| `/api/upload`        | 1     | ✅                                                                   |
+| `/api/user`          | 8     | ✅ (applications, alerts, interviews, messages, profile, saved-jobs) |
+
+**Total: ~40 API routes** ✅
+
+---
+
+## Kesimpulan & Prioritas
+
+### HARUS DIKERJAKAN (Blocking Issues)
+
+1. **Fix `/salaries` link** - Users akan kena 404
+2. **Settings Notifications toggle** - Currently does nothing
+3. **Settings buttons** - Multiple non-functional buttons
+
+### SEBAIKNYA DIKERJAKAN
+
+4. **Setup testing** - No safety net for refactoring
+5. **Email notifications** - Expected feature for job platform
+6. **Security settings** - At minimum: change password
+
+### OPSIONAL
+
+7. **OAuth providers** - Nice to have
+8. **Analytics export** - Nice to have
+9. **Full billing integration** - Complex, maybe not needed for MVP
 
 ---
 
@@ -368,148 +574,23 @@ npm run lint
 
 ### Key Files
 
-| Purpose         | File                                      |
-| --------------- | ----------------------------------------- |
-| Database schema | `prisma/schema.prisma`                    |
-| Auth config     | `src/lib/auth.ts`                         |
-| Main dashboard  | `src/app/dashboard/page.tsx`              |
-| Job listings    | `src/app/dashboard/jobs/page.tsx`         |
-| Post job form   | `src/app/dashboard/post-job/page.tsx`     |
-| Dashboard stats | `src/app/api/dashboard/stats/route.ts`    |
-| Activity feed   | `src/app/api/dashboard/activity/route.ts` |
+| Purpose              | File                                  |
+| -------------------- | ------------------------------------- |
+| Database schema      | `prisma/schema.prisma`                |
+| Auth config          | `src/lib/auth.ts`                     |
+| Main dashboard       | `src/app/dashboard/page.tsx`          |
+| Navbar (broken link) | `src/components/page/Navbar.tsx`      |
+| Settings (pajangan)  | `src/app/dashboard/settings/page.tsx` |
+| Data services        | `src/data/`                           |
 
-### Environment Variables
+### Login Credentials (Seeded)
 
-```env
-DATABASE_URL="postgresql://..."
-DIRECT_URL="postgresql://..."
-NEXTAUTH_SECRET="your-secret"
-NEXTAUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_SUPABASE_URL="https://xxx.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
-```
+| Role    | Email                  | Password    |
+| ------- | ---------------------- | ----------- |
+| Company | hr@gojektech.co.id     | admin123    |
+| Company | careers@tokopedia.com  | password123 |
+| User    | budi.santoso@gmail.com | password123 |
 
 ---
 
-## Timeline Estimates
-
-| Task      | Focus                  | Duration |
-| --------- | ---------------------- | -------- |
-| Task 1    | MVP Finalisasi         | ~2 days  |
-| Task 2    | Enhanced Features      | ~4 days  |
-| Task 3    | Advanced Features      | ~7 days  |
-| **Total** | Full-Featured Platform | ~13 days |
-
----
-
-## Task 4: Production Readiness (Audit Results) 🔴
-
-> Comprehensive audit to ensure security, stability and performance before launch.
-
-### 4.1 Security Fixes ✅
-
-> Critical vulnerabilities addressed on 2025-12-27.
-
-- [x] **Fix Guest User Creation**
-  - Removed `temp_password` usage in `apply/page.tsx`
-  - Enforced login check before application submission
-- [x] **Secure Password Reset**
-  - Added `resetToken` (hashed) & `expiry` to Schema
-  - Updated API to generate/verify crypto tokens
-- [x] **API Authorization Hardening**
-  - Added `middleware.ts` for Dashboard RBAC
-  - Secured `POST /api/job` (Company only)
-  - Secured `POST /api/jobs/apply` (User only)
-
-### 4.2 Type Safety & Code Quality ✅
-
-> Completed 2025-12-27. All `as any` casts removed.
-
-- [x] **Create `next-auth.d.ts`**
-  - Extended `Session` with `id` and `role`
-  - File: `src/types/next-auth.d.ts`
-- [x] **Create `getSessionUser` Helper**
-  - Added `requireCompany()` and `requireUser()` functions
-  - File: `src/lib/session.ts`
-- [x] **Fix `as any` Casts in API Routes:**
-  - [x] `src/app/api/upload/image/route.ts`
-  - [x] `src/app/api/jobs/route.ts`
-  - [x] `src/app/api/company/profile/route.ts`
-  - [x] `src/app/api/dashboard/stats/route.ts`
-  - [x] `src/app/api/job/route.ts`
-  - [x] `src/app/api/dashboard/activity/route.ts`
-  - [x] `src/app/api/applicants/[id]/route.ts`
-  - [x] `src/lib/auth.ts`
-  - [x] `src/app/(landing-page)/(page)/detail/job/[id]/apply/page.tsx`
-
-### 4.3 Data Layer & Validation 🟡
-
-> Zero fake data policy & input sanitization.
-
-- [ ] **Dashboard Data:**
-  - [ ] Replace `chartBars` static array with real aggregation API
-  - [ ] Replace `Candidate Sources` hardcoded % with real Applicant data
-  - [ ] Connect `View All Activity` button
-- [ ] **API Validation (Zod):**
-  - [ ] `POST /api/jobs/apply`
-  - [ ] `POST /api/job`
-  - [ ] `POST /api/user/profile`
-
-### 4.4 UI Cleanup (Remove "Pajangan") 🟢
-
-> Remove or implement non-functional UI elements.
-
-- [ ] **Dashboard Header:**
-  - [ ] **Search Bar:** Implement search logic OR Hide for MVP
-  - [ ] **Notification Button:** Replace with `NotificationsDropdown` component
-- [ ] **Landing Page Footer:**
-  - [ ] Remove/Update dead links (Salary calc, Pricing, etc)
-- [ ] **General:**
-  - [ ] Check all "Do Nothing" buttons
-
-### 4.5 Testing Infrastructure 🟡
-
-- [ ] **Setup Playwright** (`playwright.config.ts`)
-- [ ] **Core E2E Scenarios:**
-  - [ ] Job Seeker Apply Flow
-  - [ ] Company Post Job Flow
-- [ ] **API Tests:**
-  - [ ] Auth Endpoints
-  - [ ] Dashboard Stats
-
-### 4.6 Polish & Deployment 🟢
-
-- [ ] **Loading States:** Audit all async pages
-- [ ] **SEO:** Add `generateMetadata` to dynamic pages
-- [ ] **Build Check:** Run `npm run build` locally
-
-### 4.7 UI Cleanup (Remove "Pajangan") 🟢
-
-- [ ] **Dashboard Header:** Connect/Hide Search Bar & Fix Notifications
-- [ ] **Footer:** Remove placeholder links
-- [ ] **General:** Connect "View All Activity" button
-
-### 4.8 UI/UX Enhancements (User Request) 🔵
-
-> Visual polish and functionality gaps identified.
-
-- [ ] **Mobile Responsiveness:**
-  - [ ] Implement Mobile Menu (Hamburger) in `Navbar.tsx`
-  - [ ] Fix Dashboard Sidebar on mobile (Collapsible?)
-- [ ] **Empty States & Feedback:**
-  - [ ] Add "Create First Job" CTA in empty job list
-  - [ ] Add Toast Notifications (Success/Error) for Actions
-  - [ ] Add Loading Progress Bar (NProgress)
-- [ ] **Auth UX:**
-  - [ ] Add 'Forgot Password' link to Sign In page
-  - [ ] Improve User Dropdown in Navbar (Dashboard link)
-
----
-
-## Tips
-
-1. **Check Build** - Run `npm run build` sebelum commit
-2. **Use Types** - Prisma auto-generate types
-3. **Session** - Access via `getServerSession(authOptions)`
-4. **Activity Log** - Buat activity log untuk setiap major action
-5. **API Auth** - Semua protected API perlu auth check
+_Last Updated: 2025-12-28_

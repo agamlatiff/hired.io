@@ -5,6 +5,7 @@ import { FacebookIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { type FC } from "react";
+import type { Metadata } from "next";
 import { AiOutlineFire } from "react-icons/ai";
 import {
   BsFacebook,
@@ -25,6 +26,24 @@ type Params = {
 
 interface DetailCompanyPageProps {
   params: Params;
+}
+
+export async function generateMetadata({ params }: DetailCompanyPageProps): Promise<Metadata> {
+  const company = await getCompanyById(params.id);
+
+  if (!company || !company.CompanyOverview?.[0]) {
+    return {
+      title: "Company Not Found | hired.io",
+      description: "The company you're looking for doesn't exist.",
+    };
+  }
+
+  const overview = company.CompanyOverview[0];
+
+  return {
+    title: `${overview.name} | hired.io`,
+    description: `${overview.name} - ${overview.industry}. ${overview.employee} employees in ${overview.location}. ${overview.description?.slice(0, 100) || "View company profile."}`,
+  };
 }
 
 const DetailCompanyPage: FC<DetailCompanyPageProps> = async ({ params }) => {

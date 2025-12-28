@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { createJobSchema } from "@/lib/schema";
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +18,19 @@ export async function POST(request: Request) {
     if (role !== "company") {
       return NextResponse.json({ error: "Only companies can post jobs" }, { status: 403 });
     }
-    const data = await request.json();
+
+    const rawData = await request.json();
+
+    // Validate input with Zod
+    const validation = createJobSchema.safeParse(rawData);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: validation.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const data = validation.data;
 
     // Transform data for Prisma
     const jobData = {
@@ -32,7 +45,7 @@ export async function POST(request: Request) {
       salaryTo: data.salaryTo?.toString() || "0",
       requiredSkills: data.requiredSkills || [],
       benefits: data.benefits || [],
-      needs: parseInt(data.needs) || 1, // Convert to integer
+      needs: parseInt(String(data.needs)) || 1, // Convert to integer
       department: data.department || null,
       location: data.location || null,
       experienceLevel: data.experienceLevel || null,

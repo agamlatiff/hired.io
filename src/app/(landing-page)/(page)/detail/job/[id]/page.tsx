@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import { getJobById, getSimilarJobs } from "@/data/jobs";
@@ -47,6 +48,30 @@ function getTechDisplay(techName: string) {
 
 interface PageProps {
   params: { id: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const job = await getJobById(params.id);
+
+  if (!job) {
+    return {
+      title: "Job Not Found | hired.io",
+      description: "The job you're looking for doesn't exist or has been removed.",
+    };
+  }
+
+  const companyName = job.Company?.name || "Unknown Company";
+  const salary = `$${job.salaryFrom}k - $${job.salaryTo}k`;
+
+  return {
+    title: `${job.roles} at ${companyName} | hired.io`,
+    description: `${job.roles} position at ${companyName}. ${job.jobType} role with ${salary} salary. ${job.description?.slice(0, 120) || "Apply now!"}`,
+    openGraph: {
+      title: `${job.roles} at ${companyName}`,
+      description: `${job.jobType} • ${salary} • ${job.location || "Remote"}`,
+      type: "website",
+    },
+  };
 }
 
 export default async function JobDetailPage({ params }: PageProps) {

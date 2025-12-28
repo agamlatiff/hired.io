@@ -41,18 +41,6 @@ const Footer = () => {
             >
               Company Directory
             </Link>
-            <Link
-              href="#"
-              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
-            >
-              Salary Calculator
-            </Link>
-            <Link
-              href="#"
-              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
-            >
-              Resume Review
-            </Link>
           </div>
 
           {/* Employers */}
@@ -67,41 +55,29 @@ const Footer = () => {
               Post a Job
             </Link>
             <Link
-              href="#"
+              href="/dashboard"
               className="text-gray-400 hover:text-neon-green text-sm transition-colors"
             >
-              Pricing
-            </Link>
-            <Link
-              href="#"
-              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
-            >
-              Success Stories
+              Dashboard
             </Link>
           </div>
 
-          {/* Company */}
+          {/* Auth */}
           <div className="flex flex-col gap-4">
             <h4 className="text-white font-bold text-sm uppercase tracking-wider">
-              Company
+              Account
             </h4>
             <Link
-              href="#"
+              href="/auth/signin"
               className="text-gray-400 hover:text-neon-green text-sm transition-colors"
             >
-              About Us
+              Sign In
             </Link>
             <Link
-              href="#"
+              href="/auth/signup"
               className="text-gray-400 hover:text-neon-green text-sm transition-colors"
             >
-              Blog
-            </Link>
-            <Link
-              href="#"
-              className="text-gray-400 hover:text-neon-green text-sm transition-colors"
-            >
-              Contact
+              Sign Up
             </Link>
           </div>
         </div>
@@ -111,15 +87,9 @@ const Footer = () => {
       <div className="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-accent-dark flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
         <p>© 2024 hired.io Inc. All rights reserved.</p>
         <div className="flex gap-6">
-          <Link href="#" className="hover:text-white transition-colors">
-            Privacy Policy
-          </Link>
-          <Link href="#" className="hover:text-white transition-colors">
-            Terms of Service
-          </Link>
-          <Link href="#" className="hover:text-white transition-colors">
-            Twitter
-          </Link>
+          <span className="text-gray-600">
+            Built with ❤️ for developers
+          </span>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import NotificationsDropdown from "@/components/dashboard/NotificationsDropdown";
 
 interface Stats {
   activeJobs: number;
@@ -17,10 +18,21 @@ interface Activity {
   createdAt: string;
 }
 
+interface ChartData {
+  chartBars: number[];
+  candidateSources: {
+    direct: number;
+    linkedin: number;
+    referral: number;
+    other: number;
+  };
+}
+
 export default function DashboardPage() {
   const [chartView, setChartView] = useState<"day" | "week">("day");
   const [stats, setStats] = useState<Stats | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [chartData, setChartData] = useState<ChartData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,20 +40,23 @@ export default function DashboardPage() {
     async function fetchDashboardData() {
       try {
         setLoading(true);
-        const [statsRes, activityRes] = await Promise.all([
+        const [statsRes, activityRes, chartRes] = await Promise.all([
           fetch("/api/dashboard/stats"),
           fetch("/api/dashboard/activity"),
+          fetch("/api/dashboard/chart"),
         ]);
 
-        if (!statsRes.ok || !activityRes.ok) {
+        if (!statsRes.ok || !activityRes.ok || !chartRes.ok) {
           throw new Error("Failed to fetch dashboard data");
         }
 
         const statsData = await statsRes.json();
         const activityData = await activityRes.json();
+        const chartDataRes = await chartRes.json();
 
         setStats(statsData);
         setActivities(activityData);
+        setChartData(chartDataRes);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
@@ -83,7 +98,8 @@ export default function DashboardPage() {
     ]
     : [];
 
-  const chartBars = [30, 45, 20, 60, 75, 50, 80, 65, 40, 55, 35, 45, 60, 70, 85, 50];
+  const chartBars = chartData?.chartBars || [30, 45, 20, 60, 75, 50, 80, 65, 40, 55, 35, 45, 60, 70, 85, 50];
+  const candidateSources = chartData?.candidateSources || { direct: 40, linkedin: 25, referral: 35, other: 0 };
 
   if (error) {
     return (
@@ -114,22 +130,8 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 material-symbols-outlined text-lg">
-              search
-            </span>
-            <input
-              className="bg-card-dark border border-accent-dark text-sm rounded-full pl-10 pr-4 py-2.5 w-64 focus:ring-1 focus:ring-neon-green focus:border-neon-green text-white placeholder-gray-500 focus:outline-none"
-              placeholder="Search candidates, jobs..."
-              type="text"
-            />
-          </div>
-          <button className="relative p-2.5 rounded-full bg-card-dark border border-accent-dark hover:text-white text-gray-400 transition-colors">
-            <span className="material-symbols-outlined text-xl">
-              notifications
-            </span>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-neon-green rounded-full animate-pulse" />
-          </button>
+          {/* Search hidden for MVP - implement in future */}
+          <NotificationsDropdown />
           <Link
             href="/dashboard/post-job"
             className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]"
@@ -292,7 +294,7 @@ export default function DashboardPage() {
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
                     stroke="currentColor"
-                    strokeDasharray="40, 100"
+                    strokeDasharray={`${candidateSources.direct}, 100`}
                     strokeWidth="4"
                   />
                   <path
@@ -300,8 +302,8 @@ export default function DashboardPage() {
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
                     stroke="currentColor"
-                    strokeDasharray="25, 100"
-                    strokeDashoffset="-40"
+                    strokeDasharray={`${candidateSources.linkedin}, 100`}
+                    strokeDashoffset={`-${candidateSources.direct}`}
                     strokeWidth="4"
                   />
                   <path
@@ -309,8 +311,8 @@ export default function DashboardPage() {
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
                     stroke="currentColor"
-                    strokeDasharray="35, 100"
-                    strokeDashoffset="-65"
+                    strokeDasharray={`${candidateSources.referral}, 100`}
+                    strokeDashoffset={`-${candidateSources.direct + candidateSources.linkedin}`}
                     strokeWidth="4"
                   />
                 </svg>
@@ -325,21 +327,21 @@ export default function DashboardPage() {
                     <span className="w-2 h-2 rounded-full bg-neon-green" />
                     <span className="text-gray-400">Direct</span>
                   </div>
-                  <span className="font-bold">40%</span>
+                  <span className="font-bold">{candidateSources.direct}%</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-neon-purple" />
                     <span className="text-gray-400">LinkedIn</span>
                   </div>
-                  <span className="font-bold">25%</span>
+                  <span className="font-bold">{candidateSources.linkedin}%</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-500" />
                     <span className="text-gray-400">Referral</span>
                   </div>
-                  <span className="font-bold">35%</span>
+                  <span className="font-bold">{candidateSources.referral}%</span>
                 </div>
               </div>
             </div>
@@ -409,9 +411,9 @@ export default function DashboardPage() {
                 ))
               )}
             </div>
-            <button className="w-full mt-4 text-xs font-medium text-gray-400 hover:text-white py-2 border-t border-white/5 transition-colors">
+            <Link href="/dashboard/activity" className="w-full mt-4 text-xs font-medium text-gray-400 hover:text-white py-2 border-t border-white/5 transition-colors text-center block">
               View All Activity
-            </button>
+            </Link>
           </div>
         </div>
       </div>

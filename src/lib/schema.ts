@@ -90,3 +90,40 @@ export const formSignUpSchema = z.object({
 // Legacy aliases for backwards compatibility
 export const signInFormSchema = formSignInSchema;
 export const signUpFormSchema = formSignUpSchema;
+
+// API Validation Schemas (for server-side validation)
+
+// POST /api/job - Create Job
+export const createJobSchema = z.object({
+  roles: z.string().min(1, "Job title is required"),
+  description: z.string().optional().default(""),
+  responsibility: z.string().optional().default(""),
+  whoYouAre: z.string().optional().default(""),
+  niceToHaves: z.string().optional().default(""),
+  dueDate: z.string().min(1, "Due date is required"),
+  jobType: z.string().optional().default("Remote"),
+  salaryFrom: z.union([z.string(), z.number()]).optional(),
+  salaryTo: z.union([z.string(), z.number()]).optional(),
+  requiredSkills: z.array(z.string()).optional().default([]),
+  benefits: z.array(z.object({
+    benefit: z.string(),
+    description: z.string(),
+  })).optional().default([]),
+  needs: z.union([z.string(), z.number()]).optional().default(1),
+  department: z.string().nullable().optional(),
+  location: z.string().nullable().optional(),
+  experienceLevel: z.string().nullable().optional(),
+  status: z.enum(["draft", "published", "closed"]).optional().default("draft"),
+  currency: z.string().optional().default("USD"),
+});
+
+// POST /api/jobs/apply - Apply to Job
+export const jobApplySchema = z.object({
+  jobId: z.string().min(1, "Job ID is required"),
+  coverLetter: z.string().optional(),
+  resumeUrl: z.string().optional(),
+  phone: z.string().optional(),
+  linkedIn: z.string().optional(),
+  portfolio: z.string().optional(),
+  previousJobTitle: z.string().optional(),
+});

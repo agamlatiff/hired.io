@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { jobApplySchema } from "@/lib/schema";
 
 export async function POST(request: Request) {
   try {
@@ -18,18 +19,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Only job seekers can apply" }, { status: 403 });
     }
 
-    const data = await request.json();
+    const rawData = await request.json();
 
-    // Override userId from session
-    data.userId = userId;
+    // Validate input with Zod
+    const validation = jobApplySchema.safeParse(rawData);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: validation.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
 
+    const validated = validation.data;
+
+    // Create applicant with proper Prisma structure
     const result = await prisma.applicant.create({
-      data,
+      data: {
+        userId,
+        jobId: validated.jobId,
+        coverLetter: validated.coverLetter || "",
+        resume: validated.resumeUrl || "",
+        phone: validated.phone || "",
+        linkedin: validated.linkedIn || "",
+        portfolio: validated.portfolio || "",
+        previousJobTitle: validated.previousJobTitle || "",
+      },
     });
 
     await prisma.job.update({
       where: {
-        id: data.jobId,
+        id: validated.jobId,
       },
       data: {
         applicants: {
@@ -44,3 +63,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to apply" }, { status: 500 });
   }
 }
+

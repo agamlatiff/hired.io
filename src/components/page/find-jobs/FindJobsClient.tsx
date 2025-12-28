@@ -1,25 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
-
-// Keep static filter options
-const jobTypes = [
-  { label: "Full-time", count: "1.2k", checked: true },
-  { label: "Contract", count: "230", checked: false },
-  { label: "Freelance", count: "85", checked: false },
-];
-
-const experienceLevels = [
-  { label: "Junior", checked: false },
-  { label: "Mid-Level", checked: true },
-  { label: "Senior", checked: true },
-  { label: "Lead / Manager", checked: false },
-];
-
-const techStacks = ["React", "Node.js", "Python", "AWS", "Go"];
 
 // Define the shape that the UI expects
 export interface UIJob {
@@ -35,22 +19,181 @@ export interface UIJob {
   logoBg?: string;
   invertLogo?: boolean;
   letter?: string;
+  jobType?: string;
+  experienceLevel?: string;
+  salaryFrom?: number;
+  salaryTo?: number;
 }
 
 interface FindJobsClientProps {
   initialJobs: UIJob[];
 }
 
+// Static filter options
+const JOB_TYPES = ["Full-time", "Contract", "Freelance", "Remote"];
+const EXPERIENCE_LEVELS = ["Junior", "Mid-Level", "Senior", "Lead / Manager"];
+const TECH_STACKS = ["React", "Node.js", "Python", "AWS", "Go", "TypeScript", "Next.js", "Docker", "PostgreSQL"];
+
 export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
   const router = useRouter();
+
+  // Search & Location
   const [searchQuery, setSearchQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
-  const [selectedTech, setSelectedTech] = useState(["React", "Node.js"]);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // For now, we are just displaying initialJobs.
-  // Real filtering would happen server-side or we filter here if we had all jobs.
-  const jobs = initialJobs;
+  // Filter states
+  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>(["Full-time"]);
+  const [selectedExperienceLevels, setSelectedExperienceLevels] = useState<string[]>(["Mid-Level", "Senior"]);
+  const [selectedTech, setSelectedTech] = useState<string[]>([]);
+  const [salaryMin, setSalaryMin] = useState(0);
+  const [salaryMax, setSalaryMax] = useState(300);
+  const [remoteOnly, setRemoteOnly] = useState(false);
+
+  // Sorting and pagination
+  const [sortBy, setSortBy] = useState<"newest" | "salary" | "relevance">("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
+  // Toggle filter helpers
+  const toggleJobType = (type: string) => {
+    setSelectedJobTypes(prev =>
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+    setCurrentPage(1);
+  };
+
+  const toggleExperienceLevel = (level: string) => {
+    setSelectedExperienceLevels(prev =>
+      prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
+    );
+    setCurrentPage(1);
+  };
+
+  const toggleTech = (tech: string) => {
+    setSelectedTech(prev =>
+      prev.includes(tech) ? prev.filter(t => t !== tech) : [...prev, tech]
+    );
+    setCurrentPage(1);
+  };
+
+  const clearAllFilters = () => {
+    setSelectedJobTypes([]);
+    setSelectedExperienceLevels([]);
+    setSelectedTech([]);
+    setSalaryMin(0);
+    setSalaryMax(300);
+    setRemoteOnly(false);
+    setSearchQuery("");
+    setLocationQuery("");
+    setCurrentPage(1);
+  };
+
+  // Filter and sort jobs
+  const filteredJobs = useMemo(() => {
+    let result = [...initialJobs];
+
+    // Search filter (title, company, skills)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(job =>
+        job.title.toLowerCase().includes(query) ||
+        job.company.toLowerCase().includes(query) ||
+        job.skills.some(skill => skill.toLowerCase().includes(query))
+      );
+    }
+
+    // Location filter
+    if (locationQuery.trim()) {
+      const query = locationQuery.toLowerCase();
+      result = result.filter(job =>
+        job.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Remote only filter
+    if (remoteOnly) {
+      result = result.filter(job =>
+        job.location.toLowerCase().includes("remote") ||
+        job.jobType?.toLowerCase().includes("remote")
+      );
+    }
+
+    // Job type filter
+    if (selectedJobTypes.length > 0) {
+      result = result.filter(job => {
+        // If job has jobType, match it; otherwise include if Full-time is selected (default)
+        if (job.jobType) {
+          return selectedJobTypes.some(type =>
+            job.jobType?.toLowerCase().includes(type.toLowerCase())
+          );
+        }
+        return selectedJobTypes.includes("Full-time"); // Default to full-time
+      });
+    }
+
+    // Experience level filter
+    if (selectedExperienceLevels.length > 0) {
+      result = result.filter(job => {
+        if (job.experienceLevel) {
+          return selectedExperienceLevels.some(level =>
+            job.experienceLevel?.toLowerCase().includes(level.toLowerCase())
+          );
+        }
+        return true; // Include jobs without experience level set
+      });
+    }
+
+    // Tech stack filter
+    if (selectedTech.length > 0) {
+      result = result.filter(job =>
+        selectedTech.some(tech =>
+          job.skills.some(skill => skill.toLowerCase().includes(tech.toLowerCase()))
+        )
+      );
+    }
+
+    // Salary range filter
+    if (salaryMin > 0 || salaryMax < 300) {
+      result = result.filter(job => {
+        // Parse salary from string like "$12000000k - $22000000k" or use salaryFrom/To
+        const salaryFrom = job.salaryFrom || parseInt(job.salary.replace(/[^0-9]/g, '')) / 1000;
+        return salaryFrom >= salaryMin && salaryFrom <= salaryMax;
+      });
+    }
+
+    // Sorting
+    if (sortBy === "newest") {
+      // Jobs are already sorted by newest from API
+    } else if (sortBy === "salary") {
+      result.sort((a, b) => {
+        const aSalary = a.salaryFrom || parseInt(a.salary.replace(/[^0-9]/g, ''));
+        const bSalary = b.salaryFrom || parseInt(b.salary.replace(/[^0-9]/g, ''));
+        return bSalary - aSalary;
+      });
+    }
+
+    return result;
+  }, [initialJobs, searchQuery, locationQuery, selectedJobTypes, selectedExperienceLevels, selectedTech, salaryMin, salaryMax, remoteOnly, sortBy]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE);
+  const paginatedJobs = filteredJobs.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // Count jobs by type for sidebar
+  const jobTypeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    JOB_TYPES.forEach(type => {
+      counts[type] = initialJobs.filter(job =>
+        job.jobType?.toLowerCase().includes(type.toLowerCase()) ||
+        (type === "Full-time" && !job.jobType)
+      ).length;
+    });
+    return counts;
+  }, [initialJobs]);
+
 
   return (
     <div className="bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col">
@@ -69,7 +212,7 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
                 <span className="text-neon-green glow-text">Mission</span>
               </h1>
               <p className="text-gray-400 text-lg">
-                Browse {jobs.length} new developer roles added today.
+                Browse {filteredJobs.length} developer roles{searchQuery || locationQuery ? ' matching your criteria' : ' added today'}.
               </p>
             </div>
             <div className="flex gap-2">
@@ -120,23 +263,38 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
 
           {/* Quick Filters */}
           <div className="flex flex-wrap gap-3 mt-6">
-            <button className="px-4 py-2 rounded-lg bg-accent-dark/50 border border-accent-dark hover:border-neon-green/50 text-sm font-medium text-gray-300 hover:text-white transition-all flex items-center gap-2">
+            <button
+              onClick={clearAllFilters}
+              className="px-4 py-2 rounded-lg bg-accent-dark/50 border border-accent-dark hover:border-neon-green/50 text-sm font-medium text-gray-300 hover:text-white transition-all flex items-center gap-2"
+            >
               <span className="material-symbols-outlined text-base">
                 filter_list
               </span>
-              All Filters
+              Clear Filters
             </button>
-            <button className="px-4 py-2 rounded-lg bg-neon-green/10 border border-neon-green/30 text-sm font-medium text-neon-green transition-all">
+            <button
+              onClick={() => setRemoteOnly(!remoteOnly)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${remoteOnly ? 'bg-neon-green/10 border border-neon-green/30 text-neon-green' : 'bg-accent-dark/50 border border-accent-dark text-gray-300 hover:text-white'}`}
+            >
               Remote Only
             </button>
-            <button className="px-4 py-2 rounded-lg bg-accent-dark/50 border border-accent-dark hover:border-white/20 text-sm font-medium text-gray-300 hover:text-white transition-all">
+            <button
+              onClick={() => { setSalaryMin(150); setCurrentPage(1); }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${salaryMin >= 150 ? 'bg-neon-green/10 border border-neon-green/30 text-neon-green' : 'bg-accent-dark/50 border border-accent-dark text-gray-300 hover:text-white'}`}
+            >
               $150k+
             </button>
-            <button className="px-4 py-2 rounded-lg bg-accent-dark/50 border border-accent-dark hover:border-white/20 text-sm font-medium text-gray-300 hover:text-white transition-all">
+            <button
+              onClick={() => toggleExperienceLevel('Junior')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedExperienceLevels.includes('Junior') ? 'bg-neon-green/10 border border-neon-green/30 text-neon-green' : 'bg-accent-dark/50 border border-accent-dark text-gray-300 hover:text-white'}`}
+            >
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block mr-2" />
               Entry Level
             </button>
-            <button className="px-4 py-2 rounded-lg bg-accent-dark/50 border border-accent-dark hover:border-white/20 text-sm font-medium text-gray-300 hover:text-white transition-all">
+            <button
+              onClick={() => toggleJobType('Contract')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedJobTypes.includes('Contract') ? 'bg-neon-green/10 border border-neon-green/30 text-neon-green' : 'bg-accent-dark/50 border border-accent-dark text-gray-300 hover:text-white'}`}
+            >
               Contract
             </button>
           </div>
@@ -156,21 +314,23 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
                   Clear
                 </span>
               </h3>
-              {jobTypes.map((type) => (
+              {JOB_TYPES.map((type) => (
                 <label
-                  key={type.label}
+                  key={type}
                   className="flex items-center gap-3 group cursor-pointer"
+                  onClick={() => toggleJobType(type)}
                 >
                   <input
                     type="checkbox"
-                    defaultChecked={type.checked}
+                    checked={selectedJobTypes.includes(type)}
+                    onChange={() => { }}
                     className="rounded bg-accent-dark border-gray-600 text-neon-green w-4 h-4 focus:ring-neon-green"
                   />
                   <span className="text-gray-300 group-hover:text-white text-sm transition-colors">
-                    {type.label}
+                    {type}
                   </span>
                   <span className="ml-auto text-xs text-gray-600">
-                    {type.count}
+                    {jobTypeCounts[type] || 0}
                   </span>
                 </label>
               ))}
@@ -215,18 +375,20 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
             {/* Experience Level */}
             <div className="space-y-3 pt-4 border-t border-accent-dark">
               <h3 className="font-bold text-white mb-2">Experience Level</h3>
-              {experienceLevels.map((level) => (
+              {EXPERIENCE_LEVELS.map((level) => (
                 <label
-                  key={level.label}
+                  key={level}
                   className="flex items-center gap-3 group cursor-pointer"
+                  onClick={() => toggleExperienceLevel(level)}
                 >
                   <input
                     type="checkbox"
-                    defaultChecked={level.checked}
+                    checked={selectedExperienceLevels.includes(level)}
+                    onChange={() => { }}
                     className="rounded bg-accent-dark border-gray-600 text-neon-green w-4 h-4 focus:ring-neon-green"
                   />
                   <span className="text-gray-300 group-hover:text-white text-sm transition-colors">
-                    {level.label}
+                    {level}
                   </span>
                 </label>
               ))}
@@ -249,6 +411,7 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
                 {selectedTech.map((tech, i) => (
                   <span
                     key={tech}
+                    onClick={() => toggleTech(tech)}
                     className={`px-2 py-1 rounded text-xs font-bold border cursor-pointer transition ${i === 0
                       ? "bg-neon-green/20 text-neon-green border-neon-green/30 hover:bg-neon-green/30"
                       : "bg-neon-purple/20 text-neon-purple border-neon-purple/30 hover:bg-neon-purple/30"
@@ -257,11 +420,12 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
                     {tech} ×
                   </span>
                 ))}
-                {techStacks
+                {TECH_STACKS
                   .filter((t) => !selectedTech.includes(t))
                   .map((tech) => (
                     <span
                       key={tech}
+                      onClick={() => toggleTech(tech)}
                       className="px-2 py-1 rounded bg-accent-dark text-gray-400 text-xs border border-gray-700 cursor-pointer hover:text-white transition"
                     >
                       {tech}
@@ -275,19 +439,42 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
           <div className="col-span-1 lg:col-span-3 space-y-4">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Showing {jobs.length} Jobs</h2>
+              <h2 className="text-xl font-bold">Showing {filteredJobs.length} Jobs</h2>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <span>Sort by:</span>
-                <select className="bg-transparent border-none text-white font-medium focus:ring-0 cursor-pointer py-0 pl-0 pr-8">
-                  <option>Newest First</option>
-                  <option>Relevance</option>
-                  <option>Salary (High to Low)</option>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as "newest" | "salary" | "relevance")}
+                  className="bg-transparent border-none text-white font-medium focus:ring-0 cursor-pointer py-0 pl-0 pr-8"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="relevance">Relevance</option>
+                  <option value="salary">Salary (High to Low)</option>
                 </select>
               </div>
             </div>
 
+            {/* Empty State */}
+            {paginatedJobs.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <span className="material-symbols-outlined text-6xl text-gray-600 mb-4">
+                  search_off
+                </span>
+                <h3 className="text-xl font-bold text-white mb-2">No jobs found</h3>
+                <p className="text-gray-400 mb-6 max-w-md">
+                  We couldn&apos;t find any jobs matching your filters. Try adjusting your search criteria or clearing some filters.
+                </p>
+                <button
+                  onClick={clearAllFilters}
+                  className="px-6 py-3 bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold rounded-xl transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+
             {/* Job Cards */}
-            {jobs.map((job) => (
+            {paginatedJobs.map((job) => (
               <div
                 key={job.id}
                 onClick={() => router.push(`/detail/job/${job.id}`)}
@@ -378,32 +565,61 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
             ))}
 
             {/* Pagination */}
-            <div className="flex justify-center mt-12 gap-2">
-              <button className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors">
-                <span className="material-symbols-outlined">chevron_left</span>
-              </button>
-              {[1, 2, 3].map((page) => (
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-12 gap-2">
                 <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 rounded-lg font-bold flex items-center justify-center ${currentPage === page
-                    ? "bg-neon-green text-background-dark"
-                    : "bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
-                    }`}
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {page}
+                  <span className="material-symbols-outlined">chevron_left</span>
                 </button>
-              ))}
-              <span className="w-10 h-10 flex items-center justify-center text-gray-500">
-                ...
-              </span>
-              <button className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors">
-                12
-              </button>
-              <button className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors">
-                <span className="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-10 h-10 rounded-lg font-bold flex items-center justify-center ${currentPage === pageNum
+                        ? "bg-neon-green text-background-dark"
+                        : "bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
+                        }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+                {totalPages > 5 && currentPage < totalPages - 2 && (
+                  <>
+                    <span className="w-10 h-10 flex items-center justify-center text-gray-500">
+                      ...
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors"
+                    >
+                      {totalPages}
+                    </button>
+                  </>
+                )}
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="w-10 h-10 rounded-lg bg-card-dark border border-accent-dark text-gray-400 hover:text-white hover:border-gray-500 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>

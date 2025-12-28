@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import { getCompanyById } from "@/data/companies";
@@ -39,6 +40,31 @@ function getTechIcon(techName: string) {
 
 interface PageProps {
   params: { id: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const company = await getCompanyById(params.id);
+
+  if (!company) {
+    return {
+      title: "Company Not Found | hired.io",
+      description: "The company you're looking for doesn't exist or has been removed.",
+    };
+  }
+
+  const overview = company.CompanyOverview?.[0];
+  const jobCount = company.Job?.length || 0;
+  const companyName = overview?.name || company.name;
+
+  return {
+    title: `${companyName} Careers | hired.io`,
+    description: `Explore ${jobCount} open positions at ${companyName}. ${overview?.industry || "Technology"} company based in ${overview?.location || "Remote"}. ${overview?.description?.slice(0, 100) || "Join our team!"}`,
+    openGraph: {
+      title: `${companyName} - Jobs & Careers`,
+      description: `${jobCount} open positions • ${overview?.employee || "N/A"} employees • ${overview?.industry || "Technology"}`,
+      type: "website",
+    },
+  };
 }
 
 export default async function CompanyDetailPage({ params }: PageProps) {
