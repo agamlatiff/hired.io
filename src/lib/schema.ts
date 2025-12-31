@@ -52,13 +52,13 @@ export const overviewFormSchema = z.object({
   description: z.string({ message: "Description is required" }),
 });
 
-// Social media form schema
+// Social media form schema - all fields optional
 export const socialMediaFormSchema = z.object({
-  facebook: z.string({ message: "Facebook link is required" }),
-  instagram: z.string({ message: "Instagram link is required" }),
-  linkedin: z.string({ message: "Linkedin link is required" }),
-  twitter: z.string({ message: "Twitter link is required" }),
-  youtube: z.string({ message: "Youtube link is required" }),
+  facebook: z.string().optional().or(z.literal("")),
+  instagram: z.string().optional().or(z.literal("")),
+  linkedin: z.string().optional().or(z.literal("")),
+  twitter: z.string().optional().or(z.literal("")),
+  youtube: z.string().optional().or(z.literal("")),
 });
 
 // Team form schema
@@ -84,7 +84,9 @@ export const formSignUpSchema = z.object({
   email: z
     .string({ message: "Email is required" })
     .email({ message: "Email is not valid" }),
-  password: z.string({ message: "Password is required" }),
+  password: z
+    .string({ message: "Password is required" })
+    .min(8, { message: "Password must be at least 8 characters" }),
 });
 
 // Legacy aliases for backwards compatibility

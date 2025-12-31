@@ -129,8 +129,8 @@
 
 **Todo:**
 
-- [ ] Search codebase for usage
-- [ ] Delete if truly unused
+- [x] Search codebase for usage → `useFeaturedJobs` is used, other 2 are unused
+- [x] Delete if truly unused → DELETED `useCategoryCompanyFilter.tsx` and `useCategoryJobFilter.tsx`
 
 ---
 
@@ -219,8 +219,8 @@
 
 **Todo:**
 
-- [ ] Add password strength validation to signup (min 8 chars, etc.)
-- [ ] Make social media fields optional in schema
+- [x] Add password strength validation to signup (min 8 chars, etc.)
+- [x] Make social media fields optional in schema
 
 ---
 
@@ -254,7 +254,7 @@
 
 **Solusi (Pilih salah satu):**
 
-- [ ] **Option A:** Buat halaman `/salaries` dengan fitur salary explorer
+- [x] **Option A:** Buat halaman `/salaries` dengan fitur salary explorer
 - [ ] **Option B:** Hapus link dari Navbar (sementara)
 
 **Jika pilih Option A (Recommended):**
