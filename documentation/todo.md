@@ -31,7 +31,7 @@
 
 **Issues di `(landing-page)/(auth)/signin`:**
 
-- [ ] Line 98: `href="#"` - Forgot Password button points to `#` not `/auth/forgot-password`
+- [x] Line 98: `href="#"` - Forgot Password button points to `#` not `/auth/forgot-password` ✅ FIXED
 - [ ] Lines 150-177: OAuth buttons (Google/GitHub) - 100% PAJANGAN, tidak functional
 
 **Todo:**
