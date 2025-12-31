@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface NavItem {
   label: string;
@@ -27,6 +28,18 @@ const configMenuItems: NavItem[] = [
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+
+  // Get company initials from name
+  const getInitials = (name: string | undefined | null) => {
+    if (!name) return "??";
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   const isActive = (href: string) => {
     if (href === "/dashboard") {
@@ -143,11 +156,11 @@ export default function DashboardSidebar() {
         <div className="p-4 border-t border-accent-dark">
           <div className="bg-card-dark p-3 rounded-xl flex items-center gap-3 border border-white/5 cursor-pointer hover:border-neon-green/30 transition-colors">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-green to-blue-500 flex items-center justify-center text-black font-bold">
-              TC
+              {getInitials(session?.user?.name)}
             </div>
             <div className="overflow-hidden">
-              <p className="text-sm font-bold truncate">TechCorp Inc.</p>
-              <p className="text-xs text-gray-400 truncate">Pro Plan</p>
+              <p className="text-sm font-bold truncate">{session?.user?.name || "Company"}</p>
+              <p className="text-xs text-gray-400 truncate">{session?.user?.role === "company" ? "Company Account" : "Job Seeker"}</p>
             </div>
             <span className="material-symbols-outlined ml-auto text-gray-500 text-sm">
               unfold_more

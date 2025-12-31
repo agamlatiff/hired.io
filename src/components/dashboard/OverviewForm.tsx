@@ -188,17 +188,15 @@ const OverviewForm: FC<OverviewFormProps> = ({ detail }) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {data?.map((item: Industry) => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {LOCATION_OPTIONS.map(
+                          (item: optionType, i: number) => (
+                            <SelectItem key={item.id + i} value={item.id}>
+                              {item.label}
+                            </SelectItem>
+                          )
+                        )}
                       </SelectContent>
                     </Select>
-                    <FormDescription>
-                      You can manage email addresses in your{" "}
-                      <Link href="/examples/forms">email settings</Link>.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -221,7 +219,7 @@ const OverviewForm: FC<OverviewFormProps> = ({ detail }) => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {LOCATION_OPTIONS.map(
+                          {EMPLOYEE_OPTIONS.map(
                             (item: optionType, i: number) => (
                               <SelectItem key={item.id + i} value={item.id}>
                                 {item.label}
@@ -230,10 +228,6 @@ const OverviewForm: FC<OverviewFormProps> = ({ detail }) => {
                           )}
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        You can manage email addresses in your{" "}
-                        <Link href="/examples/forms">email settings</Link>.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -254,19 +248,13 @@ const OverviewForm: FC<OverviewFormProps> = ({ detail }) => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {EMPLOYEE_OPTIONS.map(
-                            (item: optionType, i: number) => (
-                              <SelectItem key={item.id + i} value={item.id}>
-                                {item.label}
-                              </SelectItem>
-                            )
-                          )}
+                          {data?.map((item: Industry) => (
+                            <SelectItem key={item.id} value={item.name}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        You can manage email addresses in your{" "}
-                        <Link href="/examples/forms">email settings</Link>.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
