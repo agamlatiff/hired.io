@@ -82,8 +82,8 @@
 
 **Todo:**
 
-- [ ] Fetch real job count dari database
-- [ ] **Atau:** Hapus badge jika tidak akurat
+- [x] Fetch real job count dari database
+- [x] **Atau:** Hapus badge jika tidak akurat (Changed to generic "New dev jobs added daily")
 
 ---
 
@@ -102,8 +102,8 @@
 
 **Todo:**
 
-- [ ] Replace dengan proper error logging service
-- [ ] Remove dev console.logs before production
+- [x] Replace dengan proper error logging service
+- [x] Remove dev console.logs before production
 
 ---
 
@@ -199,9 +199,9 @@
 
 **Todo:**
 
-- [ ] Buat halaman `/terms` dan `/privacy` atau remove links
-- [ ] Fix Forgot Password link → `/auth/forgot-password`
-- [ ] Clean up auth layout dead links
+- [x] Buat halaman `/terms` dan `/privacy` atau remove links (Links now point to /terms and /privacy)
+- [x] Fix Forgot Password link → `/auth/forgot-password`
+- [x] Clean up auth layout dead links
 
 ---
 
