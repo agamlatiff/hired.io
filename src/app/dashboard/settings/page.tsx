@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import ImageUpload from "@/components/ui/image-upload";
 import { toast } from "@/hooks/use-toast";
+import NotificationsDropdown from "@/components/dashboard/NotificationsDropdown";
 
 const settingsTabs = [
   { icon: "business", label: "Company Profile" },
@@ -349,16 +350,7 @@ export default function SettingsPage() {
               {saveMessage.text}
             </div>
           )}
-          <button className="relative p-2.5 rounded-full bg-card-dark border border-accent-dark hover:text-white text-gray-400 transition-colors">
-            <span className="material-symbols-outlined text-xl">
-              notifications
-            </span>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-neon-green rounded-full animate-pulse" />
-          </button>
-          <button className="bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2">
-            <span className="material-symbols-outlined text-lg">help</span>
-            Support
-          </button>
+          <NotificationsDropdown />
           <button
             onClick={handleSave}
             disabled={saving}
@@ -690,23 +682,6 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              {/* Danger Zone */}
-              <div className="border border-red-500/20 bg-red-500/5 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-bold text-red-400 flex items-center gap-2 mb-1">
-                    <span className="material-symbols-outlined">warning</span>
-                    Danger Zone
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Irreversible actions regarding your account and data.
-                  </p>
-                </div>
-                <div className="flex gap-3">
-                  <button className="px-4 py-2 text-sm font-bold text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/10 transition-colors">
-                    Delete Account
-                  </button>
-                </div>
-              </div>
               {/* Security Section */}
               <div className="glass-panel p-8 rounded-2xl">
                 <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">

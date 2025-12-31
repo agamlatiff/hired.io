@@ -333,44 +333,35 @@ src/app/(landing-page)/(page)/salaries/
 
 ---
 
-## Priority 3: Fitur Pajangan Lainnya 🟡
+## Priority 3: Fitur Pajangan Lainnya 🟡 - ✅ DONE
 
 ### 3.1 Dashboard Header Buttons
 
 **File:** `src/app/dashboard/settings/page.tsx`
 
-| Button             | Line    | Status              |
-| ------------------ | ------- | ------------------- |
-| Notifications Bell | 199-204 | ❌ Tidak functional |
-| Support Button     | 205-208 | ❌ Tidak functional |
+| Button             | Status                             |
+| ------------------ | ---------------------------------- |
+| Notifications Bell | ✅ Now using NotificationsDropdown |
+| Support Button     | ✅ DELETED                         |
 
 **Todo:**
 
-- [ ] Notification bell → sudah ada `NotificationsDropdown` di dashboard utama, reuse komponen ini
-- [ ] Support button → Link ke email/form atau hapus
+- [x] Notification bell → sudah ada `NotificationsDropdown` di dashboard utama, reuse komponen ini
+- [x] Support button → Link ke email/form atau hapus → DELETED
 
-### 3.2 Upgrade Plan / Manage Buttons
+### 3.2 Upgrade Plan / Manage Buttons - ✅ DELETED
 
-**Lines 566-571:**
+~~- "Upgrade Plan" button → tidak ada action~~
+~~- "Manage" button → tidak ada action~~
+~~- "Download Invoices" link → tidak ada action~~
 
-- "Upgrade Plan" button → tidak ada action
-- "Manage" button → tidak ada action
-- "Download Invoices" link → tidak ada action
+- [x] Implement atau hapus buttons ini → DELETED with Billing section
 
-**Todo:**
+### 3.3 Delete Account - ✅ DELETED
 
-- [ ] Implement atau hapus buttons ini
+~~- Button ada tapi tidak functional~~
 
-### 3.3 Delete Account
-
-**Lines 592-593:**
-
-- Button ada tapi tidak functional
-
-**Todo:**
-
-- [ ] Implement delete account flow dengan confirmation
-- [ ] **Atau:** Hapus jika tidak akan diimplementasi
+- [x] **Atau:** Hapus jika tidak akan diimplementasi → DELETED
 
 ---
 
