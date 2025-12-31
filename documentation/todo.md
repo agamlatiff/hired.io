@@ -302,11 +302,11 @@ src/app/(landing-page)/(page)/salaries/
 - [x] Buat model `NotificationPreference` di Prisma
 - [x] Buat API `GET/PATCH /api/company/notification-preferences`
 - [x] Connect toggle switches ke API
-- [ ] Simpan preferensi ke database (need `prisma db push`)
+- [x] Simpan preferensi ke database (need `prisma db push`) → DONE
 
-#### 2.3.2 Billing & Plan Tab
+#### 2.3.2 Billing & Plan Tab (HIDDEN - No backend yet)
 
-- [ ] Integrate dengan payment provider (Stripe/Midtrans)
+- [ ] Integrate dengan payment provider Midtrans
 - [ ] Buat halaman upgrade plan
 - [ ] Invoice history dari database
 - [ ] **Atau:** Hapus tab ini jika tidak akan diimplementasi
@@ -318,17 +318,16 @@ src/app/(landing-page)/(page)/salaries/
 - [ ] Session management
 - [x] **Minimum:** Implement change password
 
-#### 2.3.4 Integrations Tab
+#### 2.3.4 Integrations Tab (HIDDEN - No backend yet)
 
 - [ ] Define what integrations to support
 - [ ] ATS integrations? Slack? Calendar?
-- [ ] **Atau:** Hapus tab ini jika tidak akan diimplementasi
+- [x] **Atau:** Hapus tab ini jika tidak akan diimplementasi → HIDDEN for now
 
 #### 2.3.5 Invite Member Button
 
 - [x] Button "Invite Member" tidak functional (line 438-441) → Connected
 - [x] Buat modal invite flow
-- [ ] Email invitation system (future enhancement)
 
 ---
 

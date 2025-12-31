@@ -11,9 +11,7 @@ const settingsTabs = [
   { icon: "business", label: "Company Profile" },
   { icon: "group", label: "Team Members" },
   { icon: "notifications", label: "Notifications" },
-  { icon: "credit_card", label: "Billing & Plan" },
   { icon: "security", label: "Security" },
-  { icon: "integration_instructions", label: "Integrations" },
 ];
 
 interface TeamMember {
