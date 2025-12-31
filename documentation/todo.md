@@ -67,8 +67,8 @@
 
 **Todo:**
 
-- [ ] Fetch company data via API or session
-- [ ] Display real company name dan plan
+- [x] Fetch company data via API or session
+- [x] Display real company name dan plan
 
 ---
 
@@ -156,10 +156,10 @@
 
 **Todo:**
 
-- [ ] Fix dropdown: Employee → gunakan `EMPLOYEE_OPTIONS`
-- [ ] Fix dropdown: Industry → gunakan `data` dari API
-- [ ] Fix dropdown: Location → gunakan `LOCATION_OPTIONS`
-- [ ] Remove atau fix `/examples/forms` links
+- [x] Fix dropdown: Employee → gunakan `EMPLOYEE_OPTIONS`
+- [x] Fix dropdown: Industry → gunakan `data` dari API
+- [x] Fix dropdown: Location → gunakan `LOCATION_OPTIONS`
+- [x] Remove `/examples/forms` links
 
 ---
 
@@ -237,8 +237,8 @@
 
 **Todo:**
 
-- [ ] Standardize to `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- [ ] Update `supabase.ts`
+- [x] Standardize to `NEXT_PUBLIC_SUPABASE_PUBLIC_KEY`
+- [x] Update `supabase-storage.ts`
 
 ---
 
