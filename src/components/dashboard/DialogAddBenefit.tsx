@@ -15,9 +15,10 @@ import { PlusIcon } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import type { Benefit } from "@/lib/types";
 
 interface Props {
-  updateBenefits: (item: any) => void;
+  updateBenefits: (item: Benefit) => void;
 }
 
 const DialogAddBenefit = ({ updateBenefits }: Props) => {

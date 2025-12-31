@@ -4,22 +4,26 @@ import { useState, type FC } from "react";
 import DialogAddBenefit from "./DialogAddBenefit";
 import { PartyPopper, X } from "lucide-react";
 import { FormField, FormItem, FormMessage } from "../ui/form";
+import type { Benefit } from "@/lib/types";
+import type { UseFormReturn } from "react-hook-form";
+import type { z } from "zod";
+import type { jobFormSchema } from "@/lib/schema";
 
 interface InputBenefitsProps {
-  form: any;
+  form: UseFormReturn<z.infer<typeof jobFormSchema>>;
 }
 
 const InputBenefits: FC<InputBenefitsProps> = ({ form }) => {
-  const [benefits, setBenefits] = useState<any[]>([]);
+  const [benefits, setBenefits] = useState<Benefit[]>([]);
 
-  const deleteBenefit = (item: any) => {
-    const deletedBenefits = benefits.filter((benefit: any) => item !== benefit);
+  const deleteBenefit = (item: Benefit) => {
+    const deletedBenefits = benefits.filter((benefit) => item !== benefit);
     setBenefits([...deletedBenefits]);
     form.setValue("benefits", deletedBenefits);
   };
 
-  const updateBenefits = (item: any) => {
-    const newValue: any[] = [...benefits, item];
+  const updateBenefits = (item: Benefit) => {
+    const newValue: Benefit[] = [...benefits, item];
 
     setBenefits(newValue);
     form.setValue("benefits", newValue);
@@ -29,7 +33,7 @@ const InputBenefits: FC<InputBenefitsProps> = ({ form }) => {
     <div className="block">
       <DialogAddBenefit updateBenefits={updateBenefits} />
       <div className="grid grid-cols-3 gap-5 mt-5">
-        {benefits.map((item: any, i: number) => (
+        {benefits.map((item, i: number) => (
           <div
             className="border border-gray-200 rounded-sm p-3 relative w-[200px]"
             key={i}

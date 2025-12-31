@@ -11,16 +11,16 @@ import { Input } from "@/components/ui/input";
 import { jobFormSchema } from "@/lib/schema";
 import { PlusIcon } from "lucide-react";
 import { FC, useEffect, useRef, useState } from "react";
-import { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 import { z } from "zod";
 
-interface InputSkillsProps {
-	form: any
-	name: string
+interface InputSkillsProps<T extends FieldValues> {
+	form: UseFormReturn<T>
+	name: Path<T>
 	label: string
 }
 
-const InputSkills: FC<InputSkillsProps> = ({ form, name, label}) => {
+const InputSkills = <T extends FieldValues>({ form, name, label }: InputSkillsProps<T>) => {
 	const [isHide, setHide] = useState<boolean>(false);
 	const [values, setValues] = useState<string[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -32,29 +32,29 @@ const InputSkills: FC<InputSkillsProps> = ({ form, name, label}) => {
 			return;
 		}
 
-		const newValue: any = [...values, value];
+		const newValue: string[] = [...values, value];
 
 		setValues(newValue);
 
-		form.setValue(name, newValue);
+		form.setValue(name, newValue as T[typeof name]);
 	};
 
 	const handleDeleteValue = (item: string) => {
-		const skills: any = values.filter((value: string) => item !== value);
+		const skills: string[] = values.filter((value: string) => item !== value);
 
 		setValues(skills);
-		form.setValue(name, skills);
+		form.setValue(name, skills as T[typeof name]);
 	};
 
 	useEffect(() => {
-		const val  = form.getValues(name)
-		
-		if(val && val.length > 0) {
+		const val = form.getValues(name)
+
+		if (val && val.length > 0) {
 			setValues(val)
 		}
-		
-	}, [form,name])
-	
+
+	}, [form, name])
+
 	return (
 		<FormField
 			control={form.control}

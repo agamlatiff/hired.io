@@ -51,12 +51,19 @@ interface CompanyData {
   CompanyTeam: TeamMember[];
 }
 
-const notifications = [
-  { title: "New Applicant Alert", desc: "Get notified when someone applies.", enabled: false },
-  { title: "Interview Reminders", desc: "Daily summary of scheduled interviews.", enabled: true },
-  { title: "Weekly Performance Report", desc: "Analytics digest sent every Monday.", enabled: true },
-  { title: "Marketing & Product Updates", desc: "News about Hired.io features.", enabled: false },
-];
+interface NotificationPreferences {
+  newApplicantAlert: boolean;
+  interviewReminders: boolean;
+  weeklyPerformanceReport: boolean;
+  marketingUpdates: boolean;
+}
+
+const notificationConfig = [
+  { key: "newApplicantAlert", title: "New Applicant Alert", desc: "Get notified when someone applies." },
+  { key: "interviewReminders", title: "Interview Reminders", desc: "Daily summary of scheduled interviews." },
+  { key: "weeklyPerformanceReport", title: "Weekly Performance Report", desc: "Analytics digest sent every Monday." },
+  { key: "marketingUpdates", title: "Marketing & Product Updates", desc: "News about Hired.io features." },
+] as const;
 
 export default function SettingsPage() {
   const { data: session } = useSession();
@@ -77,9 +84,12 @@ export default function SettingsPage() {
   const [linkedinPage, setLinkedinPage] = useState("");
   const [location, setLocation] = useState("");
 
-  const [notificationStates, setNotificationStates] = useState(
-    notifications.map((n) => n.enabled)
-  );
+  const [notificationPrefs, setNotificationPrefs] = useState<NotificationPreferences>({
+    newApplicantAlert: true,
+    interviewReminders: true,
+    weeklyPerformanceReport: true,
+    marketingUpdates: false,
+  });
 
   // Fetch company data
   const fetchCompanyData = useCallback(async () => {
@@ -159,12 +169,27 @@ export default function SettingsPage() {
     }
   };
 
-  const toggleNotification = (index: number) => {
-    setNotificationStates((prev) => {
-      const newState = [...prev];
-      newState[index] = !newState[index];
-      return newState;
-    });
+  const toggleNotification = async (key: keyof NotificationPreferences) => {
+    const newValue = !notificationPrefs[key];
+    setNotificationPrefs((prev) => ({
+      ...prev,
+      [key]: newValue,
+    }));
+
+    // Save to API
+    try {
+      await fetch("/api/company/notification-preferences", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: newValue }),
+      });
+    } catch (error) {
+      // Revert on error
+      setNotificationPrefs((prev) => ({
+        ...prev,
+        [key]: !newValue,
+      }));
+    }
   };
 
   if (!session) {
@@ -511,9 +536,9 @@ export default function SettingsPage() {
                     Email Notifications
                   </h3>
                   <div className="space-y-4">
-                    {notifications.map((notif, i) => (
+                    {notificationConfig.map((notif) => (
                       <div
-                        key={i}
+                        key={notif.key}
                         className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
                       >
                         <div>
@@ -526,8 +551,8 @@ export default function SettingsPage() {
                           <input
                             type="checkbox"
                             className="sr-only peer"
-                            checked={notificationStates[i]}
-                            onChange={() => toggleNotification(i)}
+                            checked={notificationPrefs[notif.key]}
+                            onChange={() => toggleNotification(notif.key)}
                           />
                           <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-neon-green" />
                         </label>

@@ -20,13 +20,13 @@ model Industry {
 }
 
 model Company {
-  id                     String               @id @default(cuid())
+  id                     String                  @id @default(cuid())
   name                   String
   password               String
-  email                  String               @unique
+  email                  String                  @unique
   logo                   String?
-  plan                   String               @default("free")
-  createdAt              DateTime             @default(now())
+  plan                   String                  @default("free")
+  createdAt              DateTime                @default(now())
   CompanySocialMedia     CompanySocialMedia[]
   CompanyTeam            CompanyTeam[]
   CompanyOverview        CompanyOverview[]
@@ -35,9 +35,22 @@ model Company {
   Notification           Notification[]
   Interview              Interview[]
   ConversationsAsCompany Conversation[]
-  SentMessages           Message[]            @relation("CompanyMessages")
+  SentMessages           Message[]               @relation("CompanyMessages")
+  NotificationPreference NotificationPreference?
   resetToken             String?
   resetTokenExpiry       DateTime?
+}
+
+model NotificationPreference {
+  id                      String   @id @default(cuid())
+  companyId               String   @unique
+  company                 Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  newApplicantAlert       Boolean  @default(true)
+  interviewReminders      Boolean  @default(true)
+  weeklyPerformanceReport Boolean  @default(true)
+  marketingUpdates        Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model CompanySocialMedia {

@@ -34,17 +34,23 @@ export async function fetcher<JSON = any>(
   return res.json() as Promise<JSON>;
 }
 
-export const dateFormat = (date: any, format: string = "DD MMM YYYY") => {
+export const dateFormat = (date: Date | string | number, format: string = "DD MMM YYYY") => {
   return moment(date).format(format);
 };
 
+interface CategoryWithCount {
+  id: string;
+  name: string;
+  _count: { job: number };
+}
+
 export const parsingCategories = (
-  data: any,
+  data: CategoryWithCount[] | null | undefined,
   isLoading: boolean,
-  error: any
+  error: Error | null | undefined
 ) => {
   if (!isLoading && !error && data) {
-    return data.map((item: any) => {
+    return data.map((item) => {
       return {
         id: item.id,
         name: item.name,
