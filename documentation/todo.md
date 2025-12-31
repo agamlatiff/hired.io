@@ -32,13 +32,13 @@
 **Issues di `(landing-page)/(auth)/signin`:**
 
 - [x] Line 98: `href="#"` - Forgot Password button points to `#` not `/auth/forgot-password` ✅ FIXED
-- [ ] Lines 150-177: OAuth buttons (Google/GitHub) - 100% PAJANGAN, tidak functional
+- [x] Lines 150-177: OAuth buttons (Google/GitHub) - ✅ DELETED (deprecated page removed)
 
 **Todo:**
 
-- [ ] Tentukan mana yang primary signin page
-- [ ] Delete atau merge yang deprecated
-- [ ] Jika keep both, fix the `#` link dan implement OAuth
+- [x] Tentukan mana yang primary signin page → `(auth)/auth/signin` is primary
+- [x] Delete atau merge yang deprecated → DELETED `(landing-page)/(auth)/signin`
+- [x] Jika keep both, fix the `#` link dan implement OAuth → N/A (deleted)
 
 ---
 
