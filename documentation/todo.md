@@ -365,48 +365,9 @@ src/app/(landing-page)/(page)/salaries/
 
 ---
 
-## Priority 4: Email Notifications (Dari todo.md lama) 🟡
+## ~~Priority 4: Email Notifications~~ - ❌ SKIPPED
 
-### 4.1 Task 2.3 - Belum Selesai
-
-- [ ] Setup email service (Resend/SendGrid)
-- [ ] Create email templates:
-  - Application confirmation (to applicant)
-  - New application alert (to company)
-  - Status update notification
-- [ ] Send emails on relevant events
-
-**Dependencies:**
-
-- Resend API Key atau SendGrid API Key
-
----
-
-## Priority 5: Testing Infrastructure 🟡
-
-### 5.1 Status: TIDAK ADA TEST SAMA SEKALI
-
-**Temuan:**
-
-- 0 `.spec.ts` files
-- 0 test configuration
-- No Playwright, no Vitest, no Jest
-
-### 5.2 Todo: Setup Testing
-
-#### 5.2.1 E2E Tests (Playwright)
-
-- [ ] Install Playwright: `npm install -D @playwright/test`
-- [ ] Buat `playwright.config.ts`
-- [ ] Test files to create:
-  - `tests/e2e/auth.spec.ts` - Login/register flows
-  - `tests/e2e/apply-job.spec.ts` - Apply to job flow
-  - `tests/e2e/post-job.spec.ts` - Post job flow
-
-#### 5.2.2 API Tests
-
-- [ ] `tests/api/dashboard.spec.ts`
-- [ ] `tests/api/jobs.spec.ts`
+## ~~Priority 5: Testing Infrastructure~~ - ❌ SKIPPED
 
 ---
 
@@ -415,13 +376,10 @@ src/app/(landing-page)/(page)/salaries/
 **Status:** Optional, belum dikerjakan
 
 - [ ] Setup Google OAuth
-- [ ] Setup GitHub OAuth
-- [ ] Link OAuth accounts to existing users
 
 **Dependencies:**
 
 - Google OAuth credentials
-- GitHub OAuth credentials
 
 ---
 
