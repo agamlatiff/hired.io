@@ -110,8 +110,6 @@ const OverviewForm: FC<OverviewFormProps> = ({ detail }) => {
         title: "Error",
         description: "Please try again.",
       });
-
-      console.log(error);
     }
   };
 

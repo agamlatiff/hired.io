@@ -55,7 +55,6 @@ const SignUpPage = () => {
 
       await router.push("/auth/signin");
     } catch (e) {
-      console.log(e);
       toast({
         title: "Error",
         description: "Registration failed. Please try again.",
@@ -101,8 +100,8 @@ const SignUpPage = () => {
                 type="button"
                 onClick={() => setSignupType("company")}
                 className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${signupType === "company"
-                    ? "bg-neon-green text-background-dark"
-                    : "text-gray-400 hover:text-white"
+                  ? "bg-neon-green text-background-dark"
+                  : "text-gray-400 hover:text-white"
                   }`}
               >
                 <span className="material-symbols-outlined text-lg">business</span>
@@ -112,8 +111,8 @@ const SignUpPage = () => {
                 type="button"
                 onClick={() => setSignupType("user")}
                 className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${signupType === "user"
-                    ? "bg-neon-green text-background-dark"
-                    : "text-gray-400 hover:text-white"
+                  ? "bg-neon-green text-background-dark"
+                  : "text-gray-400 hover:text-white"
                   }`}
               >
                 <span className="material-symbols-outlined text-lg">person</span>
@@ -217,8 +216,8 @@ const SignUpPage = () => {
           {/* Footer */}
           <p className="text-center text-xs text-gray-600 mt-8">
             By signing up, you agree to our{" "}
-            <Link href="#" className="text-neon-green hover:underline">Terms</Link> and{" "}
-            <Link href="#" className="text-neon-green hover:underline">Privacy Policy</Link>.
+            <Link href="/terms" className="text-neon-green hover:underline">Terms</Link> and{" "}
+            <Link href="/privacy" className="text-neon-green hover:underline">Privacy Policy</Link>.
           </p>
         </div>
       </div>

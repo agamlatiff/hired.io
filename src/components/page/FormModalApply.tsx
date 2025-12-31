@@ -81,7 +81,6 @@ const FormModalApply: FC<FormModalApplyProps> = ({
 
       router.replace("/");
     } catch (error) {
-      console.log(error);
       toast({
         title: "Failed",
         description: "Please try again",

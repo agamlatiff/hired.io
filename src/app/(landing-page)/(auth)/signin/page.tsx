@@ -95,7 +95,7 @@ const SignInPage = () => {
                   Password
                 </label>
                 <Link
-                  href="#"
+                  href="/auth/forgot-password"
                   className="text-xs text-neon-green hover:text-white transition-colors"
                 >
                   Forgot Password?

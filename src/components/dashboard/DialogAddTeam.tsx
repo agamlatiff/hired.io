@@ -63,8 +63,6 @@ const DialogAddTeam = () => {
         title: "Error",
         description: "Please try again",
       });
-      
-      console.log(error)
     }
   };
 

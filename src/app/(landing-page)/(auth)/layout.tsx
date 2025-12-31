@@ -42,7 +42,7 @@ export default function AuthLayout({
               Companies
             </Link>
             <Link
-              href="#"
+              href="/find-jobs"
               className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
             >
               Salaries
@@ -81,13 +81,13 @@ export default function AuthLayout({
             <p>© 2024 hired.io Inc. All rights reserved.</p>
           </div>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/terms" className="hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/find-jobs" className="hover:text-white transition-colors">
               Help Center
             </Link>
           </div>

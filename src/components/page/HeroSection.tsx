@@ -39,7 +39,7 @@ export default function HeroSection() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-green opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-green" />
           </span>
-          Over 500+ new dev jobs added today
+          New dev jobs added daily
         </div>
 
         {/* Headline */}

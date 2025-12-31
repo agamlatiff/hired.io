@@ -50,11 +50,13 @@ export async function POST(request: Request) {
     const userTypeParam = company ? "company" : "user";
     const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}&type=${userTypeParam}`;
 
-    // Log the link (Development mode simulation)
-    console.log("==================================================================");
-    console.log(`[PASSWORD RESET] Link for ${email}:`);
-    console.log(resetLink);
-    console.log("==================================================================");
+    // DEV ONLY: Log the reset link in development mode
+    if (process.env.NODE_ENV === "development") {
+      console.log("==================================================================");
+      console.log(`[PASSWORD RESET] Link for ${email}:`);
+      console.log(resetLink);
+      console.log("==================================================================");
+    }
 
     // TODO: Implement actual email sending here using the resetLink
 

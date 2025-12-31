@@ -647,11 +647,11 @@ export default function ApplyJobPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10">
               <p className="text-sm text-gray-500 text-center md:text-left max-w-md">
                 By submitting this application, you agree to our{" "}
-                <Link href="#" className="text-neon-green hover:underline">
+                <Link href="/terms" className="text-neon-green hover:underline">
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link href="#" className="text-neon-green hover:underline">
+                <Link href="/privacy" className="text-neon-green hover:underline">
                   Privacy Policy
                 </Link>
                 .
