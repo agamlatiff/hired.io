@@ -179,8 +179,8 @@
 
 **Todo:**
 
-- [ ] Replace `any` dengan proper types
-- [ ] Create shared interfaces untuk common data shapes
+- [x] Replace `any` dengan proper types (created `src/lib/types.ts` with shared interfaces)
+- [x] Create shared interfaces untuk common data shapes (Benefit, Company, Job, Applicant, etc.)
 
 ---
 
@@ -290,19 +290,19 @@ src/app/(landing-page)/(page)/salaries/
 
 ### 2.2 Hardcoded/Dummy Values
 
-| Item         | Location     | Hardcoded Value           |
-| ------------ | ------------ | ------------------------- |
-| Storage Used | Line 249-258 | "75%", "15.2 GB of 20 GB" |
-| Plan Pricing | Line 563     | "$299/month"              |
+| Item         | Location     | Hardcoded Value           | Status                   |
+| ------------ | ------------ | ------------------------- | ------------------------ |
+| Storage Used | Line 249-258 | "75%", "15.2 GB of 20 GB" | ✅ REMOVED               |
+| Plan Pricing | Line 563     | "$299/month"              | ✅ Dynamic based on plan |
 
 ### 2.3 Todo: Implementasi Settings Tabs
 
 #### 2.3.1 Notifications Tab
 
-- [ ] Buat model `NotificationPreference` di Prisma
-- [ ] Buat API `GET/PATCH /api/company/notification-preferences`
-- [ ] Connect toggle switches ke API
-- [ ] Simpan preferensi ke database
+- [x] Buat model `NotificationPreference` di Prisma
+- [x] Buat API `GET/PATCH /api/company/notification-preferences`
+- [x] Connect toggle switches ke API
+- [ ] Simpan preferensi ke database (need `prisma db push`)
 
 #### 2.3.2 Billing & Plan Tab
 
@@ -313,10 +313,10 @@ src/app/(landing-page)/(page)/salaries/
 
 #### 2.3.3 Security Tab
 
-- [ ] Change password functionality
+- [x] Change password functionality
 - [ ] Two-factor authentication (optional)
 - [ ] Session management
-- [ ] **Minimum:** Implement change password
+- [x] **Minimum:** Implement change password
 
 #### 2.3.4 Integrations Tab
 
@@ -326,9 +326,9 @@ src/app/(landing-page)/(page)/salaries/
 
 #### 2.3.5 Invite Member Button
 
-- [ ] Button "Invite Member" tidak functional (line 438-441)
-- [ ] Buat modal invite flow
-- [ ] Email invitation system
+- [x] Button "Invite Member" tidak functional (line 438-441) → Connected
+- [x] Buat modal invite flow
+- [ ] Email invitation system (future enhancement)
 
 ---
 

@@ -91,6 +91,19 @@ export default function SettingsPage() {
     marketingUpdates: false,
   });
 
+  // Security tab state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  // Invite member modal state
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [newMemberName, setNewMemberName] = useState("");
+  const [newMemberPosition, setNewMemberPosition] = useState("");
+  const [newMemberEmail, setNewMemberEmail] = useState("");
+  const [addingMember, setAddingMember] = useState(false);
+
   // Fetch company data
   const fetchCompanyData = useCallback(async () => {
     try {
@@ -192,6 +205,123 @@ export default function SettingsPage() {
     }
   };
 
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "New passwords do not match",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 8 characters",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to change password");
+      }
+
+      toast({
+        title: "Success",
+        description: "Password changed successfully",
+      });
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to change password",
+        variant: "destructive",
+      });
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
+  const handleAddMember = async () => {
+    if (!newMemberName || !newMemberPosition) {
+      toast({
+        title: "Error",
+        description: "Name and position are required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setAddingMember(true);
+    try {
+      const res = await fetch("/api/company/team-members", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newMemberName,
+          position: newMemberPosition,
+          email: newMemberEmail,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add member");
+
+      toast({
+        title: "Success",
+        description: "Team member added successfully",
+      });
+      setShowInviteModal(false);
+      setNewMemberName("");
+      setNewMemberPosition("");
+      setNewMemberEmail("");
+      fetchCompanyData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add team member",
+        variant: "destructive",
+      });
+    } finally {
+      setAddingMember(false);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    try {
+      const res = await fetch(`/api/company/team-members?id=${memberId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Failed to remove member");
+
+      toast({
+        title: "Success",
+        description: "Team member removed",
+      });
+      fetchCompanyData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to remove team member",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (!session) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -271,15 +401,8 @@ export default function SettingsPage() {
               ))}
             </div>
             <div className="mt-8 pt-6 border-t border-white/10 px-4">
-              <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-                <span>Storage Used</span>
-                <span>75%</span>
-              </div>
-              <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-neon-green to-neon-purple h-full w-[75%]" />
-              </div>
-              <p className="text-[10px] text-gray-500 mt-2">
-                15.2 GB of 20 GB used
+              <p className="text-[10px] text-gray-500 text-center">
+                {companyData?.plan === "pro" ? "Pro Plan" : "Free Plan"}
               </p>
             </div>
           </div>
@@ -460,7 +583,10 @@ export default function SettingsPage() {
                     </span>
                     Team Management
                   </h3>
-                  <button className="text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                  <button
+                    onClick={() => setShowInviteModal(true)}
+                    className="text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+                  >
                     <span className="material-symbols-outlined text-sm">add</span>
                     Invite Member
                   </button>
@@ -505,9 +631,13 @@ export default function SettingsPage() {
                               </span>
                             </td>
                             <td className="p-4 text-right">
-                              <button className="text-gray-500 hover:text-white transition-colors">
+                              <button
+                                onClick={() => handleRemoveMember(member.id)}
+                                className="text-gray-500 hover:text-red-400 transition-colors"
+                                title="Remove member"
+                              >
                                 <span className="material-symbols-outlined text-lg">
-                                  more_horiz
+                                  delete
                                 </span>
                               </button>
                             </td>
@@ -619,10 +749,157 @@ export default function SettingsPage() {
                   </button>
                 </div>
               </div>
+              {/* Security Section */}
+              <div className="glass-panel p-8 rounded-2xl">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-orange-500">
+                    security
+                  </span>
+                  Security Settings
+                </h3>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                      Current Password
+                    </label>
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="w-full max-w-md px-4 py-3 rounded-xl bg-card-dark/60 border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                      placeholder="Enter current password"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full max-w-md px-4 py-3 rounded-xl bg-card-dark/60 border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                      placeholder="Enter new password (min 8 characters)"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full max-w-md px-4 py-3 rounded-xl bg-card-dark/60 border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                      placeholder="Confirm new password"
+                    />
+                  </div>
+                  <button
+                    onClick={handleChangePassword}
+                    disabled={changingPassword || !currentPassword || !newPassword || !confirmPassword}
+                    className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {changingPassword ? (
+                      <>
+                        <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+                        Changing...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined text-lg">lock</span>
+                        Change Password
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </>
           )}
         </div>
       </div>
+
+      {/* Invite Member Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowInviteModal(false)}
+          />
+          <div className="relative bg-card-dark border border-white/10 rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl">
+            <button
+              onClick={() => setShowInviteModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-neon-green">person_add</span>
+              Add Team Member
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  value={newMemberName}
+                  onChange={(e) => setNewMemberName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-background-dark border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                  placeholder="Team member name"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                  Position *
+                </label>
+                <input
+                  type="text"
+                  value={newMemberPosition}
+                  onChange={(e) => setNewMemberPosition(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-background-dark border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                  placeholder="e.g. Senior Developer"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+                  Email (Optional)
+                </label>
+                <input
+                  type="email"
+                  value={newMemberEmail}
+                  onChange={(e) => setNewMemberEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-background-dark border border-white/10 text-white focus:border-neon-green focus:ring-0 focus:outline-none transition-all placeholder-gray-600"
+                  placeholder="member@company.com"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => setShowInviteModal(false)}
+                  className="flex-1 py-3 px-4 rounded-lg bg-white/5 text-white font-bold hover:bg-white/10 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddMember}
+                  disabled={addingMember || !newMemberName || !newMemberPosition}
+                  className="flex-1 py-3 px-4 rounded-lg bg-neon-green text-background-dark font-bold hover:bg-[#3cd612] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {addingMember ? (
+                    <>
+                      <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+                      Adding...
+                    </>
+                  ) : (
+                    "Add Member"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
