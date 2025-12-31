@@ -304,12 +304,13 @@ src/app/(landing-page)/(page)/salaries/
 - [x] Connect toggle switches ke API
 - [x] Simpan preferensi ke database (need `prisma db push`) → DONE
 
-#### 2.3.2 Billing & Plan Tab (HIDDEN - No backend yet)
+#### 2.3.2 Billing & Plan Tab - ❌ DELETED
 
-- [ ] Integrate dengan payment provider Midtrans
-- [ ] Buat halaman upgrade plan
-- [ ] Invoice history dari database
-- [ ] **Atau:** Hapus tab ini jika tidak akan diimplementasi
+~~- [ ] Integrate dengan payment provider Midtrans~~
+~~- [ ] Buat halaman upgrade plan~~
+~~- [ ] Invoice history dari database~~
+
+- [x] **Atau:** Hapus tab ini jika tidak akan diimplementasi → DELETED
 
 #### 2.3.3 Security Tab
 
@@ -318,11 +319,12 @@ src/app/(landing-page)/(page)/salaries/
 - [ ] Session management
 - [x] **Minimum:** Implement change password
 
-#### 2.3.4 Integrations Tab (HIDDEN - No backend yet)
+#### 2.3.4 Integrations Tab - ❌ DELETED
 
-- [ ] Define what integrations to support
-- [ ] ATS integrations? Slack? Calendar?
-- [x] **Atau:** Hapus tab ini jika tidak akan diimplementasi → HIDDEN for now
+~~- [ ] Define what integrations to support~~
+~~- [ ] ATS integrations? Slack? Calendar?~~
+
+- [x] **Atau:** Hapus tab ini jika tidak akan diimplementasi → DELETED
 
 #### 2.3.5 Invite Member Button
 

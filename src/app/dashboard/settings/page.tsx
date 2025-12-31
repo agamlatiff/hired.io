@@ -688,46 +688,6 @@ export default function SettingsPage() {
                     ))}
                   </div>
                 </div>
-
-                {/* Plan & Billing */}
-                <div className="glass-panel p-6 rounded-2xl h-full flex flex-col">
-                  <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-blue-500">
-                      credit_card
-                    </span>
-                    Plan & Billing
-                  </h3>
-                  <div className="bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl p-5 border border-white/5 mb-6 relative overflow-hidden group">
-                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all" />
-                    <div className="flex justify-between items-start mb-2 relative z-10">
-                      <div>
-                        <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-1">
-                          Current Plan
-                        </p>
-                        <h4 className="text-2xl font-bold text-white capitalize">
-                          {companyData?.plan || "Free"}
-                        </h4>
-                      </div>
-                      <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg shadow-blue-500/20">
-                        ACTIVE
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-300 mb-4 relative z-10">
-                      {companyData?.plan === "pro" ? "$299/month" : "Free plan • Limited features"}
-                    </p>
-                    <div className="flex gap-2 relative z-10">
-                      <button className="flex-1 bg-white text-black text-xs font-bold py-2 rounded hover:bg-gray-100 transition-colors">
-                        Upgrade Plan
-                      </button>
-                      <button className="flex-1 bg-black/30 text-white text-xs font-bold py-2 rounded border border-white/10 hover:bg-black/50 transition-colors">
-                        Manage
-                      </button>
-                    </div>
-                  </div>
-                  <button className="w-full text-center text-xs text-gray-400 hover:text-white mt-auto py-2 border-t border-white/5 transition-colors">
-                    Download Invoices
-                  </button>
-                </div>
               </div>
 
               {/* Danger Zone */}
