@@ -8,6 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import JobActionButtons from "@/components/job/JobActionButtons";
 
 // Default perks (since DB doesn't have per-job perks)
 const DEFAULT_PERKS = [
@@ -202,24 +203,11 @@ export default async function JobDetailPage({ params }: PageProps) {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto mt-2 xl:mt-0">
-                      <div className="flex gap-3">
-                        <button
-                          className="flex-1 sm:flex-none h-12 px-4 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all group/btn"
-                          title="Save Job"
-                        >
-                          <span className="material-symbols-outlined group-hover/btn:scale-110 transition-transform">
-                            bookmark_border
-                          </span>
-                        </button>
-                        <button
-                          className="flex-1 sm:flex-none h-12 px-4 rounded-xl bg-card-dark border border-accent-dark hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all group/btn"
-                          title="Share"
-                        >
-                          <span className="material-symbols-outlined group-hover/btn:scale-110 transition-transform">
-                            share
-                          </span>
-                        </button>
-                      </div>
+                      <JobActionButtons
+                        jobId={job.id}
+                        jobTitle={job.roles}
+                        companyName={company?.name || "Unknown Company"}
+                      />
 
                       {hasApplied ? (
                         <div className="flex-1 sm:flex-none bg-gray-700 text-gray-400 font-extrabold rounded-xl px-10 h-12 cursor-not-allowed text-lg flex items-center justify-center gap-2">
