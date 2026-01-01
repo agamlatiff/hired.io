@@ -121,7 +121,7 @@ function ApplySuccessContent() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/dashboard"
+                href="/dashboard/user"
                 className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-8 py-4 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 flex items-center justify-center gap-2 min-w-[200px]"
               >
                 <span>View Dashboard</span>

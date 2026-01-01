@@ -21,6 +21,21 @@ export async function POST(request: Request) {
 
     const rawData = await request.json();
 
+    // Check if already applied
+    const existingApplication = await prisma.applicant.findFirst({
+      where: {
+        userId: userId,
+        jobId: rawData.jobId,
+      },
+    });
+
+    if (existingApplication) {
+      return NextResponse.json(
+        { error: "You have already applied for this position" },
+        { status: 400 }
+      );
+    }
+
     // Validate input with Zod
     const validation = jobApplySchema.safeParse(rawData);
     if (!validation.success) {

@@ -1,6 +1,7 @@
 import UserSidebar from "@/components/dashboard/UserSidebar";
 import NextAuthProvider from "@/context/NextAuthProvider";
 
+// This layout replaces the parent dashboard layout for user routes
 export default function UserDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <NextAuthProvider>
@@ -16,3 +17,4 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     </NextAuthProvider>
   );
 }
+
