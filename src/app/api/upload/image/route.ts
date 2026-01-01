@@ -42,12 +42,20 @@ export async function POST(request: NextRequest) {
 
     // Upload to appropriate bucket
     const bucket = type === "avatar" ? "avatars" : "company";
+    console.log("Upload attempt:", { bucket, type, fileName: file.name, fileSize: file.size });
+
     const { error: uploadError, filename } = await supabaseUploadFile(file, bucket);
 
     if (uploadError) {
-      console.error("Upload error:", uploadError);
+      console.error("Upload error details:", {
+        message: uploadError.message,
+        name: uploadError.name,
+        bucket,
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "NOT SET",
+        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY ? "SET (length: " + process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY.length + ")" : "NOT SET",
+      });
       return NextResponse.json(
-        { error: "Failed to upload file" },
+        { error: "Failed to upload file", details: uploadError.message },
         { status: 500 }
       );
     }
