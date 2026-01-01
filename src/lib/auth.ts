@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/lib/prisma";
 import { comparePassword } from "@/lib/helpers";
 
@@ -107,18 +108,55 @@ export const authOptions: NextAuthOptions = {
         return null;
       },
     }),
+    // Google OAuth Provider (for job seekers)
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      profile(profile) {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture,
+          role: "user" as UserRole,
+        };
+      },
+    }),
   ],
   pages: {
     signIn: "/auth/signin",
     newUser: "/auth/signup",
   },
   callbacks: {
-    jwt({ token, user }) {
+    async signIn({ user, account }) {
+      // Handle Google OAuth - create user if not exists
+      if (account?.provider === "google" && user.email) {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        if (!existingUser) {
+          // Create new user from Google OAuth
+          await prisma.user.create({
+            data: {
+              email: user.email,
+              name: user.name || "Google User",
+              password: "", // OAuth users don't have password
+            },
+          });
+        }
+      }
+      return true;
+    },
+    jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.role = (user as AuthUser).role;
       }
-
+      // For Google OAuth, set role to user
+      if (account?.provider === "google") {
+        token.role = "user";
+      }
       return token;
     },
     async session({ session, token }) {

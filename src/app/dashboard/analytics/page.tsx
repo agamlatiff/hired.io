@@ -32,9 +32,40 @@ export default function AnalyticsPage() {
 
   const statusColors: Record<string, string> = { new: "bg-blue-500", reviewing: "bg-yellow-500", interview: "bg-purple-500", hired: "bg-green-500", rejected: "bg-red-500" };
 
+  const handleExport = async () => {
+    try {
+      const res = await fetch("/api/company/analytics/export?format=csv");
+      if (!res.ok) throw new Error("Export failed");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `analytics-report-${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      console.error("Export error:", error);
+    }
+  };
+
   return (
     <>
-      <header className="mb-10"><h2 className="text-3xl font-bold text-white mb-1">Analytics & Reporting</h2><p className="text-gray-400 text-sm">Track your hiring performance and metrics.</p></header>
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div>
+          <h2 className="text-3xl font-bold text-white mb-1">Analytics & Reporting</h2>
+          <p className="text-gray-400 text-sm">Track your hiring performance and metrics.</p>
+        </div>
+        <button
+          onClick={handleExport}
+          className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]"
+        >
+          <span className="material-symbols-outlined text-lg">download</span>
+          Export CSV
+        </button>
+      </header>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">

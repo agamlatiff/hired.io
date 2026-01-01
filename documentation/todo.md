@@ -371,25 +371,26 @@ src/app/(landing-page)/(page)/salaries/
 
 ---
 
-## Priority 6: OAuth Providers (Task 2.4) 🟢
+## Priority 6: OAuth Providers (Task 2.4) 🟢 - ✅ DONE
 
-**Status:** Optional, belum dikerjakan
+**Status:** Implemented
 
-- [ ] Setup Google OAuth
+- [x] Setup Google OAuth
 
-**Dependencies:**
+**Env variables required:**
 
-- Google OAuth credentials
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
 
 ---
 
-## Priority 7: Analytics Export (Task 3.3) 🟢
+## Priority 7: Analytics Export (Task 3.3) 🟢 - ✅ DONE
 
-**Status:** Partial - analytics page works, export tidak
+**Status:** Implemented
 
-- [ ] Export reports to PDF/Excel
-- [ ] Buat API `/api/company/analytics/export`
-- [ ] Support format: PDF, Excel, CSV
+- [x] Export reports to CSV
+- [x] Buat API `/api/company/analytics/export`
+- [x] Add Export button to Analytics page
 
 ---
 
