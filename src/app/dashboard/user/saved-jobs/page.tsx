@@ -39,7 +39,29 @@ export default function SavedJobsPage() {
         <Link href="/find-jobs" className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-6 py-2.5 rounded-full transition-all flex items-center gap-2"><span className="material-symbols-outlined text-lg">search</span>Find More</Link>
       </header>
 
-      {loading ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{[1, 2, 3].map((i) => <div key={i} className="h-48 bg-gray-700 rounded-2xl animate-pulse" />)}</div> : savedJobs.length === 0 ? (
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="glass-panel p-6 rounded-2xl animate-pulse">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-gray-700 rounded-xl" />
+                <div className="w-6 h-6 bg-gray-700/50 rounded" />
+              </div>
+              <div className="h-5 bg-gray-700 rounded w-3/4 mb-2" />
+              <div className="h-4 bg-gray-700/50 rounded w-1/2 mb-4" />
+              <div className="flex gap-2 mb-4">
+                <div className="h-6 bg-gray-700/30 rounded w-20" />
+                <div className="h-6 bg-gray-700/30 rounded w-16" />
+              </div>
+              <div className="h-5 bg-gray-700 rounded w-40 mb-4" />
+              <div className="flex gap-2 mt-auto">
+                <div className="flex-1 h-10 bg-gray-700/50 rounded-xl" />
+                <div className="flex-1 h-10 bg-gray-700 rounded-xl" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : savedJobs.length === 0 ? (
         <div className="glass-panel p-12 rounded-2xl text-center">
           <span className="material-symbols-outlined text-5xl text-gray-600 mb-4">bookmark_border</span>
           <h3 className="text-xl font-bold text-white mb-2">No saved jobs</h3>

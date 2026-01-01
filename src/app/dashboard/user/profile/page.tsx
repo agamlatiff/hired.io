@@ -41,7 +41,52 @@ export default function UserProfilePage() {
   const removeSkill = (skill: string) => setSkills(skills.filter((s) => s !== skill));
 
   if (!session) return <div className="flex items-center justify-center h-[60vh]"><p className="text-gray-400">Please sign in.</p></div>;
-  if (loading) return <div className="animate-pulse space-y-6"><div className="h-8 bg-gray-700 rounded w-1/4" /><div className="h-64 bg-gray-700 rounded-2xl" /></div>;
+  if (loading) return (
+    <div className="animate-pulse">
+      {/* Header skeleton */}
+      <div className="flex items-center justify-between mb-10">
+        <div>
+          <div className="h-8 bg-gray-700 rounded w-40 mb-2" />
+          <div className="h-4 bg-gray-700/50 rounded w-64" />
+        </div>
+        <div className="h-10 bg-gray-700 rounded-full w-36" />
+      </div>
+      {/* Content skeleton */}
+      <div className="grid grid-cols-12 gap-8">
+        <div className="col-span-12 lg:col-span-8 space-y-6">
+          {/* Basic Info Card */}
+          <div className="glass-panel p-8 rounded-2xl">
+            <div className="h-5 bg-gray-700 rounded w-40 mb-6" />
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="w-24 h-24 bg-gray-700 rounded-full shrink-0" />
+              <div className="flex-1 space-y-4">
+                <div><div className="h-3 bg-gray-700/50 rounded w-20 mb-2" /><div className="h-12 bg-gray-700 rounded-xl" /></div>
+                <div><div className="h-3 bg-gray-700/50 rounded w-16 mb-2" /><div className="h-12 bg-gray-700 rounded-xl" /></div>
+                <div><div className="h-3 bg-gray-700/50 rounded w-16 mb-2" /><div className="h-12 bg-gray-700 rounded-xl" /></div>
+              </div>
+            </div>
+          </div>
+          {/* Skills Card */}
+          <div className="glass-panel p-8 rounded-2xl">
+            <div className="h-5 bg-gray-700 rounded w-20 mb-6" />
+            <div className="flex gap-2 mb-4">
+              {[1, 2, 3, 4].map((i) => <div key={i} className="h-8 bg-gray-700 rounded-full w-20" />)}
+            </div>
+            <div className="h-12 bg-gray-700 rounded-xl" />
+          </div>
+        </div>
+        {/* Sidebar */}
+        <div className="col-span-12 lg:col-span-4">
+          <div className="glass-panel p-6 rounded-2xl">
+            <div className="h-5 bg-gray-700 rounded w-28 mb-4" />
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => <div key={i} className="h-4 bg-gray-700/50 rounded w-full" />)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>

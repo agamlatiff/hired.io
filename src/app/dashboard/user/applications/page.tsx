@@ -46,7 +46,26 @@ export default function ApplicationsPage() {
         ))}
       </div>
 
-      {loading ? <div className="animate-pulse space-y-4">{[1, 2, 3].map((i) => <div key={i} className="h-24 bg-gray-700 rounded-xl" />)}</div> : filteredApplications.length === 0 ? (
+      {loading ? (
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gray-700 rounded-xl" />
+                <div>
+                  <div className="h-5 bg-gray-700 rounded w-44 mb-2" />
+                  <div className="h-4 bg-gray-700/50 rounded w-32 mb-1" />
+                  <div className="h-3 bg-gray-700/30 rounded w-24" />
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="h-7 bg-gray-700 rounded-full w-24" />
+                <div className="w-6 h-6 bg-gray-700/50 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredApplications.length === 0 ? (
         <div className="glass-panel p-12 rounded-2xl text-center">
           <span className="material-symbols-outlined text-5xl text-gray-600 mb-4">inbox</span>
           <h3 className="text-xl font-bold text-white mb-2">No applications found</h3>

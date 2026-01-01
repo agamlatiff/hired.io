@@ -62,7 +62,19 @@ export default function UserMessagesPage() {
       <div className="w-80 glass-panel rounded-2xl flex flex-col">
         <div className="p-4 border-b border-white/10"><h3 className="font-bold text-white">Messages</h3></div>
         <div className="flex-1 overflow-y-auto">
-          {loading ? <div className="p-4 space-y-3">{[1, 2, 3].map((i) => <div key={i} className="h-16 bg-gray-700 rounded-xl animate-pulse" />)}</div> : conversations.length === 0 ? (
+          {loading ? (
+            <div className="p-4 space-y-3 animate-pulse">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-3 p-2">
+                  <div className="w-10 h-10 bg-gray-700 rounded-xl shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="h-4 bg-gray-700 rounded w-28 mb-2" />
+                    <div className="h-3 bg-gray-700/50 rounded w-40" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : conversations.length === 0 ? (
             <div className="p-8 text-center"><span className="material-symbols-outlined text-4xl text-gray-600 mb-2">chat_bubble</span><p className="text-sm text-gray-400">No messages from companies yet</p></div>
           ) : (
             conversations.map((conv) => (

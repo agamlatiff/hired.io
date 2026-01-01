@@ -32,7 +32,62 @@ export default function UserDashboardPage() {
   };
 
   if (!session) return <div className="flex items-center justify-center h-[60vh]"><p className="text-gray-400">Please sign in.</p></div>;
-  if (loading) return <div className="animate-pulse space-y-6"><div className="h-8 bg-gray-700 rounded w-1/3" /><div className="grid grid-cols-3 gap-6">{[1, 2, 3].map((i) => <div key={i} className="h-32 bg-gray-700 rounded-2xl" />)}</div></div>;
+  if (loading) return (
+    <div className="animate-pulse">
+      {/* Header */}
+      <div className="mb-10">
+        <div className="h-8 bg-gray-700 rounded w-80 mb-2" />
+        <div className="h-4 bg-gray-700/50 rounded w-72" />
+      </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="glass-panel p-6 rounded-2xl">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gray-700 rounded-xl" />
+              <div className="flex-1">
+                <div className="h-8 bg-gray-700 rounded w-12 mb-2" />
+                <div className="h-4 bg-gray-700/50 rounded w-24" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Recent Applications Card */}
+      <div className="glass-panel p-6 rounded-2xl mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="h-5 bg-gray-700 rounded w-40" />
+          <div className="h-4 bg-gray-700/50 rounded w-20" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center justify-between p-4 bg-card-dark rounded-xl border border-white/5">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gray-700 rounded-lg" />
+                <div>
+                  <div className="h-4 bg-gray-700 rounded w-40 mb-2" />
+                  <div className="h-3 bg-gray-700/50 rounded w-28" />
+                </div>
+              </div>
+              <div className="h-6 bg-gray-700 rounded-full w-20" />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Action Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[1, 2].map((i) => (
+          <div key={i} className="glass-panel p-6 rounded-2xl flex items-center gap-4">
+            <div className="w-12 h-12 bg-gray-700 rounded-xl" />
+            <div className="flex-1">
+              <div className="h-5 bg-gray-700 rounded w-32 mb-2" />
+              <div className="h-4 bg-gray-700/50 rounded w-40" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <>

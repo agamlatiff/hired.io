@@ -81,7 +81,26 @@ export default function JobAlertsPage() {
         </div>
       )}
 
-      {loading ? <div className="space-y-4">{[1, 2].map((i) => <div key={i} className="h-20 bg-gray-700 rounded-xl animate-pulse" />)}</div> : alerts.length === 0 ? (
+      {loading ? (
+        <div className="space-y-4 animate-pulse">
+          {[1, 2].map((i) => (
+            <div key={i} className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <div className="h-7 bg-gray-700 rounded-full w-24" />
+                  <div className="h-7 bg-gray-700/50 rounded-full w-20" />
+                  <div className="h-7 bg-gray-700/30 rounded-full w-16" />
+                </div>
+                <div className="h-4 bg-gray-700/30 rounded w-48" />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-9 bg-gray-700 rounded-full w-20" />
+                <div className="w-10 h-10 bg-gray-700/50 rounded-lg" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : alerts.length === 0 ? (
         <div className="glass-panel p-12 rounded-2xl text-center">
           <span className="material-symbols-outlined text-5xl text-gray-600 mb-4">notifications_off</span>
           <h3 className="text-xl font-bold text-white mb-2">No job alerts</h3>

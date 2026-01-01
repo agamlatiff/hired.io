@@ -28,7 +28,58 @@ export default function AnalyticsPage() {
   }, [session]);
 
   if (!session) return <div className="flex items-center justify-center h-[60vh]"><p className="text-gray-400">Please sign in.</p></div>;
-  if (loading) return <div className="animate-pulse space-y-6"><div className="h-8 bg-gray-700 rounded w-1/4" /><div className="grid grid-cols-4 gap-6">{[1, 2, 3, 4].map((i) => <div key={i} className="h-32 bg-gray-700 rounded-2xl" />)}</div></div>;
+  if (loading) return (
+    <div className="animate-pulse">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div>
+          <div className="h-8 bg-gray-700 rounded w-52 mb-2" />
+          <div className="h-4 bg-gray-700/50 rounded w-72" />
+        </div>
+        <div className="h-10 bg-gray-700 rounded-full w-32" />
+      </div>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="glass-panel p-6 rounded-2xl">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gray-700 rounded-xl" />
+              <div>
+                <div className="h-7 bg-gray-700 rounded w-16 mb-2" />
+                <div className="h-4 bg-gray-700/50 rounded w-20" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-12 gap-6 mb-10">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="col-span-12 md:col-span-4 glass-panel p-6 rounded-2xl">
+            <div className="h-5 bg-gray-700 rounded w-32 mb-6" />
+            <div className="space-y-4">
+              {[1, 2, 3].map((j) => (
+                <div key={j}>
+                  <div className="flex justify-between mb-1">
+                    <div className="h-4 bg-gray-700/50 rounded w-20" />
+                    <div className="h-4 bg-gray-700 rounded w-16" />
+                  </div>
+                  <div className="h-2 bg-gray-700/30 rounded-full" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Table */}
+      <div className="glass-panel p-6 rounded-2xl">
+        <div className="h-5 bg-gray-700 rounded w-40 mb-6" />
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => <div key={i} className="h-12 bg-gray-700/30 rounded-lg" />)}
+        </div>
+      </div>
+    </div>
+  );
   if (!analytics) return <div className="text-center py-12"><p className="text-gray-400">Failed to load analytics.</p></div>;
 
   const statusColors: Record<string, string> = { new: "bg-blue-500", reviewing: "bg-yellow-500", interview: "bg-purple-500", hired: "bg-green-500", rejected: "bg-red-500" };
