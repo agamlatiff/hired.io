@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface JobActionButtonsProps {
   jobId: string;
@@ -19,6 +19,10 @@ export default function JobActionButtons({
   const { toast } = useToast();
   const [isBookmarked, setIsBookmarked] = useState(initialIsSaved);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setIsBookmarked(initialIsSaved);
+  }, [initialIsSaved]);
 
   const handleShare = async () => {
     const url = `${window.location.origin}/detail/job/${jobId}`;
@@ -104,8 +108,8 @@ export default function JobActionButtons({
         onClick={handleBookmark}
         disabled={loading}
         className={`flex-1 sm:flex-none h-12 px-4 rounded-xl bg-card-dark border transition-all group/btn flex items-center justify-center ${isBookmarked
-            ? "border-neon-green text-neon-green hover:bg-neon-green/10"
-            : "border-accent-dark text-gray-400 hover:border-white/20 hover:text-white"
+          ? "border-neon-green text-neon-green hover:bg-neon-green/10"
+          : "border-accent-dark text-gray-400 hover:border-white/20 hover:text-white"
           }`}
         title={isBookmarked ? "Unsave Job" : "Save Job"}
       >
