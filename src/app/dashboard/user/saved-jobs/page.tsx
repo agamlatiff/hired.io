@@ -12,6 +12,7 @@ export default function SavedJobsPage() {
   const { data: session } = useSession();
   const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
   const [loading, setLoading] = useState(true);
+  const [removingJobId, setRemovingJobId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSavedJobs() {
@@ -23,8 +24,10 @@ export default function SavedJobsPage() {
   }, [session]);
 
   const unsaveJob = async (jobId: string) => {
+    setRemovingJobId(jobId);
     try { const res = await fetch("/api/user/saved-jobs", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jobId }) }); if (res.ok) { setSavedJobs(savedJobs.filter((sj) => sj.job.id !== jobId)); toast({ title: "Removed" }); } }
     catch (error) { toast({ title: "Error", variant: "destructive" }); }
+    finally { setRemovingJobId(null); }
   };
 
   if (!session) return <div className="flex items-center justify-center h-[60vh]"><p className="text-gray-400">Please sign in.</p></div>;
@@ -49,7 +52,7 @@ export default function SavedJobsPage() {
             <div key={saved.id} className="glass-panel p-6 rounded-2xl flex flex-col group hover:border-neon-green/50 transition-all">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden">{saved.job.Company?.logo ? <img src={saved.job.Company.logo} alt="" className="w-full h-full object-contain" /> : <span className="text-gray-800 font-bold text-lg">{saved.job.Company?.name?.charAt(0) || "?"}</span>}</div>
-                <button onClick={() => unsaveJob(saved.job.id)} className="text-red-400 hover:text-red-300 transition-colors" title="Remove"><span className="material-symbols-outlined">bookmark_remove</span></button>
+                <button onClick={() => unsaveJob(saved.job.id)} disabled={removingJobId === saved.job.id} className="text-red-400 hover:text-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" title="Remove">{removingJobId === saved.job.id ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : <span className="material-symbols-outlined">bookmark_remove</span>}</button>
               </div>
               <h3 className="font-bold text-white text-lg mb-1 group-hover:text-neon-green transition-colors">{saved.job.roles}</h3>
               <p className="text-sm text-gray-400 mb-2">{saved.job.Company?.name || "Unknown"}</p>
@@ -66,3 +69,4 @@ export default function SavedJobsPage() {
     </>
   );
 }
+

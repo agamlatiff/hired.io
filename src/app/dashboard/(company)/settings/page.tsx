@@ -102,6 +102,7 @@ export default function SettingsPage() {
   const [newMemberPosition, setNewMemberPosition] = useState("");
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [addingMember, setAddingMember] = useState(false);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
 
   // Fetch company data
   const fetchCompanyData = useCallback(async () => {
@@ -300,6 +301,7 @@ export default function SettingsPage() {
   };
 
   const handleRemoveMember = async (memberId: string) => {
+    setRemovingMemberId(memberId);
     try {
       const res = await fetch(`/api/company/team-members?id=${memberId}`, {
         method: "DELETE",
@@ -318,6 +320,8 @@ export default function SettingsPage() {
         description: "Failed to remove team member",
         variant: "destructive",
       });
+    } finally {
+      setRemovingMemberId(null);
     }
   };
 
@@ -623,12 +627,15 @@ export default function SettingsPage() {
                             <td className="p-4 text-right">
                               <button
                                 onClick={() => handleRemoveMember(member.id)}
-                                className="text-gray-500 hover:text-red-400 transition-colors"
+                                disabled={removingMemberId === member.id}
+                                className="text-gray-500 hover:text-red-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 title="Remove member"
                               >
-                                <span className="material-symbols-outlined text-lg">
-                                  delete
-                                </span>
+                                {removingMemberId === member.id ? (
+                                  <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+                                ) : (
+                                  <span className="material-symbols-outlined text-lg">delete</span>
+                                )}
                               </button>
                             </td>
                           </tr>

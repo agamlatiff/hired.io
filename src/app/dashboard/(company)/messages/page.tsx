@@ -105,7 +105,7 @@ export default function MessagesPage() {
             <div className="p-4 border-t border-white/10">
               <div className="flex gap-3">
                 <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage()} placeholder="Type a message..." className="flex-1 px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white focus:border-neon-green focus:outline-none" />
-                <button onClick={sendMessage} disabled={sending || !newMessage.trim()} className="px-6 py-3 bg-neon-green text-background-dark font-bold rounded-xl hover:bg-[#3cd612] disabled:opacity-50 transition-colors"><span className="material-symbols-outlined">send</span></button>
+                <button onClick={sendMessage} disabled={sending || !newMessage.trim()} className="px-6 py-3 bg-neon-green text-background-dark font-bold rounded-xl hover:bg-[#3cd612] disabled:opacity-50 transition-colors flex items-center justify-center min-w-[56px]">{sending ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : <span className="material-symbols-outlined">send</span>}</button>
               </div>
             </div>
           </>

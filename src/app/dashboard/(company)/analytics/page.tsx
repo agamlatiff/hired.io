@@ -16,6 +16,7 @@ export default function AnalyticsPage() {
   const { data: session } = useSession();
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     async function fetchAnalytics() {
@@ -33,6 +34,7 @@ export default function AnalyticsPage() {
   const statusColors: Record<string, string> = { new: "bg-blue-500", reviewing: "bg-yellow-500", interview: "bg-purple-500", hired: "bg-green-500", rejected: "bg-red-500" };
 
   const handleExport = async () => {
+    setExporting(true);
     try {
       const res = await fetch("/api/company/analytics/export?format=csv");
       if (!res.ok) throw new Error("Export failed");
@@ -48,6 +50,8 @@ export default function AnalyticsPage() {
       a.remove();
     } catch (error) {
       console.error("Export error:", error);
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -60,10 +64,20 @@ export default function AnalyticsPage() {
         </div>
         <button
           onClick={handleExport}
-          className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)]"
+          disabled={exporting}
+          className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(73,230,25,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="material-symbols-outlined text-lg">download</span>
-          Export CSV
+          {exporting ? (
+            <>
+              <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+              Exporting...
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-lg">download</span>
+              Export CSV
+            </>
+          )}
         </button>
       </header>
 

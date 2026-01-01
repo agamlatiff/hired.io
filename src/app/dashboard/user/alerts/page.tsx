@@ -7,6 +7,13 @@ import { toast } from "@/hooks/use-toast";
 
 interface JobAlert { id: string; keyword: string | null; location: string | null; jobType: string | null; minSalary: number | null; frequency: string; isActive: boolean; createdAt: string }
 
+const Spinner = () => (
+  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+);
+
 export default function JobAlertsPage() {
   const { data: session } = useSession();
   const [alerts, setAlerts] = useState<JobAlert[]>([]);
@@ -16,6 +23,9 @@ export default function JobAlertsPage() {
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("");
   const [frequency, setFrequency] = useState("daily");
+  const [creatingAlert, setCreatingAlert] = useState(false);
+  const [togglingAlertId, setTogglingAlertId] = useState<string | null>(null);
+  const [deletingAlertId, setDeletingAlertId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAlerts() {
@@ -27,20 +37,26 @@ export default function JobAlertsPage() {
   }, [session]);
 
   const createAlert = async () => {
+    setCreatingAlert(true);
     try {
       const res = await fetch("/api/user/alerts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ keyword: keyword || null, location: location || null, jobType: jobType || null, frequency }) });
       if (res.ok) { const newAlert = await res.json(); setAlerts([newAlert, ...alerts]); setShowForm(false); setKeyword(""); setLocation(""); setJobType(""); setFrequency("daily"); toast({ title: "Alert Created" }); }
     } catch (error) { toast({ title: "Error", variant: "destructive" }); }
+    finally { setCreatingAlert(false); }
   };
 
   const toggleAlert = async (alertId: string, isActive: boolean) => {
+    setTogglingAlertId(alertId);
     try { const res = await fetch("/api/user/alerts", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ alertId, isActive: !isActive }) }); if (res.ok) setAlerts(alerts.map((a) => (a.id === alertId ? { ...a, isActive: !isActive } : a))); }
     catch (error) { toast({ title: "Error", variant: "destructive" }); }
+    finally { setTogglingAlertId(null); }
   };
 
   const deleteAlert = async (alertId: string) => {
+    setDeletingAlertId(alertId);
     try { const res = await fetch("/api/user/alerts", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ alertId }) }); if (res.ok) { setAlerts(alerts.filter((a) => a.id !== alertId)); toast({ title: "Alert Deleted" }); } }
     catch (error) { toast({ title: "Error", variant: "destructive" }); }
+    finally { setDeletingAlertId(null); }
   };
 
   if (!session) return <div className="flex items-center justify-center h-[60vh]"><p className="text-gray-400">Please sign in.</p></div>;
@@ -61,7 +77,7 @@ export default function JobAlertsPage() {
             <div><label className="block text-xs font-medium text-gray-400 mb-1.5">Job Type</label><select value={jobType} onChange={(e) => setJobType(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white focus:border-neon-green focus:outline-none"><option value="">Any</option><option value="Remote">Remote</option><option value="On-site">On-site</option><option value="Hybrid">Hybrid</option></select></div>
             <div><label className="block text-xs font-medium text-gray-400 mb-1.5">Frequency</label><select value={frequency} onChange={(e) => setFrequency(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-card-dark border border-white/10 text-white focus:border-neon-green focus:outline-none"><option value="instant">Instant</option><option value="daily">Daily</option><option value="weekly">Weekly</option></select></div>
           </div>
-          <div className="flex gap-3"><button onClick={createAlert} className="px-6 py-2.5 bg-neon-green text-background-dark font-bold rounded-full">Create Alert</button><button onClick={() => setShowForm(false)} className="px-6 py-2.5 bg-white/10 text-white rounded-full hover:bg-white/20">Cancel</button></div>
+          <div className="flex gap-3"><button onClick={createAlert} disabled={creatingAlert} className="px-6 py-2.5 bg-neon-green text-background-dark font-bold rounded-full flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">{creatingAlert ? <><Spinner />Creating...</> : 'Create Alert'}</button><button onClick={() => setShowForm(false)} disabled={creatingAlert} className="px-6 py-2.5 bg-white/10 text-white rounded-full hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button></div>
         </div>
       )}
 
@@ -85,8 +101,8 @@ export default function JobAlertsPage() {
                 <p className="text-xs text-gray-500">{alert.frequency.charAt(0).toUpperCase() + alert.frequency.slice(1)} • Created {new Date(alert.createdAt).toLocaleDateString()}</p>
               </div>
               <div className="flex items-center gap-3">
-                <button onClick={() => toggleAlert(alert.id, alert.isActive)} className={`px-4 py-2 rounded-full text-sm font-medium ${alert.isActive ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"}`}>{alert.isActive ? "Active" : "Paused"}</button>
-                <button onClick={() => deleteAlert(alert.id)} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"><span className="material-symbols-outlined">delete</span></button>
+                <button onClick={() => toggleAlert(alert.id, alert.isActive)} disabled={togglingAlertId === alert.id} className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 min-w-[90px] justify-center disabled:cursor-not-allowed ${alert.isActive ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"}`}>{togglingAlertId === alert.id ? <Spinner /> : (alert.isActive ? "Active" : "Paused")}</button>
+                <button onClick={() => deleteAlert(alert.id)} disabled={deletingAlertId === alert.id} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">{deletingAlertId === alert.id ? <Spinner /> : <span className="material-symbols-outlined">delete</span>}</button>
               </div>
             </div>
           ))}

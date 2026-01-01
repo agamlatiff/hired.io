@@ -47,7 +47,7 @@ export default function UserProfilePage() {
     <>
       <header className="flex items-center justify-between mb-10">
         <div><h2 className="text-3xl font-bold text-white mb-1">My Profile</h2><p className="text-gray-400 text-sm">Update your profile to attract employers.</p></div>
-        <button onClick={handleSave} disabled={saving} className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-6 py-2.5 rounded-full transition-all disabled:opacity-50">{saving ? "Saving..." : "Save Changes"}</button>
+        <button onClick={handleSave} disabled={saving} className="bg-neon-green hover:bg-[#3cd612] text-background-dark font-bold text-sm px-6 py-2.5 rounded-full transition-all disabled:opacity-50 flex items-center gap-2">{saving ? <><span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>Saving...</> : "Save Changes"}</button>
       </header>
 
       <div className="grid grid-cols-12 gap-8">

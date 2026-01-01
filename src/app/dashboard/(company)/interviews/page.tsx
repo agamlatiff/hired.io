@@ -12,6 +12,7 @@ export default function InterviewsPage() {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("upcoming");
+  const [updatingInterviewId, setUpdatingInterviewId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchInterviews() {
@@ -26,8 +27,10 @@ export default function InterviewsPage() {
   const getTypeIcon = (type: string) => ({ video: "videocam", phone: "call", onsite: "location_on" }[type] || "event");
 
   const updateStatus = async (interviewId: string, status: string) => {
+    setUpdatingInterviewId(interviewId);
     try { const res = await fetch("/api/company/interviews", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ interviewId, status }) }); if (res.ok) { setInterviews(interviews.map((i) => (i.id === interviewId ? { ...i, status } : i))); toast({ title: "Updated", description: `Interview marked as ${status}` }); } }
     catch (error) { toast({ title: "Error", description: "Failed to update", variant: "destructive" }); }
+    finally { setUpdatingInterviewId(null); }
   };
 
   const now = new Date();
@@ -67,7 +70,12 @@ export default function InterviewsPage() {
                   <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(interview.status)}`}>{interview.status}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {interview.status === "scheduled" && (<><button onClick={() => updateStatus(interview.id, "completed")} className="px-3 py-1.5 bg-green-500/20 text-green-400 rounded-lg text-xs font-bold hover:bg-green-500/30">Complete</button><button onClick={() => updateStatus(interview.id, "cancelled")} className="px-3 py-1.5 bg-red-500/20 text-red-400 rounded-lg text-xs font-bold hover:bg-red-500/30">Cancel</button></>)}
+                  {interview.status === "scheduled" && (
+                    <>
+                      <button onClick={() => updateStatus(interview.id, "completed")} disabled={updatingInterviewId === interview.id} className="px-3 py-1.5 bg-green-500/20 text-green-400 rounded-lg text-xs font-bold hover:bg-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 min-w-[80px] justify-center">{updatingInterviewId === interview.id ? <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span> : "Complete"}</button>
+                      <button onClick={() => updateStatus(interview.id, "cancelled")} disabled={updatingInterviewId === interview.id} className="px-3 py-1.5 bg-red-500/20 text-red-400 rounded-lg text-xs font-bold hover:bg-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 min-w-[80px] justify-center">{updatingInterviewId === interview.id ? <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span> : "Cancel"}</button>
+                    </>
+                  )}
                   {interview.location && <a href={interview.location} target="_blank" className="px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg text-xs font-bold hover:bg-blue-500/30">Join</a>}
                 </div>
               </div>
@@ -79,3 +87,4 @@ export default function InterviewsPage() {
     </>
   );
 }
+
