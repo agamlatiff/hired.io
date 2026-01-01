@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/find-jobs", label: "Find Jobs" },
   { href: "/find-companies", label: "Companies" },
   { href: "/salaries", label: "Salaries" },
-  { href: "/dashboard", label: "For Employers" },
+  { href: "/dashboard/user/saved-jobs", label: "Saved Jobs" },
 ];
 
 const Navbar = () => {
@@ -124,8 +124,8 @@ const Navbar = () => {
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(link.href)
-                    ? "bg-neon-green/10 text-neon-green font-semibold"
-                    : "text-gray-300 hover:bg-white/5 hover:text-white"
+                  ? "bg-neon-green/10 text-neon-green font-semibold"
+                  : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`}
               >
                 {link.label}
