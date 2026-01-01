@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import NextTopLoader from "nextjs-toploader";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -23,6 +24,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${manrope.className} font-display`}>
+        <NextTopLoader
+          color="#39ff14"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #39ff14,0 0 5px #39ff14"
+        />
         {children}
         <Toaster />
       </body>
