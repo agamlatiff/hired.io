@@ -88,6 +88,7 @@ export default async function JobDetailPage({ params }: PageProps) {
   // Check if current user has applied
   const session = await getServerSession(authOptions);
   let hasApplied = false;
+  let isSaved = false;
 
   if (session?.user?.id && session?.user?.role === "user") {
     const application = await prisma.applicant.findFirst({
@@ -98,6 +99,17 @@ export default async function JobDetailPage({ params }: PageProps) {
       select: { id: true },
     });
     hasApplied = !!application;
+
+    const saved = await prisma.savedJob.findUnique({
+      where: {
+        userId_jobId: {
+          userId: session.user.id,
+          jobId: job.id,
+        },
+      },
+      select: { id: true },
+    });
+    isSaved = !!saved;
   }
 
   const company = job.Company;
