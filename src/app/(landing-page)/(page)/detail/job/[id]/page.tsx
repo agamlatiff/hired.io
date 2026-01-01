@@ -10,6 +10,8 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import JobActionButtons from "@/components/job/JobActionButtons";
 
+export const dynamic = "force-dynamic";
+
 // Default perks (since DB doesn't have per-job perks)
 const DEFAULT_PERKS = [
   { icon: "monitor_heart", label: "Comprehensive Health" },
@@ -219,6 +221,7 @@ export default async function JobDetailPage({ params }: PageProps) {
                         jobId={job.id}
                         jobTitle={job.roles}
                         companyName={company?.name || "Unknown Company"}
+                        initialIsSaved={isSaved}
                       />
 
                       {hasApplied ? (
