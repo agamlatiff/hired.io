@@ -5,6 +5,9 @@ import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 import { getJobById, getSimilarJobs } from "@/data/jobs";
 import { formatDistanceToNow } from "date-fns";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 
 // Default perks (since DB doesn't have per-job perks)
 const DEFAULT_PERKS = [
@@ -79,6 +82,21 @@ export default async function JobDetailPage({ params }: PageProps) {
 
   if (!job) {
     notFound();
+  }
+
+  // Check if current user has applied
+  const session = await getServerSession(authOptions);
+  let hasApplied = false;
+
+  if (session?.user?.id && session?.user?.role === "user") {
+    const application = await prisma.applicant.findFirst({
+      where: {
+        jobId: job.id,
+        userId: session.user.id,
+      },
+      select: { id: true },
+    });
+    hasApplied = !!application;
   }
 
   const company = job.Company;
@@ -202,15 +220,25 @@ export default async function JobDetailPage({ params }: PageProps) {
                           </span>
                         </button>
                       </div>
-                      <Link
-                        href={`/detail/job/${params.id}/apply`}
-                        className="flex-1 sm:flex-none bg-neon-green hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-10 h-12 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 whitespace-nowrap text-lg flex items-center justify-center gap-2"
-                      >
-                        <span>Apply Now</span>
-                        <span className="material-symbols-outlined text-xl">
-                          arrow_outward
-                        </span>
-                      </Link>
+
+                      {hasApplied ? (
+                        <div className="flex-1 sm:flex-none bg-gray-700 text-gray-400 font-extrabold rounded-xl px-10 h-12 cursor-not-allowed text-lg flex items-center justify-center gap-2">
+                          <span>Applied</span>
+                          <span className="material-symbols-outlined text-xl">
+                            check_circle
+                          </span>
+                        </div>
+                      ) : (
+                        <Link
+                          href={`/detail/job/${params.id}/apply`}
+                          className="flex-1 sm:flex-none bg-neon-green hover:bg-[#3cd612] text-background-dark font-extrabold rounded-xl px-10 h-12 transition-all shadow-[0_0_20px_rgba(73,230,25,0.3)] hover:shadow-[0_0_30px_rgba(73,230,25,0.5)] active:scale-95 whitespace-nowrap text-lg flex items-center justify-center gap-2"
+                        >
+                          <span>Apply Now</span>
+                          <span className="material-symbols-outlined text-xl">
+                            arrow_outward
+                          </span>
+                        </Link>
+                      )}
                     </div>
                   </div>
 

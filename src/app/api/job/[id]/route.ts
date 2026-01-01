@@ -24,7 +24,21 @@ export async function GET(
       return NextResponse.json({ error: "Job not found" }, { status: 404 });
     }
 
-    return NextResponse.json(job);
+    // Check if current user has applied
+    const session = await getServerSession(authOptions);
+    let hasApplied = false;
+
+    if (session?.user?.id && session?.user?.role === "user") {
+      const application = await prisma.applicant.findFirst({
+        where: {
+          jobId: job.id,
+          userId: session.user.id,
+        },
+      });
+      hasApplied = !!application;
+    }
+
+    return NextResponse.json({ ...job, hasApplied });
   } catch (error) {
     console.error("[JOB_GET_ERROR]", error);
     return NextResponse.json(
