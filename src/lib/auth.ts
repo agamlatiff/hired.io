@@ -109,27 +109,35 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               name: user.name || "Google User",
               password: "", // OAuth users don't have password
+              // Ensure role is default (User model doesn't have role field usually, logic handles it)
             },
           });
         }
       }
       return true;
     },
-    jwt({ token, user, account }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.id = user.id;
-        token.role = (user as AuthUser).role;
-      }
-      // For Google OAuth, set role to user
-      if (account?.provider === "google") {
-        token.role = "user";
+        if (account?.provider === "credentials") {
+          token.id = user.id;
+          token.role = (user as AuthUser).role;
+        } else if (account?.provider === "google") {
+          // For Google, verify against DB to get the Real CUID
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          });
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.role = "user";
+          }
+        }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
+        session.user.id = token.id as string;
+        session.user.role = token.role as UserRole;
       }
 
       return session;
