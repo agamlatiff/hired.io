@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 // GET - Fetch messages in a conversation
 export async function GET(request: Request, { params }: { params: Promise<{ conversationId: string }> }) {
   try {
