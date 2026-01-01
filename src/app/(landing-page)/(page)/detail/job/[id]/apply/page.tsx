@@ -181,15 +181,13 @@ export default function ApplyJobPage() {
 
       // Submit application
       const applicationData = {
-        userId,
         jobId: params.id,
         previousJobTitle: previousJobTitle || "Not specified",
         phone: phone || "Not provided",
-        linkedin: linkedin ? `https://linkedin.com/in/${linkedin}` : "",
+        linkedIn: linkedin ? `https://linkedin.com/in/${linkedin}` : "",
         portfolio: portfolio || "",
         coverLetter: coverLetter || "",
-        resume: resumeUrl,
-        source: "direct",
+        resumeUrl: resumeUrl,
       };
 
       const res = await fetch("/api/jobs/apply", {
