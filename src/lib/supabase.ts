@@ -1,10 +1,33 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-// Create a single supabase client for interacting with your database
-export const supabaseClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!!,
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY!!
-);
+// Lazy initialization to avoid build-time errors when env vars are not available
+let supabaseInstance: SupabaseClient | null = null;
+
+function getSupabaseClient(): SupabaseClient {
+  if (!supabaseInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Supabase URL and Key must be defined in environment variables");
+    }
+
+    supabaseInstance = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabaseInstance;
+}
+
+// For backward compatibility - creates client on first access
+export const supabaseClient = new Proxy({} as SupabaseClient, {
+  get: (_, prop) => {
+    const client = getSupabaseClient();
+    const value = client[prop as keyof SupabaseClient];
+    if (typeof value === 'function') {
+      return value.bind(client);
+    }
+    return value;
+  }
+});
 
 function randomString(length: number) {
   const chars =

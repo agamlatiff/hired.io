@@ -1,9 +1,24 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY!;
+// Lazy initialization to avoid build-time errors when env vars are not available
+let supabaseInstance: SupabaseClient | null = null;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+function getSupabase(): SupabaseClient {
+  if (!supabaseInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Supabase URL and Key must be defined in environment variables");
+    }
+
+    supabaseInstance = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabaseInstance;
+}
+
+// Export a getter function instead of the instance directly
+export { getSupabase };
 
 export async function uploadFile(
   file: File,
@@ -14,7 +29,7 @@ export async function uploadFile(
     const fileExt = file.name.split(".").pop();
     const fileName = `${path}/${Date.now()}.${fileExt}`;
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await getSupabase().storage
       .from(bucket)
       .upload(fileName, file, {
         cacheControl: "3600",
@@ -27,7 +42,7 @@ export async function uploadFile(
     }
 
     // Get public URL
-    const { data: publicUrl } = supabase.storage
+    const { data: publicUrl } = getSupabase().storage
       .from(bucket)
       .getPublicUrl(data.path);
 
@@ -52,7 +67,7 @@ export async function uploadAvatar(file: File, userId: string): Promise<string |
 
 export async function deleteFile(bucket: string, path: string): Promise<boolean> {
   try {
-    const { error } = await supabase.storage.from(bucket).remove([path]);
+    const { error } = await getSupabase().storage.from(bucket).remove([path]);
     return !error;
   } catch (err) {
     console.error("Delete failed:", err);
