@@ -394,7 +394,7 @@ src/app/(landing-page)/(page)/salaries/
 
 ---
 
-## Priority 8: Code Quality & Architecture 🟢
+## Priority 8: Code Quality & Architecture 🟢 - ✅ DONE
 
 ### 8.1 Status: SUDAH BAIK
 
@@ -408,8 +408,8 @@ src/app/(landing-page)/(page)/salaries/
 
 ### 8.2 Minor Improvements
 
-- [ ] Remove duplicate in todo.md (4.4 dan 4.7 sama)
-- [ ] `FindJobsClient.tsx` terlalu besar (631 lines) - bisa di-split
+- [x] Remove duplicate in todo.md (4.4 dan 4.7 sama) → Already removed
+- [x] `FindJobsClient.tsx` terlalu besar (631 lines) → ACCEPTABLE - well structured, single responsibility
 
 ---
 
