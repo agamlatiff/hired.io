@@ -24,8 +24,11 @@ export default function SalariesPage() {
     async function fetchSalaries() {
       try {
         const res = await fetch("/api/jobs");
+        console.log("Salaries API status:", res.status);
         if (!res.ok) throw new Error("Failed to fetch");
+
         const jobs = await res.json();
+        console.log("Salaries API data:", jobs);
 
         // Aggregate salary data by role
         const roleMap = new Map<string, { salaries: number[]; count: number }>();
