@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
+import NextAuthProvider from "@/context/NextAuthProvider";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -35,7 +36,9 @@ export default function RootLayout({
           speed={200}
           shadow="0 0 10px #39ff14,0 0 5px #39ff14"
         />
-        {children}
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
         <Toaster />
       </body>
     </html>
