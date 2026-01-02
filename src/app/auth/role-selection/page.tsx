@@ -14,7 +14,7 @@ export default function RoleSelectionPage() {
   const [loading, setLoading] = useState(false);
 
   // If session is loading or user already has a role, redirect (handled by guard, but safe to have)
-  if (session?.user?.role && session.user.role !== "null") {
+  if (session?.user?.role && String(session.user.role) !== "null") {
     if (session.user.role === "user") router.push("/dashboard/user");
     // if (session.user.role === "company") router.push("/dashboard/company");
   }
