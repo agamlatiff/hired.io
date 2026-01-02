@@ -24,7 +24,7 @@
 
 - 🌙 **Dark Mode First** - Beautiful glassmorphism UI with neon accents
 - 🔐 **Dual Authentication** - Separate flows for job seekers and employers
-- 📊 **Real-time Analytics** - Live dashboard with application tracking
+- 📊 **Analytics Dashboard** - Comprehensive dashboard with application tracking
 - 💬 **Messaging System** - Direct communication between companies and candidates
 - 📱 **Fully Responsive** - Optimized for all device sizes
 
@@ -41,7 +41,7 @@
 | 💼 **Company Profiles**     | Detailed company pages with team info and tech stack                 |
 | 🔔 **Job Alerts**           | Custom notifications for matching job postings                       |
 | ❤️ **Saved Jobs**           | Bookmark interesting positions for later                             |
-| 📈 **Application Tracking** | Monitor your application status in real-time                         |
+| 📈 **Application Tracking** | Monitor your application status with detailed updates                |
 
 ### For Employers
 
@@ -205,7 +205,7 @@ hired-io/
 - **Job** - Job listings with requirements, benefits, and salary info
 - **Applicant** - Job applications with status tracking
 - **Interview** - Scheduled interviews with candidates
-- **Conversation/Message** - Real-time messaging system
+- **Conversation/Message** - Direct messaging system between users and companies
 - **Notification** - Push notifications for both users and companies
 
 ---
