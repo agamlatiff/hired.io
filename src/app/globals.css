@@ -17,6 +17,14 @@
   border: 1px solid rgba(73, 230, 25, 0.1);
 }
 
+/* Glassmorphism Panel - Secondary Accent */
+.glass-panel-accent {
+  background: rgba(162, 89, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(162, 89, 255, 0.1);
+}
+
 /* Glow Text Effect */
 .glow-text {
   text-shadow: 0 0 10px rgba(73, 230, 25, 0.5);
