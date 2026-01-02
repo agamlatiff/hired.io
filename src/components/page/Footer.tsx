@@ -86,11 +86,6 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-accent-dark flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
         <p>© 2024 hired.io Inc. All rights reserved.</p>
-        <div className="flex gap-6">
-          <span className="text-gray-600">
-            Built with ❤️ for developers
-          </span>
-        </div>
       </div>
     </footer>
   );

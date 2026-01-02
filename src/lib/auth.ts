@@ -122,13 +122,15 @@ export const authOptions: NextAuthOptions = {
           token.id = user.id;
           token.role = (user as AuthUser).role;
         } else if (account?.provider === "google") {
-          // For Google, verify against DB to get the Real CUID
+          // For Google, verify against DB to get the Real CUID and ROLE
           const dbUser = await prisma.user.findUnique({
             where: { email: user.email! }
           });
+
           if (dbUser) {
             token.id = dbUser.id;
-            token.role = "user";
+            // @ts-ignore
+            token.role = dbUser.role || "null"; // Pass "null" if role is empty so client knows to redirect
           }
         }
       }

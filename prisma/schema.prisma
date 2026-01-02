@@ -1,4 +1,4 @@
-  generator client {
+generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
@@ -140,6 +140,7 @@ model User {
   SentMessages        Message[]      @relation("UserMessages")
   resetToken          String?
   resetTokenExpiry    DateTime?
+  role                String? // "user" (job seeker) or "company_admin" (employer)
 }
 
 model Applicant {
