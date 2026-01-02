@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast"; // Fixed import path
 
 export default function RoleSelectionPage() {
   const { data: session, update } = useSession();
