@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 
@@ -475,13 +476,13 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
 
             {/* Job Cards */}
             {paginatedJobs.map((job) => (
-              <div
+              <Link
+                href={`/detail/job/${job.id}`}
                 key={job.id}
-                onClick={() => router.push(`/detail/job/${job.id}`)}
                 className={`glow-box group relative bg-card-dark border ${job.featured
                   ? "border-neon-green/30 hover:border-neon-green/60"
                   : "border-accent-dark hover:border-neon-green/30"
-                  } rounded-2xl p-6 transition-all duration-300 cursor-pointer`}
+                  } rounded-2xl p-6 transition-all duration-300 cursor-pointer block`}
               >
                 {job.featured && (
                   <div className="absolute top-4 right-4 bg-neon-green/10 text-neon-green text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
@@ -561,7 +562,7 @@ export default function FindJobsClient({ initialJobs }: FindJobsClientProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
 
             {/* Pagination */}
