@@ -116,11 +116,18 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    // @ts-ignore
+    async jwt({ token, user, account, trigger, session }) {
+      // Allow client-side session updates to update the token
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
+      }
+
       if (user) {
         if (account?.provider === "credentials") {
           token.id = user.id;
-          token.role = (user as AuthUser).role;
+          // @ts-ignore
+          token.role = user.role;
         } else if (account?.provider === "google") {
           // For Google, verify against DB to get the Real CUID and ROLE
           const dbUser = await prisma.user.findUnique({
