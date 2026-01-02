@@ -5,17 +5,12 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const companyId = session.user.id;
+    // No auth check needed for public salary data
+    // const session = await getServerSession(authOptions);
 
     const jobs = await prisma.job.findMany({
       where: {
-        companyId: companyId,
+        status: "published", // Only published jobs
       },
       orderBy: {
         datePosted: "desc",

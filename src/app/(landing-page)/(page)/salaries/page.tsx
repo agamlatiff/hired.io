@@ -32,14 +32,16 @@ export default function SalariesPage() {
 
         for (const job of jobs) {
           const role = job.roles || "Unknown";
-          const avgSalary = ((job.salaryFrom || 0) + (job.salaryTo || 0)) / 2;
+          const salaryFrom = parseInt(String(job.salaryFrom)) || 0;
+          const salaryTo = parseInt(String(job.salaryTo)) || 0;
+          const avgSalary = (salaryFrom + salaryTo) / 2;
 
           if (!roleMap.has(role)) {
             roleMap.set(role, { salaries: [], count: 0 });
           }
 
           const data = roleMap.get(role)!;
-          data.salaries.push(job.salaryFrom || 0, job.salaryTo || 0);
+          data.salaries.push(salaryFrom, salaryTo);
           data.count++;
         }
 
